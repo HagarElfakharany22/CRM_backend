@@ -9,14 +9,14 @@ const taskSchema = new Schema({
         type: String,
         required: true,
     },
-    // image: {
-    //     type: String,
-    //     default: "",
-    // },
-    // linkReference: {
-    //     type: String,
-    //     default: "",
-    // },
+    image: {
+        type: String,
+        default: "",
+    },
+    linkReference: {
+        type: String,
+        default: "",
+    },
     status: {
         type: String,
         default: "In Progress"
