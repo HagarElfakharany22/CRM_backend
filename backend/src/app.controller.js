@@ -1,11 +1,6 @@
 import connectDB from "./DB/connection.js";
 import userController from './modules/user/user.controller.js'
-import productController from './modules/product/product.controller.js'
-import wishlistController from './modules/wishlist/wishlist.controller.js'
-import cartController from './modules/cart/cart.controller.js'
-import categoryController from './modules/category/category.controller.js'
-import brandController from './modules/brand/brand.controller.js'
-import orderController from './modules/order/order.controller.js'
+
 import reviewController from './modules/review/review.controller.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
@@ -23,7 +18,8 @@ const bootstrap=(app , express)=>{
     // app.use('/static', express.static(path.join(__dirname, 'utilities/email/template/img')));
 
     const allowedOrigins = [
-        'crm-cross-road.vercel.app',
+    'https://crm-cross-road.vercel.app',
+    "http://localhost:5173"  
       ];
     //here i will use cors
     app.use(cors({
@@ -48,18 +44,12 @@ const bootstrap=(app , express)=>{
 
     app.get('/',(req,res,next)=>{
         return res.status(200).json({
-            message:"welcome in e-commerce project..."
+            message:"welcome in crm project..."
         })
     })
 
 
     app.use('/api/v1/user' ,userController )
-    app.use('/api/v1/product' , productController)
-    app.use('/api/v1/wishlist' , wishlistController)
-    app.use('/api/v1/cart' , cartController)
-    app.use('/api/v1/category' , categoryController)
-    app.use('/api/v1/brand' , brandController)
-    app.use('/api/v1/order' , orderController)
     app.use('/api/v1/review' , reviewController)
 
 
