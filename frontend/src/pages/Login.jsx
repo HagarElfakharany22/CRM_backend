@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -8,17 +8,14 @@ export default function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const loggedUser = login(email, password);
+    const loggedUser = await login(email, password);
 
     if (loggedUser) {
-      console.log(loggedUser)
       if (loggedUser.role === "admin") navigate("/dashboard");
       else if (loggedUser.role === "user") navigate("/leads");
       else navigate("/tasks");
-    } else {
-      alert("Email or password incorrect");
     }
   };
 

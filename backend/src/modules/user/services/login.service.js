@@ -11,9 +11,7 @@ import { generateToken } from "../../../utilities/security/token.security.js";
         if(!user){
             return next(new Error('user not found' , {cause:404}))
         }
-          if(!user.confirmEmail){
-            return next(new Error('plase confirm email first' , {cause:403}))
-        }
+        
         if(!compareHash({plaintext:password , hashValue:user.password})){
             return next(new Error('In-Valid login data!!' , {cause:400}))
 

@@ -18,7 +18,8 @@ const bootstrap=(app , express)=>{
     // app.use('/static', express.static(path.join(__dirname, 'utilities/email/template/img')));
 
     const allowedOrigins = [
-    'https://crm-cross-road.vercel.app/login#'
+    'https://crm-cross-road.vercel.app',
+    "http://localhost:5173"  
       ];
     //here i will use cors
     app.use(cors({
