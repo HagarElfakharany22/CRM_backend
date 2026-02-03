@@ -12,6 +12,7 @@ import Reports from "./pages/Reports";
 import { dumyData } from "./dumyData";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Register from "./pages/register";
 
 export default function App() {
   const [leads, setLeads] = useState(dumyData.leads);
@@ -49,7 +50,8 @@ const addContacts = (conatct) =>
     <Routes>
       {/* Login Route */}
       <Route path="/login" element={<Login />} />
-      
+      <Route path="/register" element={<Register />} />
+
       {/* Redirect root to login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 

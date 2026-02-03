@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -59,7 +60,13 @@ export default function Login() {
           </form>
           
           <div className="mt-4 text-center">
-            <small className="text-muted"> Forget password? <a href="#" className="text-decoration-none">here</a></small>
+            <small className="text-muted">
+  Don’t have an account?{" "}
+  <Link to="/register" className="text-decoration-none">
+    Register here
+  </Link>
+</small>
+
           </div>
         </div>
       </div>
