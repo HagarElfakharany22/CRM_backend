@@ -24,7 +24,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://crmbackend-production-83c1.up.railway.app/api/v1/user/register", {
+      const res = await fetch("https://crmbackend-production-39b2.up.railway.app/api/v1/user/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
