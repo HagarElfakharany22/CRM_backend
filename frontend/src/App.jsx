@@ -12,7 +12,7 @@ import Reports from "./pages/Reports";
 import { dumyData } from "./dumyData";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Register from "./pages/register";
+import Register from "./pages/Register";
 
 export default function App() {
   const [leads, setLeads] = useState(dumyData.leads);
