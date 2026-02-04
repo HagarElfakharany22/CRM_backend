@@ -1,12 +1,16 @@
 import connectDB from "./DB/connection.js";
 import userController from './modules/user/user.controller.js'
-
+import taskController from './modules/tasks/task.controller.js'
 import reviewController from './modules/review/review.controller.js'
+import boardController from './modules/board/board.controller.js'
+import listController from './modules/list/list.controller.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import fs from 'fs'
 import { globalErrorHandling } from "./utilities/error/error.js";
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +55,9 @@ const bootstrap=(app , express)=>{
 
     app.use('/api/v1/user' ,userController )
     app.use('/api/v1/review' , reviewController)
-
+    app.use('/api/v1/task' ,taskController)
+    app.use('/api/v1/board' , boardController)
+    app.use('/api/v1/list' , listController)
 
 
     app.all('*' , (req,res,next)=>{

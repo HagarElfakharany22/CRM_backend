@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 
 const taskSchema = new Schema({
-    tite: {
+    title: {
         type: String,
         required: true,
     },
@@ -23,6 +23,11 @@ const taskSchema = new Schema({
     },
     deadline: {
         type: Date,
+        required: true,
+    },
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
         required: true,
     }
 },
