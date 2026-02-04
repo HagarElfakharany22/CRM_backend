@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
         return data.user; 
       } else {
-        alert(data.message || "Email or password incorrect");
+        alert(data.error|| "Email or password incorrect");
         return null;
       }
     } catch (err) {

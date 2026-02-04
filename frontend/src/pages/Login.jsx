@@ -12,6 +12,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const loggedUser = await login(email, password);
+    
 
     if (loggedUser) {
       if (loggedUser.role === "admin") navigate("/dashboard");
