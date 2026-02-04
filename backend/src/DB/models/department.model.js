@@ -17,5 +17,5 @@ const departmentSchema = new Schema({
     ]
 
 })
-const Department =model('Department' , taskSchema)|| mongoose.models.Department ;
+const Department =model('Department' , departmentSchema)|| mongoose.models.Department ;
 export default Department;
