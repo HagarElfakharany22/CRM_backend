@@ -4,6 +4,7 @@ import taskController from './modules/tasks/task.controller.js'
 import reviewController from './modules/review/review.controller.js'
 import boardController from './modules/board/board.controller.js'
 import listController from './modules/list/list.controller.js'
+import departmentController from './modules/department/department.controller.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -59,7 +60,9 @@ const bootstrap=(app , express)=>{
     app.use('/api/v1/task' ,taskController)
     app.use('/api/v1/board' , boardController)
     app.use('/api/v1/list' , listController)
+    app.use('/api/v1/department' , departmentController)
 
+  
 
     app.all('*' , (req,res,next)=>{
         return res.status(404).json({
