@@ -8,6 +8,7 @@ const menuItems =
         { name: "Leads", path: "/leads", end: false },
         { name: "Contacts", path: "/contacts", end: false },
         { name: "Deals", path: "/deals", end: false },
+        { name: "Boards", path: "/boards", end: false },
         { name: "Tasks", path: "/tasks", end: false },
         { name: "Reports", path: "/reports", end: false },
       ]
