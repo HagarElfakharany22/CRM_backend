@@ -1,9 +1,17 @@
-import React from 'react'
+import { useContext } from "react";
+import { TaskContext } from "../context/TaskContext";
 
-export default function Tasks() {
+function TasksPage() {
+  const { tasks, setTasks } = useContext(TaskContext);
+
   return (
     <div>
-      <h2>tasks</h2>
+      <h1>All Tasks</h1>
+      {tasks.map(task => (
+        <p key={task._id}>{task.title}</p>
+      ))}
     </div>
-  )
+  );
 }
+
+export default TasksPage;

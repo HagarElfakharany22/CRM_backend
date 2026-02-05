@@ -12,7 +12,12 @@ const boardSchema= new Schema({
     owner:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
-    }
+    },
+    users:[{
+        
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users"
+    }]
 },
     { timestamps: true })
     const Board= model('Board' , boardSchema)|| mongoose.models.Board ;
