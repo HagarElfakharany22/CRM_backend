@@ -8,6 +8,8 @@ import Contacts from "./pages/Contacts";
 import Deals from "./pages/Deals";
 import Tasks from "./pages/Tasks";
 import Reports from "./pages/Reports";
+import Boards from "./pages/Boards/Boards.jsx";
+import Board from "./pages/Board/Board.jsx";
 
 import { dumyData } from "./dumyData";
 import Login from "./pages/Login";
@@ -100,6 +102,26 @@ const addContacts = (conatct) =>
         <Route path="/deals" element={<Deals deals={deals}  onAdd={addDeals}
               onEdit={editDeals}
               onDelete={deleteDeals} />} />
+
+               {/* Boards */}
+        <Route
+          path="/boards"
+          element={
+            <ProtectedRoute roles={["admin", "employee"]}>
+              <Boards />
+            </ProtectedRoute>
+          }
+        />
+
+         {/* Board */}
+        <Route
+          path="/boards/:id"
+          element={
+            <ProtectedRoute roles={["admin", "employee"]}>
+              <Board />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Tasks */}
         <Route
