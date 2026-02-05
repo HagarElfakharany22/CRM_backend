@@ -1,15 +1,15 @@
-import {Schema} from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 const reviewSchema = new Schema({
-  userId: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "users",
-    required: true,
+    // required: true,
   },
-   cardId: {
+   taskId: {
     type: Schema.Types.ObjectId,
-    ref: "Card",
-    required: true,
+    ref: "Tasks",
+    // required: true,
   },
   content:{
     type:String,
