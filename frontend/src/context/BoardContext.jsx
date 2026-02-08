@@ -1,39 +1,57 @@
 import axios from "axios";
-import { createContext, useState } from "react";
-// import Cookies from 'js-cookie';
+import { createContext, useState, useContext } from "react";
+import { AuthContext } from "./AuthContext";    
 
+export const BoardContext = createContext();
 
-export  let BoardContext=createContext(0)
+const API_URL = import.meta.env.VITE_API_URL;
+ 
+// helper function to get token & auth type
+function getAuthData(user) {
+  const token = localStorage.getItem("token");
+  if (!token || !user) return null;
 
-const role = JSON.parse(localStorage.getItem("user")).role;  
-     let auth;
-     if(role==='admin')
-     {
-        auth='admin'
-     }
-     else{
-        auth='Bearer'
-     }
-     console.log(auth);
-async function getAllBoards(){
-    
- let response=await axios.get(`http://localhost:8000/api/v1/board/all` , {
-    headers:{
-        Authorization:`${auth} ${localStorage.getItem("token")}`
-    }
-  });
-  
-  return response.data;
+  const role = user.role || "user";
+  const auth = role === "admin" ? "admin" : "Bearer";
+  return { token, auth };
 }
-export default  function BoardContextProvider({children}){
-    const [BoardsData,setBoardsData]=useState();
+export const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+});
+export default function BoardContextProvider({ children }) {
+  const [BoardsData, setBoardsData] = useState([]);
+  const { user } = useContext(AuthContext);
 
-    return <BoardContext.Provider value={{
+  // Fetch all boards
+  async function getAllBoards() {
+    const authData = getAuthData(user);
+    if (!authData) return null; // user مش logged in → ما نعملش request
+
+    try {
+      const response = await axios.get(`${API_URL}/api/v1/board/all`, {
+        headers: {
+          Authorization: `${authData.auth} ${authData.token}`,
+        },
+      });
+
+      setBoardsData(response.data.boards || []); // حافظ على array بدل undefined
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching boards:", err);
+      return null;
+    }
+  }
+
+  return (
+    <BoardContext.Provider
+      value={{
         getAllBoards,
         BoardsData,
-        setBoardsData
-    }}>
-        {children}
-        
+        setBoardsData,
+      }}
+    >
+      {children}
     </BoardContext.Provider>
+  );
 }

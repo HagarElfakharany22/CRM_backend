@@ -9,17 +9,17 @@ import BoardContextProvider from './context/BoardContext.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BoardContextProvider>
-    <TaskProvider>
-    <BrowserRouter >
+ <StrictMode>
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-    <App />
-    </QueryClientProvider>
+      <BoardContextProvider>
+        <TaskProvider>
+          <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+              <App />
+            </QueryClientProvider>
+          </BrowserRouter>
+        </TaskProvider>
+      </BoardContextProvider>
     </AuthProvider>
-    </BrowserRouter>
-    </TaskProvider>
-    </BoardContextProvider>
-  </StrictMode>,
+  </StrictMode>
 )
