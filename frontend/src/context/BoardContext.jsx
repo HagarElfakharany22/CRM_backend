@@ -5,16 +5,33 @@ import { createContext, useState } from "react";
 
 export  let BoardContext=createContext(0)
 
+const role = JSON.parse(localStorage.getItem("user")).role;  
+     let auth;
+     if(role==='admin')
+     {
+        auth='admin'
+     }
+     else{
+        auth='Bearer'
+     }
+     console.log(auth);
 async function getAllBoards(){
-  return axios.get(`http://localhost:8000/api/v1/board/all` , {
+    
+ let response=await axios.get(`http://localhost:8000/api/v1/board/all` , {
     headers:{
-        Authorization:`admin ${localStorage.getItem("token")}`
+        Authorization:`${auth} ${localStorage.getItem("token")}`
     }
   });
+  
+  return response.data;
 }
 export default  function BoardContextProvider({children}){
+    const [BoardsData,setBoardsData]=useState();
+
     return <BoardContext.Provider value={{
-        getAllBoards
+        getAllBoards,
+        BoardsData,
+        setBoardsData
     }}>
         {children}
         

@@ -17,7 +17,7 @@ export default function Layout() {
         <Topbar user={user}/>
 
         {/* Page Content */}
-        <main className="p-3 flex-grow-1">
+        <main className=" flex-grow-1">
          
            <Outlet /> 
         </main>
