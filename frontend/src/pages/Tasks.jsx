@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
-import Modal from "../common/Modal"; // Assuming this handles the Bootstrap modal backdrop
-import TaskForm from "../forms/TaskForm"; // You'll create this to handle the inputs
+import Modal from "../common/Modal"; 
+import TaskForm from "../forms/TaskForm"; 
+
 
 function TasksPage() {
   const { tasks, AddTask, EditTasks, DeleteTasks,getTasks,setTasks } = useContext(TaskContext);

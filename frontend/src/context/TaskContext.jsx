@@ -1,8 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_API_URL;
+console.log(API_URL)
 export const TaskContext = createContext();
-
+export const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+});
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
 
@@ -23,7 +27,7 @@ async function getTasks() {
      }
      console.log(auth);
      
-      const res = await axios.get('http://localhost:8000/api/v1/task/all', {
+      const res = await api.get('/api/v1/task/all', {
         headers: {
          Authorization: `${auth} ${token}`
         }
@@ -49,7 +53,7 @@ async function getTasks() {
      }
      console.log(auth);
      
-      const res = await axios.put(`http://localhost:8000/api/v1/task/edit/${taskId}`, updatedData,{
+      const res = await api.put(`/api/v1/task/edit/${taskId}`, updatedData,{
         headers: {
          Authorization: `${auth} ${token}`
         }
@@ -74,7 +78,7 @@ async function getTasks() {
      }
      console.log(auth);
      
-      const res = await axios.delete(`http://localhost:8000/api/v1/task/delete/${taskId}`,{
+      const res = await api.delete(`/api/v1/task/delete/${taskId}`,{
         headers: {
          Authorization: `${auth} ${token}`
         }
@@ -99,7 +103,7 @@ async function getTasks() {
      }
      console.log(auth);
      
-      const res = await axios.delete(`http://localhost:8000/api/v1/task/add`,{
+      const res = await api.delete(`/api/v1/task/add`,{
         headers: {
          Authorization: `${auth} ${token}`
         }
