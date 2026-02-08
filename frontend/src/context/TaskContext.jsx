@@ -16,9 +16,7 @@ export const api = axios.create({
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const { user } = useContext(AuthContext);
-  // const navigate = useNavigate();
-
-  // Helper function to get token & auth type
+ 
   function getAuthData() {
     const token = localStorage.getItem("token");
     if (!token || !user) return null;
@@ -35,7 +33,6 @@ const TaskProvider = ({ children }) => {
     } else {
       getTasks();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   async function getTasks() {

@@ -26,7 +26,7 @@ export default function BoardContextProvider({ children }) {
   // Fetch all boards
   async function getAllBoards() {
     const authData = getAuthData(user);
-    if (!authData) return null; // user مش logged in → ما نعملش request
+    if (!authData) return null; 
 
     try {
       const response = await axios.get(`${API_URL}/api/v1/board/all`, {
@@ -35,7 +35,7 @@ export default function BoardContextProvider({ children }) {
         },
       });
 
-      setBoardsData(response.data.boards || []); // حافظ على array بدل undefined
+      setBoardsData(response.data.boards || []); 
       return response.data;
     } catch (err) {
       console.error("Error fetching boards:", err);

@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
-import Modal from "../common/Modal"; 
-import TaskForm from "../forms/TaskForm"; 
+import Modal from "../common/Modal";
+import TaskForm from "../forms/TaskForm";
 
 
 function TasksPage() {
-  const { tasks, AddTask, EditTasks, DeleteTasks,getTasks,setTasks } = useContext(TaskContext);
-  
+  const { tasks, AddTask, EditTasks, DeleteTasks, getTasks, setTasks } = useContext(TaskContext);
+
   // State for Modal and Search
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
@@ -22,8 +22,8 @@ function TasksPage() {
   const handleSubmit = () => {
     if (editing) {
       console.log(editing._id);
-      
-     EditTasks( editing._id ,formData);
+
+      EditTasks(editing._id, formData);
     } else {
       AddTask(formData);
     }
@@ -51,24 +51,21 @@ function TasksPage() {
           <h1 className="h3 mb-1 fw-bold text-dark">Task Manager</h1>
           <p className="text-muted mb-0">Manage your CRM activities and deadlines</p>
         </div>
-        
+
         <div className="d-flex gap-2">
-          <div className="input-group shadow-sm" style={{ maxWidth: '300px' }}>
-            <span className="input-group-text bg-white border-end-0">
-              {/* <i className="bi bi-search text-muted"></i> */}
-            </span>
-            <input
-              type="text"
-              className="form-control border-start-0"
-              placeholder="Search tasks..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <button className="btn btn-primary shadow-sm px-4" onClick={openAddModal}>
-            New Task
-          </button>
+
+
+          <input
+            type="text"
+            className="form-control border-start-0"
+            placeholder="Search tasks..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
         </div>
+        <button className="btn btn-primary shadow-sm px-4" onClick={openAddModal}>
+          New Task</button>
       </div>
 
       {/* Main Table Card */}
@@ -91,22 +88,21 @@ function TasksPage() {
                       <div className="text-muted small">{task.description?.substring(0, 40)}...</div>
                     </td>
                     <td>
-                      <span className={`badge rounded-pill ${
-                        task.status === 'Completed' ? 'bg-success-subtle text-success border border-success' : 
-                        task.status === 'In Progress' ? 'bg-primary-subtle text-primary border border-primary' : 
-                        'bg-warning-subtle text-dark border border-warning'
-                      }`}>
+                      <span className={`badge rounded-pill ${task.status === 'Completed' ? 'bg-success-subtle text-success border border-success' :
+                          task.status === 'In Progress' ? 'bg-primary-subtle text-primary border border-primary' :
+                            'bg-warning-subtle text-dark border border-warning'
+                        }`}>
                         {task.status}
                       </span>
                     </td>
                     <td className="text-end pe-4">
-                      <button 
+                      <button
                         className="btn btn-sm btn-light border me-2"
                         onClick={() => openEditModal(task)}
                       >
                         Edit
                       </button>
-                      <button 
+                      <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => DeleteTasks(task._id)}
                       >
@@ -128,10 +124,10 @@ function TasksPage() {
       </div>
 
       {/* Reusable Modal Component */}
-      <Modal 
-        isOpen={open} 
-        title={editing ? "Update Task" : "Create New Task"} 
-        onClose={() => setOpen(false)} 
+      <Modal
+        isOpen={open}
+        title={editing ? "Update Task" : "Create New Task"}
+        onClose={() => setOpen(false)}
         onSubmit={handleSubmit}
       >
         <TaskForm formData={formData} setFormData={setFormData} />
