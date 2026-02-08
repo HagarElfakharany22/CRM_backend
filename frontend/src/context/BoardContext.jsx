@@ -16,9 +16,9 @@ const role = JSON.parse(localStorage.getItem("user")).role;
      console.log(auth);
 async function getAllBoards(){
     
- let response=await api.get(/api/v1/board/all , {
+ let response=await api.get(`/api/v1/board/all` , {
     headers:{
-        Authorization:${auth} ${localStorage.getItem("token")}
+       Authorization:`${auth} ${localStorage.getItem("token")}`
     }
   });
   
@@ -29,7 +29,7 @@ async function addBoard(data){
     
     let response=await api.post('/api/v1/board/add' , data , {
     headers:{
-        Authorization:${auth} ${localStorage.getItem("token")}
+        Authorization:`${auth} ${localStorage.getItem("token")}`
     }});
     console.log(response);
     
@@ -37,9 +37,9 @@ async function addBoard(data){
 }
 
 async function getBoardByItsId (id) {
-    let response= await api.get(/api/v1/board/${id} , {
+    let response= await api.get(`/api/v1/board/${id}` , {
         headers:{
-        Authorization:${auth} ${localStorage.getItem("token")}
+        Authorization:`${auth} ${localStorage.getItem("token")}`
     }
     })
 

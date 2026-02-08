@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { BoardContext } from "../../context/BoardContext.jsx";
-import { useQuery , useQueryClient } from "@tanstack/react-query";
-import Board from "../Board/Board.jsx";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Board from "../BoardCard/BoardCard.jsx";
 import styles from "./Boards.module.css";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 export default function Boards() {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   let { getAllBoards, BoardsData, setBoardsData, addBoard } =
     useContext(BoardContext);
   let [loading, setloading] = useState(true);
@@ -67,7 +67,7 @@ export default function Boards() {
     },
   });
 
-  if (isLoading) return <div>Fetching posts...</div>;
+  if (isLoading) return <div>Fetching Boards...</div>;
   if (error) return <div>An error occurred: {error.message}</div>;
   return (
     <div className={`${styles.bg_dark} p-0 m-0 h-100 `}>
