@@ -1,0 +1,19 @@
+.board_users {
+  display: flex;
+  align-items: center;
+}
+
+.user_avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -8px; /* overlap effect */
+  border: 2px solid #2e2a4f; /* matches dark header */
+  cursor: pointer;
+}

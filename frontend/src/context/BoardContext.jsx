@@ -1,7 +1,5 @@
-
-import axios from "axios";
 import { createContext, useState } from "react";
-// import Cookies from 'js-cookie';
+import api from "./baseURL.jsx";
 
 
 export  let BoardContext=createContext(0)
@@ -18,7 +16,7 @@ const role = JSON.parse(localStorage.getItem("user")).role;
      console.log(auth);
 async function getAllBoards(){
     
- let response=await axios.get(`http://localhost:8000/api/v1/board/all` , {
+ let response=await api.get(`/api/v1/board/all` , {
     headers:{
         Authorization:`${auth} ${localStorage.getItem("token")}`
     }
@@ -29,13 +27,24 @@ async function getAllBoards(){
 async function addBoard(data){
     console.log(data);
     
-    let response=await axios.post('http://localhost:8000/api/v1/board/add' , data , {
+    let response=await api.post('/api/v1/board/add' , data , {
     headers:{
         Authorization:`${auth} ${localStorage.getItem("token")}`
     }});
     console.log(response);
     
     return response.data;
+}
+
+async function getBoardByItsId (id) {
+    let response= await api.get(`/api/v1/board/${id}` , {
+        headers:{
+        Authorization:`${auth} ${localStorage.getItem("token")}`
+    }
+    })
+
+    
+    return response.data.board;
 }
 export default  function BoardContextProvider({children}){
     const [BoardsData,setBoardsData]=useState();
@@ -44,7 +53,8 @@ export default  function BoardContextProvider({children}){
         getAllBoards,
         BoardsData,
         setBoardsData,
-        addBoard
+        addBoard,
+        getBoardByItsId
     }}>
         {children}
         

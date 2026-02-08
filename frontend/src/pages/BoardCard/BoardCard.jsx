@@ -1,16 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import styles from './Board.module.css';
+import { Link, useParams , useNavigate } from "react-router-dom";
+import styles from './BoardCard.module.css';
 
 export default function Board({ item }){
-
-
-
+      const navigate = useNavigate();
 
     return(
         <>
         
-      <div className="col-lg-4 col-sm-4 rounded-4 pt-5 ">
+      <div className={`col-lg-4 col-sm-4 rounded-4 pt-5 ${styles.cursor}`} onClick={()=>navigate("/boards/" + item._id)}>
         <div className={`${styles.product} text-white cursor-pointer rounded-3 gray-border my-3 w-100 h-100 pt-5 ps-1`}>
           {/* start link to product details */}
           <Link className="un-underline text-white text-decoration-none" to={"/boards/" + item._id}>

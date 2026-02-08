@@ -9,45 +9,41 @@ import Deals from "./pages/Deals";
 import Tasks from "./pages/Tasks";
 import Reports from "./pages/Reports";
 import Boards from "./pages/Boards/Boards.jsx";
-import Board from "./pages/Board/Board.jsx";
-
+import BoardCard from "./pages/BoardCard/BoardCard.jsx";
+import BoardDetails from "./pages/BoardDetails/BoardDetails.jsx";
 import { dumyData } from "./dumyData";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
+import Employees from "./layout/Employees";
 
 export default function App() {
   const [leads, setLeads] = useState(dumyData.leads);
-  const [contacts,setContacts]=useState(dumyData.contacts);
-  const [deals,setDeals]=useState(dumyData.deals);
-  const addLead = (lead) =>
-    setLeads([...leads, { ...lead, id: Date.now() }]);
+  const [contacts, setContacts] = useState(dumyData.contacts);
+  const [deals, setDeals] = useState(dumyData.deals);
+  const addLead = (lead) => setLeads([...leads, { ...lead, id: Date.now() }]);
 
   const editLead = (lead) =>
-    setLeads(leads.map(l => l.id === lead.id ? lead : l));
+    setLeads(leads.map((l) => (l.id === lead.id ? lead : l)));
 
-  const deleteLead = (id) =>
-    setLeads(leads.filter(l => l.id !== id));
+  const deleteLead = (id) => setLeads(leads.filter((l) => l.id !== id));
 
-const addContacts = (conatct) =>
+  const addContacts = (conatct) =>
     setContacts([...contacts, { ...conatct, id: Date.now() }]);
 
   const editContact = (conatct) =>
-   setContacts(contacts.map(l => l.id === conatct.id ? conatct : l));
+    setContacts(contacts.map((l) => (l.id === conatct.id ? conatct : l)));
 
   const deleteConatact = (id) =>
-    setContacts(contacts.filter(l => l.id !== id));
-
+    setContacts(contacts.filter((l) => l.id !== id));
 
   ///deals
-  const addDeals = (deal) =>
-    setDeals([...deals, { ...deal, id: Date.now() }]);
+  const addDeals = (deal) => setDeals([...deals, { ...deal, id: Date.now() }]);
 
   const editDeals = (deal) =>
-   setDeals(deals.map(l => l.id === deal.id ? deal : l));
+    setDeals(deals.map((l) => (l.id === deal.id ? deal : l)));
 
-  const deleteDeals = (id) =>
-    setDeals(deals.filter(l => l.id !== id));
+  const deleteDeals = (id) => setDeals(deals.filter((l) => l.id !== id));
   return (
     <Routes>
       {/* Login Route */}
@@ -58,18 +54,32 @@ const addContacts = (conatct) =>
       <Route path="/" element={<Navigate to="/login" replace />} />
 
       {/* Protected Routes with Layout */}
-      <Route  element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         {/* Dashboard */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute  roles={["admin"]}>
+            <ProtectedRoute roles={["admin"]}>
               <Dashboard />
             </ProtectedRoute>
           }
         />
 
+        {/* employees */}
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <employees />
+            </ProtectedRoute>
+          }
+        />
         {/* Leads */}
         <Route
           path="/leads"
@@ -99,11 +109,19 @@ const addContacts = (conatct) =>
         />
 
         {/* Deals */}
-        <Route path="/deals" element={<Deals deals={deals}  onAdd={addDeals}
+        <Route
+          path="/deals"
+          element={
+            <Deals
+              deals={deals}
+              onAdd={addDeals}
               onEdit={editDeals}
-              onDelete={deleteDeals} />} />
+              onDelete={deleteDeals}
+            />
+          }
+        />
 
-               {/* Boards */}
+        {/* Boards */}
         <Route
           path="/boards"
           element={
@@ -112,13 +130,13 @@ const addContacts = (conatct) =>
             </ProtectedRoute>
           }
         />
-
-         {/* Board */}
+        
+        {/* Board details  */}
         <Route
           path="/boards/:id"
           element={
             <ProtectedRoute roles={["admin", "employee"]}>
-              <Board />
+              <BoardDetails />
             </ProtectedRoute>
           }
         />
@@ -135,9 +153,7 @@ const addContacts = (conatct) =>
 
         {/* Reports */}
         <Route path="/reports" element={<Reports />} />
-        
       </Route>
     </Routes>
-
   );
 }
