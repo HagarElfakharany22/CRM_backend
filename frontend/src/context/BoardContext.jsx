@@ -25,13 +25,25 @@ async function getAllBoards(){
   
   return response.data;
 }
+async function addBoard(data){
+    console.log(data);
+    
+    let response=await axios.post('http://localhost:8000/api/v1/board/add' , data , {
+    headers:{
+        Authorization:`${auth} ${localStorage.getItem("token")}`
+    }});
+    console.log(response);
+    
+    return response.data;
+}
 export default  function BoardContextProvider({children}){
     const [BoardsData,setBoardsData]=useState();
 
     return <BoardContext.Provider value={{
         getAllBoards,
         BoardsData,
-        setBoardsData
+        setBoardsData,
+        addBoard
     }}>
         {children}
         
