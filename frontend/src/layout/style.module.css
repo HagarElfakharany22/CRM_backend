@@ -59,3 +59,62 @@
   z-index: 10;
   transform: translateY(-2px);
 }
+
+.list {
+  background-color: #f1f2f4; /* Light grey list background */
+  width: 272px;              /* Standard Trello list width */
+  border-radius: 12px;
+  padding: 12px;
+  flex-shrink: 0;            /* Prevents lists from squishing */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.list_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px 8px 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #172b4d;
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task {
+  background: #ffffff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1), 0 0 1px rgba(0,0,0,0.1);
+  cursor: pointer;
+  font-size: 14px;
+  color: #172b4d;
+  border: 1px solid transparent;
+}
+
+.task:hover {
+  border-color: #388bff; /* Slight blue border on hover */
+}
+
+.add_card {
+  background: transparent;
+  border: none;
+  margin-top: 12px;
+  padding: 6px 8px;
+  color: #44546f;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.add_card:hover {
+  background: #091e420f;
+  color: #172b4d;
+}

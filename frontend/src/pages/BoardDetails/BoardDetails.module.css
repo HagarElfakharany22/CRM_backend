@@ -6,3 +6,35 @@
 .bg_dark_transparent{
     background-color: RGBA(0,0,0,0.5);
 }
+
+/* Container for the lists */
+.board {
+  display: flex;
+  align-items: flex-start; /* Prevents lists from stretching vertically */
+  gap: 12px;               /* Space between lists */
+  padding: 15px;
+  overflow-x: auto;        /* Allows horizontal scrolling if many lists */
+  height: calc(100vh - 60px); /* Adjust based on your header height */
+}
+
+
+
+.add_list {
+  min-width: 272px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.24);
+  /*Translucentwhite*/color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  -webkit-transition: background 0.2s;
+  -moz-transition: background 0.2s;
+  -ms-transition: background 0.2s;
+  -o-transition: background 0.2s;
+}
+
+.add_list:hover {
+  background: rgba(255, 255, 255, 0.16);
+}

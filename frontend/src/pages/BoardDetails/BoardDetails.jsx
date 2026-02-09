@@ -5,19 +5,31 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./BoardDetails.module.css";
 import Employees from "../../layout/Employees.jsx";
 import Lists from "../../layout/Lists.jsx";
+import { ListContext } from "../../context/ListContext.jsx";
 export default function BoardDetails() {
   const { id } = useParams();
   const { getBoardByItsId } = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
-
+  let { getListsByBoardId } = useContext(ListContext);
   const { data, error, isLoading } = useQuery({
     queryKey: ["boardDetails"],
     queryFn: () => getBoardByItsId(id),
   });
 
+  const {
+    data: listData,
+    error: listError,
+    isLoading: isListloading,
+  } = useQuery({
+    queryKey: ["lists", data?._id],
+    queryFn: () => getListsByBoardId(data._id),
+    enabled: !!data?._id,
+  });
+
   useEffect(() => {
     console.log(data?._id);
-  }, [data]);
+    console.log(listData);
+  }, [data , listData]);
 
   return (
     <div className={`${styles.bg_gredient} container p-0 vh-100 `}>
@@ -30,9 +42,14 @@ export default function BoardDetails() {
         <div className="d-flex align-items-center gap-3">
           <Employees users={data?.users} />
         </div>
-       
       </div>
-       <Lists boardId={data?._id} />
+      <div className={`${styles.board}`}>
+        {listData?.map((list) => (
+          <Lists key={list._id} list={list} />
+        ))}
+
+        <div className={`${styles.add_list}`}>+ Add another list</div>
+      </div>
     </div>
   );
 }

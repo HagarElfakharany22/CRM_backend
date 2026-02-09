@@ -11,7 +11,6 @@ const role = JSON.parse(localStorage.getItem("user")).role;
      else{
         auth='Bearer'
      }
-     console.log(auth);
 async function getListsByBoardId(id) {
     let response= await api.get(`/api/v1/list/by-board-id/${id}` , {
         headers:{
@@ -20,7 +19,7 @@ async function getListsByBoardId(id) {
     });
     console.log(response?.data);
     
-    return response?.data
+    return response?.data?.lists
 }
 export default function ListContextProvider({children}){
     return <ListContext.Provider value={{
