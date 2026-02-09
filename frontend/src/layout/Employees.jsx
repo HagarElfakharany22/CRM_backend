@@ -13,16 +13,15 @@ function getColor(index) {
 }
 
 function getInitials(name) {
-  return name
-    .split(" ")
-    .map(word => word[0])
-    .join("")
-    .toUpperCase();
+  if (!name) return "?";
+  const parts = name.trim().split(" ");
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
   return (
     <div className={`${styles.board_employees}`}>
-      {users.map((user, index) => (
+      {users?.map((user, index) => (
         <div
           key={user._id}
           className={`${styles.user_avatar}`}

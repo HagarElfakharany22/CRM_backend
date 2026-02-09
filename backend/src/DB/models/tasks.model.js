@@ -32,7 +32,8 @@ const taskSchema = new Schema({
     },
     listId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Lists"
+        ref: "Lists",
+        required: true,
     }
 },
 { timestamps: true })

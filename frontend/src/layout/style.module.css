@@ -1,19 +1,61 @@
-.board_users {
+/* .board_users {
   display: flex;
   align-items: center;
 }
 
 .user_avatar {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: -8px; /* overlap effect */
-  border: 2px solid #2e2a4f; /* matches dark header */
+
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+
+  margin-left: -8px;
+  border: 2px solid #2c254d; 
+
   cursor: pointer;
+} */
+
+
+.board_employees {
+  display: flex;
+  align-items: center;
+  /* Flex direction row-reverse is often used if you want the first 
+     person to be on top, but a simple negative margin works too */
+  padding-left: 10px;
+}
+
+.user_avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  
+  /* The Secret Sauce: */
+  margin-left: -8px; /* Pulls the circles together */
+  /* border: 2px solid #2d264d; Use the same color as your purple navbar background */
+  position: relative;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.user_avatar:first-child {
+  margin-left: 0;
+}
+
+/* Optional: Lift the avatar when hovering */
+.user_avatar:hover {
+  z-index: 10;
+  transform: translateY(-2px);
 }

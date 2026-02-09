@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.jsx'
 import TaskProvider from './context/TaskContext.jsx'
 import BoardContextProvider from './context/BoardContext.jsx'
+import ListContextProvider from './context/ListContext.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
@@ -13,11 +14,13 @@ createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <BoardContextProvider>
         <TaskProvider>
+          <ListContextProvider>
           <BrowserRouter>
             <QueryClientProvider client={queryClient}>
               <App />
             </QueryClientProvider>
           </BrowserRouter>
+          </ListContextProvider>
         </TaskProvider>
       </BoardContextProvider>
     </AuthProvider>

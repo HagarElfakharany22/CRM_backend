@@ -8,7 +8,13 @@ const listSchema= new Schema ({
     boardId:{
         type: mongoose.Schema.Types.ObjectId,
          ref: "Board",
-    }
+            required: true,
+    },
+    tasks:[{
+            
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Tasks"
+        }]
 },{timestamps:true})
 const Lists= model('Lists' , listSchema)|| mongoose.models.Lists ;
 export default Lists;
