@@ -1,15 +1,15 @@
-import { useContext , useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { ListContext } from "../context/ListContext.jsx";
-import { useQuery , useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import TaskCard from "./TaskCard.jsx";
 import styles from './style.module.css'
-export default function Lists({list}){
+export default function Lists({ list, onTaskClick }) {
 
-    useEffect(()=>{
-       
-    } , [])
+  useEffect(() => {
 
-    return (
+  }, [])
+
+  return (
     <div className={`${styles.list}`}>
       <div className={`${styles.list_header}`}>
         <span>{list.title}</span>
@@ -18,7 +18,7 @@ export default function Lists({list}){
 
       <div className={`${styles.tasks}`}>
         {list.tasks.map((task) => (
-          <TaskCard key={task._id} task={task} />
+          <TaskCard key={task._id} task={task} onClick={onTaskClick} />
         ))}
       </div>
 

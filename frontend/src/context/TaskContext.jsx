@@ -16,7 +16,7 @@ export const api = axios.create({
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const { user } = useContext(AuthContext);
- 
+
   function getAuthData() {
     const token = localStorage.getItem("token");
     if (!token || !user) return null;
@@ -55,11 +55,18 @@ const TaskProvider = ({ children }) => {
     const authData = getAuthData();
     if (!authData) return;
 
+    const isFormData = updatedData instanceof FormData;
+    const headers = {
+      Authorization: `${authData.auth} ${authData.token}`,
+    };
+
+    if (isFormData) {
+      headers['Content-Type'] = 'multipart/form-data';
+    }
+
     try {
       await api.put(`/api/v1/task/edit/${taskId}`, updatedData, {
-        headers: {
-          Authorization: `${authData.auth} ${authData.token}`,
-        },
+        headers: headers,
       });
       getTasks();
     } catch (err) {
@@ -94,7 +101,7 @@ const TaskProvider = ({ children }) => {
           Authorization: `${authData.auth} ${authData.token}`,
         },
       });
-      
+
       if (res.data.task) setTasks(prev => [...prev, res.data.task]);
       getTasks()
     } catch (err) {
