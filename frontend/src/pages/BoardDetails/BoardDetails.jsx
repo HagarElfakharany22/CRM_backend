@@ -7,11 +7,20 @@ import Employees from "../../layout/Employees.jsx";
 import Lists from "../../layout/Lists.jsx";
 import { ListContext } from "../../context/ListContext.jsx";
 import ShareModal from "../../layout/ShareModal.jsx";
+import TaskDetailModal from "../../components/TaskDetailModal.jsx";
+import { TaskContext } from "../../context/TaskContext.jsx";
+import { toast } from "react-toastify";
+
 export default function BoardDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const { getBoardByItsId } = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
+  const { EditTasks, DeleteTasks } = useContext(TaskContext);
+
+  // Modal State
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 //   ----------------------------------------
   let { getListsByBoardId , createList } = useContext(ListContext);
 //   --------------------------------------------
@@ -51,8 +60,39 @@ export default function BoardDetails() {
   useEffect(() => {
     console.log(data?._id);
     console.log(listData);
-  }, [data , listData]);
+  
  
+  }, [data, listData]);
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateTask = async (taskId, updatedData) => {
+    try {
+      await EditTasks(taskId, updatedData);
+      toast.success("Task updated successfully");
+      setIsModalOpen(false);
+      // Invalidate lists query to refresh data
+      queryClient.invalidateQueries(["lists", data?._id]);
+    } catch (error) {
+      toast.error("Failed to update task");
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await DeleteTasks(taskId);
+      toast.success("Task deleted successfully");
+      setIsModalOpen(false);
+      queryClient.invalidateQueries(["lists", data?._id]);
+    } catch (error) {
+      toast.error("Failed to delete task");
+    }
+  };
+
+
   return (
     <div className={`${styles.bg_gredient} container p-0 vh-100 `}>
       <div
@@ -74,7 +114,7 @@ export default function BoardDetails() {
       <div className={`${styles.board}`}>
         
         {listData?.map((list) => (
-          <Lists key={list._id} list={list} />
+          <Lists key={list._id} list={list} onTaskClick={handleTaskClick} />
         ))}
         {isAddingList ? (
           <div className={`${styles.add_list_form} ${styles.list}`}> {/* Uses 'list' class for same width */}
@@ -109,6 +149,15 @@ export default function BoardDetails() {
             </div>
       )}
       
+
+      {/* Task Detail Modal */}
+      <TaskDetailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        task={selectedTask}
+        onUpdate={handleUpdateTask}
+        onDelete={handleDeleteTask}
+      />
     </div>
   );
 }
