@@ -2,16 +2,23 @@ import React, { useState, useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 import Modal from "../common/Modal";
 import TaskForm from "../forms/TaskForm";
-
+import { toast } from "react-toastify";
 
 function TasksPage() {
+  const emptyTask = {
+  title: '',
+  status: 'Pending',
+  priority: 'Medium',
+  description: '',
+  dueDate: ''
+};
   const { tasks, AddTask, EditTasks, DeleteTasks, getTasks, setTasks } = useContext(TaskContext);
 
   // State for Modal and Search
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [formData, setFormData] = useState({ title: '', status: 'Pending', description: '' });
+  const [formData, setFormData] = useState(emptyTask);
 
   // Filter logic
   const filteredTasks = tasks?.filter(t =>
@@ -19,17 +26,22 @@ function TasksPage() {
     t.status.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
+   try {
     if (editing) {
-      console.log(editing._id);
-
-      EditTasks(editing._id, formData);
+      await EditTasks(editing._id, formData);
+      toast.success("Task updated successfully ✅");
     } else {
-      AddTask(formData);
+      await AddTask(formData);
+      toast.success("Task added successfully 🎉");
     }
+
     setOpen(false);
     setEditing(null);
-  };
+  } catch (error) {
+    toast.error("Something went wrong. Try again ❌");
+  }
+};
 
   const openEditModal = (task) => {
     setEditing(task);
@@ -39,9 +51,17 @@ function TasksPage() {
 
   const openAddModal = () => {
     setEditing(null);
-    setFormData({ title: '', status: 'Pending', description: '' });
+    setFormData(emptyTask);
     setOpen(true);
   };
+const handleDelete = async (id) => {
+  try {
+    await DeleteTasks(id);
+    toast.success("Task deleted successfully 🗑️");
+  } catch (error) {
+    toast.error("Failed to delete task ❌");
+  }
+};
 
   return (
     <div className="container-fluid py-4 bg-light min-vh-100">
@@ -76,6 +96,7 @@ function TasksPage() {
               <tr>
                 <th className="ps-4 py-3 text-uppercase small fw-bold text-muted">Task Details</th>
                 <th className="py-3 text-uppercase small fw-bold text-muted">Status</th>
+               {/* <th className=" py-3 text-uppercase small fw-bold text-muted">TO</th> */}
                 <th className="py-3 text-uppercase small fw-bold text-muted text-end pe-4">Actions</th>
               </tr>
             </thead>
@@ -104,7 +125,7 @@ function TasksPage() {
                       </button>
                       <button
                         className="btn btn-sm btn-outline-danger"
-                        onClick={() => DeleteTasks(task._id)}
+                        onClick={() => handleDelete(task._id)}
                       >
                         Delete
                       </button>

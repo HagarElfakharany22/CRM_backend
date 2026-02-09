@@ -88,6 +88,7 @@ const TaskProvider = ({ children }) => {
     if (!authData) return;
 
     try {
+      console.log(data)
       const res = await api.post(`/api/v1/task/add`, data, {
         headers: {
           Authorization: `${authData.auth} ${authData.token}`,
@@ -95,6 +96,7 @@ const TaskProvider = ({ children }) => {
       });
       
       if (res.data.task) setTasks(prev => [...prev, res.data.task]);
+      getTasks()
     } catch (err) {
       console.error("Error adding task:", err);
     }

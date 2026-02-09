@@ -17,7 +17,7 @@ router.delete('/delete/:id' ,authentication() , deleteTask)
 router.get('/all' ,authentication() , getAllTasks)
 router.get('/user' , authentication() , getTasksByUserId)
 router.get('/user/:id' ,authentication(),getDepartmentTasks)
-router.post('/assign' ,authentication() , upload.single("image"), assignTask)
+router.post('/assign/:taskId' ,authentication() , upload.single("image"), assignTask)
 router.get('/by-list-id/:id' , authentication() , getTasksByListId)
 
 export default router;

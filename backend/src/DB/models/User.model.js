@@ -34,12 +34,6 @@ const userSchema = new Schema(
       default: "user"
     },
 
-    tasks: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tasks",
-      },
-    ],
   },
   { timestamps: true }
 );

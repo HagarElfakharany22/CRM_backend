@@ -21,19 +21,24 @@ const taskSchema = new Schema({
         type: String,
         default: "In Progress"
     },
-    deadline: {
+    dueDate: {
         type: Date,
-        required: true,
+       
     },
+    priority:{
+ type: String,
+        default: "Medium"
+    },
+
     userId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
-        required: true,
+       
     },
     listId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lists",
-        required: true,
+        
     }
 },
 { timestamps: true })
