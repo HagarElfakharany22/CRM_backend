@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 import api from "./baseURL.jsx";
 
 export let ListContext= createContext(0);
-const role = JSON.parse(localStorage.getItem("user")).role;  
+const role = JSON.parse(localStorage.getItem("user"))?.role;  
      let auth;
      if(role==='admin')
      {

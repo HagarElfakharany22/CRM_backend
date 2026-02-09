@@ -5,7 +5,7 @@ import {generateHash} from "../../../utilities/security/hash.security.js";
 import { generateEncryption } from "../../../utilities/security/encryption.security.js";
 
  const signup= asyncHandler(async(req,res,next)=>{
-        const {name , email , password ,confirmationPassword , phone} = req.body;
+        const {name , email , password ,confirmationPassword , phone,role} = req.body;
         if(password !== confirmationPassword){
             return next(new Error('pssword mismatch caonfirmation Password!!' , {cause:400}))
         }
@@ -15,7 +15,7 @@ import { generateEncryption } from "../../../utilities/security/encryption.secur
        
         const hashPassword=generateHash({plaintext:password})
         const encryptedPhone=generateEncryption({plainText:phone})
-        const user=await User.create({name , email , password:hashPassword , phone:encryptedPhone});
+        const user=await User.create({name , email , password:hashPassword , phone:encryptedPhone,role});
         emailEvent.emit('sendConfirmEmail' , {email})
        
         return res.status(201).json({
