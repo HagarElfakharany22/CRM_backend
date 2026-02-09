@@ -6,7 +6,7 @@ const getListByBoardId= asyncHandler(async(req , res , next)=>{
     const tasks= await Tasks.find({listId:id});
     console.log(`tasks : ` , tasks);
     
-    const lists= await Lists.find({boardId:id});
+    const lists= await Lists.find({boardId:id}).populate('tasks');
     if(lists.length===0){
         return res.status(404).json({message:'no lists found for this board'})
     }

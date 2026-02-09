@@ -1,18 +1,30 @@
 import { useContext , useEffect } from "react"
 import { ListContext } from "../context/ListContext.jsx";
 import { useQuery , useQueryClient } from "@tanstack/react-query";
-export default function Lists({id}){
-    const queryClient=useQueryClient();
-    const {data , error , isloading}= useQuery({
-        queryKey:['lists'],
-        queryFn:()=>getListsByBoardId(id)
-    })
-    let {getListsByBoardId } = useContext(ListContext);
-    useEffect(()=>{
-        console.log(data);
-    } , [data])
+import TaskCard from "./TaskCard.jsx";
+import styles from './style.module.css'
+export default function Lists({list}){
 
-    return(
-        <div>lists</div>
-    )
+    useEffect(()=>{
+       
+    } , [])
+
+    return (
+    <div className={`${styles.list}`}>
+      <div className={`${styles.list_header}`}>
+        <span>{list.title}</span>
+        <span>•••</span>
+      </div>
+
+      <div className={`${styles.tasks}`}>
+        {list.tasks.map((task) => (
+          <TaskCard key={task._id} task={task} />
+        ))}
+      </div>
+
+      <button className={`${styles.add_card}`}>
+        + Add a card
+      </button>
+    </div>
+  );
 }
