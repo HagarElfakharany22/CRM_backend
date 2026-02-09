@@ -4,7 +4,7 @@ import api from "./baseURL.jsx";
 
 export  let BoardContext=createContext(0)
 
-const role = JSON.parse(localStorage.getItem("user")).role;  
+const role = JSON.parse(localStorage.getItem("user"))?.role;  
      let auth;
      if(role==='admin')
      {
