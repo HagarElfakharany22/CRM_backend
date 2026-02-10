@@ -16,11 +16,18 @@ export default function Lists({ list, onTaskClick }) {
         <span>•••</span>
       </div>
 
-      <div className={`${styles.tasks}`}>
-        {list.tasks.map((task) => (
-          <TaskCard key={task._id} task={task} onClick={onTaskClick} />
-        ))}
+      <div className={styles.tasks}>
+        {list.tasks.map((task) =>
+          task.status !== 'done' && (
+            <TaskCard
+              key={task._id}
+              task={task}
+              onClick={onTaskClick}
+            />
+          )
+        )}
       </div>
+
 
       <button className={`${styles.add_card}`}>
         + Add a card

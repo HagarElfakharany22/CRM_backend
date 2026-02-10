@@ -8,7 +8,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
     const [showLinkInput, setShowLinkInput] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL ;
 
     useEffect(() => {
         setFormData({ ...task });
@@ -21,11 +21,13 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(name,value);
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        console.log(file)
         if (file) {
             setSelectedFile(file);
             // Create preview URL
@@ -39,7 +41,9 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
             Object.keys(formData).forEach(key => {
                 if (key !== 'image' && key !== '_id' && key !== '__v') {
                     data.append(key, formData[key] || '');
+                    console.log("key",key,"formData",formData[key])
                 }
+                 console.log("key",key,"formData",formData[key])
             });
             data.append('image', selectedFile);
             onUpdate(task._id, data);
@@ -241,9 +245,10 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
                                             value={formData.status || 'Pending'}
                                             onChange={handleChange}
                                         >
-                                            <option value="Pending">Pending</option>
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Completed">Completed</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="in progress">In Progress</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="done">Done</option>
                                         </select>
                                     </div>
 
