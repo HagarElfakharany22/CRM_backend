@@ -21,9 +21,20 @@ async function getListsByBoardId(id) {
     
     return response?.data?.lists
 }
+
+async function createList(data){
+    let response= await api.post('/api/v1/list/add' , data , {
+          headers:{
+       Authorization:`${auth} ${localStorage.getItem("token")}`
+    }
+    })
+    console.log(response);
+    return response.data;
+}
 export default function ListContextProvider({children}){
     return <ListContext.Provider value={{
-        getListsByBoardId
+        getListsByBoardId,
+        createList
     }}>
         {children}
     </ListContext.Provider>
