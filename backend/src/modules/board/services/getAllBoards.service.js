@@ -2,9 +2,8 @@ import Board from "../../../DB/models/board.model.js";
 import { asyncHandler } from "../../../utilities/error/error.js";
 
 const getAllBoards=asyncHandler(async(req , res , next)=>{
-    const boards= await Board.find();
-    console.log(boards);
-    
+    const boards= await Board.find().populate('owner' , 'name email').populate('users' , 'name email');
+   
     if(boards.length===0){
         return res.status(404).json({message:'no boards found'})
     }

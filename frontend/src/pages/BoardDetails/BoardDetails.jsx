@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 export default function BoardDetails() {
   const { id } = useParams();
   const queryClient = useQueryClient();
-  const { getBoardByItsId } = useContext(BoardContext);
+  const { getBoardByItsId , addUserToBoard } = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
   const { EditTasks, DeleteTasks } = useContext(TaskContext);
 
@@ -29,8 +29,10 @@ export default function BoardDetails() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["boardDetails"],
+    queryKey: ["boardDetails" , id],
     queryFn: () => getBoardByItsId(id),
+    placeholderData: (prev) => prev,
+    staleTime: 30_000,
   });
 
 
@@ -62,7 +64,7 @@ export default function BoardDetails() {
     console.log(listData);
   
  
-  }, [data, listData]);
+  }, [data, listData ]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -102,7 +104,7 @@ export default function BoardDetails() {
           <h5>{data?.title}</h5>
         </div>
         <div className="d-flex align-items-center gap-3">
-          <Employees users={data?.users} />
+          <Employees users={data?.users} owner={data?.owner}  />
           {/* Trigger Icon */}
           <i 
             className={`${styles.cursor} fa-solid fa-user-plus`}
@@ -145,6 +147,10 @@ export default function BoardDetails() {
             users={data?.users}  
           board={data}
           onClose={() => setIsShareModalOpen(false)} 
+          onSubmit={()=> {
+            setIsShareModalOpen(false);
+            queryClient.invalidateQueries(["boardDetails" , id]);
+          }}
         />
             </div>
       )}

@@ -46,6 +46,17 @@ async function getBoardByItsId (id) {
     
     return response.data.board;
 }
+
+async function addUserToBoard(id , email){
+    let response= await api.put(`/api/v1/board/by-email/${id}` , {email} , {
+        headers:{
+        Authorization:`${auth} ${localStorage.getItem("token")}`
+    }
+    })
+    console.log(response.data);
+    
+    return response.data;
+}
 export default  function BoardContextProvider({children}){
     const [BoardsData,setBoardsData]=useState();
 
@@ -54,7 +65,8 @@ export default  function BoardContextProvider({children}){
         BoardsData,
         setBoardsData,
         addBoard,
-        getBoardByItsId
+        getBoardByItsId,
+        addUserToBoard
     }}>
         {children}
         
