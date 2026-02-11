@@ -17,7 +17,7 @@ import Register from "./pages/Register";
 import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:8000");
+const socket = io("http://192.168.0.181:8000");
 export default function App() {
   const [message, setMessage] = useState("");
   const [leads, setLeads] = useState(dumyData.leads);
