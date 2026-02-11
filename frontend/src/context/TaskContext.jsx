@@ -19,6 +19,7 @@ const TaskProvider = ({ children }) => {
 
   function getAuthData() {
     const token = localStorage.getItem("token");
+   
     if (!token || !user) return null;
     const role = user.role || "user";
     const auth = role === "admin" ? "admin" : "Bearer";
@@ -29,7 +30,7 @@ const TaskProvider = ({ children }) => {
   useEffect(() => {
     if (!user) {
       // navigate("/login");
-      console.log("not a user")
+      // console.log("not a user")
     } else {
       getTasks();
     }
@@ -40,6 +41,7 @@ const TaskProvider = ({ children }) => {
     if (!authData) return;
 
     try {
+      console.log(authData.auth,authData.token)
       const res = await api.get("/api/v1/task/done", {
         headers: {
           Authorization: `${authData.auth} ${authData.token}`,

@@ -8,13 +8,17 @@ import getProfileData from "./services/getProfileData.service.js";
 import changePassword from "./services/changePassword.service.js";
 import confirmEmail from "./services/confirmEmail.service.js";
 import { endpoint } from "./user.endpoint.js";
+import getAttendace from "./services/getAttendence.service.js";
+import { logout } from "./services/logout.service.js";
 
 
 const router=Router();
 router.post('/register' , signup)
 router.post('/login' , login)
+router.post('/logout' , logout)
 router.post('/confirm-email' , confirmEmail)
 router.put('/update',authentication()  , updateProfile)
 router.get('/profile',authentication() , getProfileData)
+router.get('/attendance',authentication() , getAttendace)
 router.put('/password',authentication() , changePassword)
 export default router;
