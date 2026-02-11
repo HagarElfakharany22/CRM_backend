@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import { io } from "socket.io-client";
 import Layout from "./layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
@@ -16,15 +15,16 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import Employees from "./layout/Employees";
+import { io } from "socket.io-client";
 
-
+const socket = io("http://localhost:8000");
 export default function App() {
   const [message, setMessage] = useState("");
   const [leads, setLeads] = useState(dumyData.leads);
   const [contacts, setContacts] = useState(dumyData.contacts);
   const [deals, setDeals] = useState(dumyData.deals);
 
-  const socket = io("http://localhost:8000");
+  
  useEffect(() => {
     // استقبال الرسالة من السيرفر
     socket.on('server-notification', (data) => {
