@@ -10,6 +10,7 @@ import confirmEmail from "./services/confirmEmail.service.js";
 import { endpoint } from "./user.endpoint.js";
 import getAttendace from "./services/getAttendence.service.js";
 import { logout } from "./services/logout.service.js";
+import testSocket from "./services/testSocket.js";
 
 
 const router=Router();
@@ -21,4 +22,5 @@ router.put('/update',authentication()  , updateProfile)
 router.get('/profile',authentication() , getProfileData)
 router.get('/attendance',authentication() , getAttendace)
 router.put('/password',authentication() , changePassword)
+router.get('/test-socket', testSocket)
 export default router;

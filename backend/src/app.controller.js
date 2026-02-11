@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 console.log('__dirname : ' , __dirname);
 
 
-const bootstrap=(app , express)=>{
+const bootstrap=(app , express , io)=>{
     app.use(express.json());
     // app.use('/static', express.static(path.join(__dirname, 'utilities/email/template/img')));
 
@@ -39,6 +39,12 @@ const bootstrap=(app , express)=>{
         },
         credentials: true
       }));
+
+      
+      app.use((req, res, next) => {
+        req.io = io; 
+        next();
+    });
   console.log("__dirname" , __dirname);
 
       const uploadsPath =path.join(__dirname, '../uploads');
@@ -54,6 +60,7 @@ const bootstrap=(app , express)=>{
             message:"welcome in crm project..."
         })
     })
+
 
 
     app.use('/api/v1/user' ,userController )
