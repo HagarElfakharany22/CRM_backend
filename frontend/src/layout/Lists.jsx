@@ -49,7 +49,7 @@ export default function Lists({list , onTaskClick}){
 
       <div className={`${styles.tasks}`}>
         {list.tasks.map((task) => (
-          <TaskCard key={task._id} task={task} onClick={onTaskClick} />
+          task.status !== 'done' &&<TaskCard key={task._id} task={task} onClick={onTaskClick} />
         ))}
       </div>
       {isAddingTask ? (
@@ -91,18 +91,18 @@ export default function Lists({list , onTaskClick}){
 //         <div className="mt-2">
 //           <textarea
 //             autoFocus
-//             className={`${styles.form_control} mb-2`}
+//             className={${styles.form_control} mb-2}
 //             placeholder="Enter a title for this card..."
 //             value={taskTitle}
 //             onChange={(e) => setTaskTitle(e.target.value)}
 //           />
 //           <div className="d-flex gap-2">
-//             <button className={`${styles.btn_primary} btn  btn-sm`} onClick={handleAddTask}>Add card</button>
+//             <button className={${styles.btn_primary} btn  btn-sm} onClick={handleAddTask}>Add card</button>
 //             <button className="btn-close ms-2 mt-1" onClick={() => setIsAddingTask(false)}></button>
 //           </div>
 //         </div>
 //       ) : (
-//         <button className={`${styles.add_card}`} onClick={() => setIsAddingTask(true)}>
+//         <button className={${styles.add_card}} onClick={() => setIsAddingTask(true)}>
 //           + Add a card
 //         </button>
 //       )}

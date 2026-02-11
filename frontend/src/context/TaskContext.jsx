@@ -40,7 +40,7 @@ const TaskProvider = ({ children }) => {
     if (!authData) return;
 
     try {
-      const res = await api.get("/api/v1/task/all", {
+      const res = await api.get("/api/v1/task/done", {
         headers: {
           Authorization: `${authData.auth} ${authData.token}`,
         },
