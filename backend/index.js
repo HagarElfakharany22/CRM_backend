@@ -16,12 +16,13 @@ import express from 'express'
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 const app=express();
-const port =8000;
+// const port =8000;
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: "*", // أو ["http://192.168.1.5:5173"] لو عايز تحدد
+        methods: ["GET", "POST"],
     }
 });
 
@@ -43,7 +44,7 @@ io.engine.on("connection_error", (err) => {
 bootstrap(app , express , io)
 
 
-
-httpServer.listen(port, () => {
-    console.log(`listening on ${port} with Socket.io support`);
+const PORT = process.env.PORT || 8000;
+httpServer.listen(PORT, () => {
+    console.log(`listening on ${PORT} with Socket.io support`);
 });
