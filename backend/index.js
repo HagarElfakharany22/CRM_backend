@@ -36,6 +36,25 @@ io.on('connection', (socket) => {
     });
 });
 
+// io.on("connection", async (socket) => {
+//     console.log('User connected:', socket.id);
+//   const offset = socket.handshake.auth.offset;
+//   console.log("offset :" , offset);
+  
+//   if (offset) {
+//     console.log('offset found');
+    
+//     const missedEvents = await db.getEventsAfter(offset);
+//     missedEvents.forEach(event => {
+//       socket.emit("my-event", event);
+//     });
+//   }
+//   socket.on('disconnect', () => {
+//         console.log('User disconnected');
+//     });
+// });
+
+
 io.engine.on("connection_error", (err) => {
   console.log("Connection Error:", err.message);
   console.log("Context:", err.context);
@@ -43,8 +62,10 @@ io.engine.on("connection_error", (err) => {
 
 bootstrap(app , express , io)
 
-
 const PORT = process.env.PORT || 8000;
-httpServer.listen(PORT, () => {
-    console.log(`listening on ${PORT} with Socket.io support`);
+// httpServer.listen(PORT, () => {
+//     console.log(`listening on ${PORT} with Socket.io support`);
+// });
+httpServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -18,7 +18,10 @@ import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
 
 
-const socket = io("http://localhost:8000");
+// const socket = io("http://localhost:8000");
+
+const socket = io("http://192.168.0.181:8000");
+
 export default function App() {
   const [message, setMessage] = useState("");
   const [leads, setLeads] = useState(dumyData.leads);
@@ -32,7 +35,7 @@ export default function App() {
       alert(`رسالة من السيرفر: ${data?.message}`);
       console.log("message from socket : ", data.message);
     });
-
+  
     // مهم جداً: نقفل الوصلة لما الـ Component يتمسح
     return () => {
       socket.off('server-notification');
