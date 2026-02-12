@@ -17,9 +17,8 @@ import Register from "./pages/Register";
 import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
 
-const socket = io("https://crmbackend-production-39b2.up.railway.app/" , {
-  transports: ["websocket"],
-});
+
+const socket = io("http://localhost:8000");
 export default function App() {
   const [message, setMessage] = useState("");
   const [leads, setLeads] = useState(dumyData.leads);
