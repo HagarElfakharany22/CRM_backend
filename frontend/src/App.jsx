@@ -18,6 +18,7 @@ import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
 
 const socket = io("http://localhost:8000");
+console.log(socket)
 export default function App() {
   const [message, setMessage] = useState("");
   const [leads, setLeads] = useState(dumyData.leads);

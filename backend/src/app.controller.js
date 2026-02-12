@@ -5,7 +5,7 @@ import reviewController from './modules/review/review.controller.js'
 import boardController from './modules/board/board.controller.js'
 import listController from './modules/list/list.controller.js'
 import departmentController from './modules/department/department.controller.js'
-// import reportController from './modules/report/report.controller.js'
+import reportController from './modules/report/report.controller.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -70,7 +70,7 @@ const bootstrap=(app , express , io)=>{
     app.use('/api/v1/board' , boardController)
     app.use('/api/v1/list' , listController)
     app.use('/api/v1/department' , departmentController)
-    // app.use('/api/v1/report' , reportController)
+    app.use('/api/v1/report' , reportController)
 
   
 
