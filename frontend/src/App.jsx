@@ -16,11 +16,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 // const socket = io("http://localhost:8000");
 
-const socket = io("http://192.168.0.181:8000");
+const socket = io(API_URL);
 
 export default function App() {
   const [message, setMessage] = useState("");
