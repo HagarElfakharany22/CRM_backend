@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import styles from './style.module.css'
 
 export default function Sidebar({ user }) {
 const menuItems =
@@ -23,8 +24,8 @@ const menuItems =
 
   return (
     <aside
-      className="d-flex flex-column bg-dark text-white"
-      style={{ width: "16rem", minHeight: "100vh" }}
+      className={`d-flex flex-column bg-dark text-white ${styles.w20} ${styles.min_w_15} `}
+     
     >
       {/* Logo */}
       <Link

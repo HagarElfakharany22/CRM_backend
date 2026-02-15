@@ -10,9 +10,10 @@ import ShareModal from "../../layout/ShareModal.jsx";
 import TaskDetailModal from "../../components/TaskDetailModal.jsx";
 import { TaskContext } from "../../context/TaskContext.jsx";
 import { toast } from "react-toastify";
-
+import { TailSpin } from 'react-loader-spinner'
 export default function BoardDetails() {
   const { id } = useParams();
+   let [loading, setloading] = useState(true);
   const queryClient = useQueryClient();
   const { getBoardByItsId , addUserToBoard } = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
@@ -94,13 +95,24 @@ export default function BoardDetails() {
     }
   };
 
+  if (isLoading)  return (
+    <div className={`${styles.bg_dark} p-0 m-0 h-100 d-flex justify-content-center align-items-center `}>
+      <TailSpin
+        height="80"
+        width="80"
+        color="#2f0df0"
+        ariaLabel="tail-spin-loading"
+        visible={loading}
+      />
+    </div>
+  )
 
   return (
-    <div className={`${styles.bg_gredient} container p-0 vh-100 `}>
+    <div className={`${styles.bg_gredient}  p-0 vh-100  `}>
       <div
-        className={`${styles.boardNav} ${styles.bg_dark_transparent} p-2 text-white d-flex align-items-center justify-content-between`}
+        className={`${styles.boardNav} ${styles.bg_dark_transparent} p-2 text-white d-flex align-items-center justify-content-start  `}
       >
-        <div>
+        <div className=" me-5">
           <h5>{data?.title}</h5>
         </div>
         <div className="d-flex align-items-center gap-3">

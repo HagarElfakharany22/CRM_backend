@@ -5,6 +5,7 @@ import Board from "../BoardCard/BoardCard.jsx";
 import styles from "./Boards.module.css";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import { TailSpin } from 'react-loader-spinner'
 export default function Boards() {
   const queryClient = useQueryClient();
   let { getAllBoards, BoardsData, setBoardsData, addBoard } =
@@ -67,10 +68,20 @@ export default function Boards() {
     },
   });
 
-  if (isLoading) return <div>Fetching Boards...</div>;
+  if (isLoading)  return (
+    <div className={`${styles.bg_dark} p-0 m-0 h-100 d-flex justify-content-center align-items-center `}>
+      <TailSpin
+        height="80"
+        width="80"
+        color="#2f0df0"
+        ariaLabel="tail-spin-loading"
+        visible={loading}
+      />
+    </div>
+  )
   if (error) return <div>An error occurred: {error.message}</div>;
   return (
-    <div className={`${styles.bg_dark} p-0 m-0 h-100 `}>
+    <div className={`${styles.bg_dark} p-0 m-0  `}>
       <div className={`${styles.iconHolder}`}>
         <i
           onClick={() => setShowForm(true)}

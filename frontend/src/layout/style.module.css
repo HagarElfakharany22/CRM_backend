@@ -21,8 +21,32 @@
 
   cursor: pointer;
 } */
+ /* .layoutRoot {
+  height: 100vh;
+  overflow: hidden; 
+}
+.contentColumn {
+  height: 100vh;
+  overflow: hidden;
+}
 
-
+.mainContent {
+  overflow: hidden;
+  height: calc(100vh - 60px);
+  display: flex;   
+}
+.fit_screen {
+  width: 100vw;     
+  max-width: 100%;    
+  box-sizing: border-box;
+  overflow-x: hidden;  
+} */
+.bg_dark{
+    background-color: #212529;
+}
+.min_w_15{
+  min-width: 15%;
+}
 .board_employees {
   display: flex;
   align-items: center;
@@ -185,4 +209,8 @@ textarea.form_control {
 
 .cursor:hover {
   transform: scale(1.1);
+}
+
+.w20{
+  width: 15% !important;
 }
