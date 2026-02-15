@@ -16,7 +16,7 @@ const Topbar = ({user}) => {
       /> */}
      <h3>hello <span style={{color:"#6495ED"}}>{user.name}</span></h3>
       {/* Right Section */}
-      <div className="d-flex align-items-center gap-2 pe-5 me-5">
+      <div className="d-flex align-items-center gap-2 ">
         {/* <button className="btn btn-primary">
           + Create New
         </button> */}

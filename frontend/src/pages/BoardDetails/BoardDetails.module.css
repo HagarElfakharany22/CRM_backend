@@ -1,18 +1,18 @@
-
-.bg_gredient{
-    background: linear-gradient(#fd7e14 10% , #0d6efd );
-    height: 100%;
+.bg_gredient {
+  background: linear-gradient(#fd7e14 10%, #0d6efd);
+  height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+  /* allow child (.board) scrollbars to show */
 }
 
-.bg_dark_transparent{
-    background-color: RGBA(0,0,0,0.5);
+.bg_dark_transparent {
+  background-color: RGBA(0, 0, 0, 0.5);
 }
 
-.cursor{
-    cursor: pointer;
+.cursor {
+  cursor: pointer;
 }
 
 /* Container for the lists */
@@ -26,54 +26,73 @@
  
   
 } */
- .board {
+.board {
   display: flex;
-  align-items: flex-start; /* Keeps lists at the top */
-  gap: 16px; 
+  align-items: flex-start;
+  /* Keeps lists at the top */
+  gap: 16px;
   padding: 15px;
-  
+
   /* Horizontal Scroll Logic */
-  overflow-x: auto; 
-  overflow-y: auto;     
-  white-space: nowrap;    /* Keeps inline elements from wrapping */
-  
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  /* Keeps inline elements from wrapping */
+  -webkit-overflow-scrolling: touch;
+  /* smooth scrolling on touch devices */
+  scroll-behavior: smooth;
+
   /* Ensure it takes up the remaining height */
-  height: calc(100vh - 60px); 
+  /* height: calc(100vh - 60px);  */
+  flex: 1;
   width: 100%;
 }
 
-.list, .add_list, .add_list_form {
-  flex: 0 0 272px;        /* flex-grow: 0, flex-shrink: 0, flex-basis: 272px */
+.list,
+.add_list,
+.add_list_form {
+  flex: 0 0 272px;
+  /* flex-grow: 0, flex-shrink: 0, flex-basis: 272px */
   width: 272px;
   max-width: 272px;
 }
 
 .board::-webkit-scrollbar {
-  height: 12px; /* Height for horizontal scrollbars */
+  height: 12px;
+  /* Height for horizontal scrollbars */
   /* background-color: rgba(20, 20, 20, 0.236); */
 }
+
 .board::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1); /* Light transparent track */
+  background: rgba(0, 0, 0, 0.1);
+  /* Light transparent track */
   border-radius: 10px;
-  margin: 0 10px; /* Keeps the bar from touching the edges */
+  margin: 0 10px;
+  /* Keeps the bar from touching the edges */
 }
+
 .board::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3); /* Semi-transparent white like Trello */
+  background: rgba(255, 255, 255, 0.3);
+  /* Semi-transparent white like Trello */
   border-radius: 10px;
-  border: 3px solid transparent; /* Creates padding effect around the thumb */
+  border: 3px solid transparent;
+  /* Creates padding effect around the thumb */
   background-clip: padding-box;
 }
+
 /* 4. Hover effect on the thumb */
 .board::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid transparent;
 }
+
 .add_list {
   min-width: 272px;
   padding: 12px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.24);
-  /*Translucentwhite*/color: white;
+  /*Translucentwhite*/
+  color: white;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -89,35 +108,39 @@
 }
 
 .add_list_form {
-    background-color: #f1f2f4 !important;
-    height: fit-content;
+  background-color: #f1f2f4 !important;
+  height: fit-content;
 }
 
 .form_control {
-    font-size: 14px;
-    border: none;
-    box-shadow: inset 0 0 0 2px #388bff;
+  font-size: 14px;
+  border: none;
+  box-shadow: inset 0 0 0 2px #388bff;
 }
 
 textarea.form_control {
-    resize: none;
-    min-height: 60px;
+  resize: none;
+  min-height: 60px;
 }
+
 .list {
-  background-color: #f1f2f4; /* Light grey list background */
-  width: 272px;   
-  min-width: 272PX;         
+  background-color: #f1f2f4;
+  /* Light grey list background */
+  width: 272px;
+  min-width: 272PX;
   border-radius: 12px;
   padding: 12px;
-  flex-shrink: 0;            /* Prevents lists from squishing */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  /* Prevents lists from squishing */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .btn_primary {
-    background-color: #0c66e4;
-    border: none;
-    font-weight: 500;
+  background-color: #0c66e4;
+  border: none;
+  font-weight: 500;
 }
+
 .btn_primary:hover {
-    background-color: #0a58b8;
+  background-color: #0a58b8;
 }
