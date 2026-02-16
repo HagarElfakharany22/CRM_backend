@@ -14,16 +14,11 @@ export default function ShareModal({ board, onClose , onSubmit }) {
   const addMemberMutation = useMutation({
     mutationFn: async (email) =>addUserToBoard(board._id, email)
     ,
-    onSuccess: (updatedBoard) => {
-      
-      queryClient.setQueryData(
-    ["boardDetails", updatedBoard?.board?._id],
-    updatedBoard?.board
-  );
-  console.log(updatedBoard?.board);
-  
+    onSuccess: async () => {
+  await queryClient.invalidateQueries({ queryKey: ["boardDetails", board._id] });
+  queryClient.refetchQueries({ queryKey: ["boardDetails", board._id] });
   onClose();
-    },
+},
   });
   
   const handleShare = () => {

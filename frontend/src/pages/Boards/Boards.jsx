@@ -82,10 +82,10 @@ export default function Boards() {
   if (error) return <div>An error occurred: {error.message}</div>;
   return (
     <div className={`${styles.bg_dark} p-0 m-0  `}>
-      <div className={`${styles.iconHolder}`}>
+      <div className={`${styles.iconHolder} z-1`}>
         <i
           onClick={() => setShowForm(true)}
-          className="fa-solid fa-plus fs-2 rounded-5 p-1"
+          className="fa-solid fa-plus fs-2 rounded-5 p-1 "
         ></i>
       </div>
 

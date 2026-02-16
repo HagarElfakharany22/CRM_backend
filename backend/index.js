@@ -28,11 +28,11 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
 
-    console.log('User connected:', socket.id);
+    // console.log('User connected:', socket.id);
     io.emit('server-notification' , {message:'Hello from the server!'});
 
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        // console.log('User disconnected');
     });
 });
 

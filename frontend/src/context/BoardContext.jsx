@@ -4,23 +4,36 @@ import api from "./baseURL.jsx";
 
 export  let BoardContext=createContext(0)
 
-const role = JSON.parse(localStorage.getItem("user"))?.role;  
-     let auth;
-     if(role==='admin')
-     {
-        auth='admin'
-     }
-     else{
-        auth='Bearer'
-     }
-     console.log(auth);
+// const role = JSON.parse(localStorage.getItem("user"))?.role;  
+//      let auth;
+//      if(role==='admin')
+//      {
+//         auth='admin'
+//      }
+//      else{
+//         auth='Bearer'
+//      }
+//      console.log(auth);
+function getAuthHeader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+
+  if (!token) return {};
+
+  const role = user?.role;
+  const authType = role === "admin" ? "admin" : "Bearer";
+
+  return {
+    Authorization: `${authType} ${token}`,
+  };
+}
 async function getAllBoards(){
     
  let response=await api.get(`/api/v1/board/all` , {
-    headers:{
-       Authorization:`${auth} ${localStorage.getItem("token")}`
-    }
+    headers:getAuthHeader()
   });
+  console.log(response.data);
+  
   
   return response.data;
 }
@@ -28,9 +41,7 @@ async function addBoard(data){
     console.log(data);
     
     let response=await api.post('/api/v1/board/add' , data , {
-    headers:{
-        Authorization:`${auth} ${localStorage.getItem("token")}`
-    }});
+    headers:getAuthHeader()});
     console.log(response);
     
     return response.data;
@@ -38,9 +49,7 @@ async function addBoard(data){
 
 async function getBoardByItsId (id) {
     let response= await api.get(`/api/v1/board/${id}` , {
-        headers:{
-        Authorization:`${auth} ${localStorage.getItem("token")}`
-    }
+        headers:getAuthHeader()
     })
 
     
@@ -49,9 +58,7 @@ async function getBoardByItsId (id) {
 
 async function addUserToBoard(id , email){
     let response= await api.put(`/api/v1/board/by-email/${id}` , {email} , {
-        headers:{
-        Authorization:`${auth} ${localStorage.getItem("token")}`
-    }
+        headers:getAuthHeader()
     })
     console.log(response.data);
     

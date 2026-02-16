@@ -4,6 +4,8 @@ import { asyncHandler } from "../../../utilities/error/error.js";
 const updateList=asyncHandler(async(req , res , next)=>{
     const {id}=req.params;
     const {title}=req.body;
+    console.log(`title : ${title}`);
+    
     const updatedList= await Lists.findByIdAndUpdate(id , {title} , {new:true , runValidators:true})
     if (!updatedList) {
         return res.status(404).json({

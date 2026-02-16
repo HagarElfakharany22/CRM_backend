@@ -61,10 +61,8 @@ export default function BoardDetails() {
   };
 
   useEffect(() => {
-    console.log(data?._id);
-    console.log(listData);
-
-
+   console.log(listData);
+   
   }, [data, listData]);
 
   const handleTaskClick = (task) => {
@@ -126,7 +124,7 @@ export default function BoardDetails() {
 
       </div>
       <div className={`${styles.board}`}>
-
+       
         {listData?.map((list) => (
           <Lists key={list._id} list={list} onTaskClick={handleTaskClick} />
         ))}
