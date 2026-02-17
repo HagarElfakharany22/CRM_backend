@@ -68,7 +68,7 @@ export default function Boards() {
     },
   });
 
-  if (isLoading)  return (
+  if (isLoading) return (
     <div className={`${styles.bg_dark} p-0 m-0 h-100 d-flex justify-content-center align-items-center `}>
       <TailSpin
         height="80"
@@ -92,7 +92,7 @@ export default function Boards() {
       {/*------------------------------ start form ---------------------------------*/}
       {showForm && (
         <div
-          className={`${styles.formHolder} position-absolute top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center`}
+          className={`${styles.formHolder} z-2 position-absolute top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center`}
         >
           <div
             className={`${styles.form} container bg-dark w-50 px-3 py-5 rounded-5`}
@@ -108,11 +108,9 @@ export default function Boards() {
                 onBlur={Register.handleBlur}
                 value={Register.values.title}
                 onChange={Register.handleChange}
-                className={` ${
-                  styles.MyInput
-                } form-control Gray-Color rounded-5 mb-3    ${
-                  Register.errors.title ? "is-invalid" : ""
-                } `}
+                className={` ${styles.MyInput
+                  } form-control Gray-Color rounded-5 mb-3    ${Register.errors.title ? "is-invalid" : ""
+                  } `}
                 type="text"
                 name="title"
                 id="title"
@@ -134,11 +132,9 @@ export default function Boards() {
                 onBlur={Register.handleBlur}
                 value={Register.values.description}
                 onChange={Register.handleChange}
-                className={` ${
-                  styles.MyInput
-                } form-control Gray-Color rounded-5    ${
-                  Register.errors.description ? "is-invalid" : ""
-                } `}
+                className={` ${styles.MyInput
+                  } form-control Gray-Color rounded-5    ${Register.errors.description ? "is-invalid" : ""
+                  } `}
                 type="text"
                 name="description"
                 id="description"
@@ -158,7 +154,10 @@ export default function Boards() {
               <button
                 disabled={!(Register.dirty && Register.isValid)}
                 type="submit"
-                className="btn bg-main text-secondary mt-3 form-control rounded-5"
+                className={`btn mt-3 form-control rounded-5 ${Register.dirty && Register.isValid
+                    ? "bg-success text-white"
+                    : "bg-secondary text-light"
+                  }`}
               >
                 {loading ? (
                   "Submit"

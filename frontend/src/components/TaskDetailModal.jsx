@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAlignLeft, faList, faTag, faClock, faTrash, faTimes, faSave, faImage, faPaperclip, faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 
-const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
+const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete   }) => {
     const [formData, setFormData] = useState({ ...task });
     const [showImageInput, setShowImageInput] = useState(false);
     const [showLinkInput, setShowLinkInput] = useState(false);
@@ -15,7 +15,12 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
         setShowImageInput(false);
         setShowLinkInput(false);
         setSelectedFile(null);
-    }, [task]);
+        console.log(task?.userId);
+        
+        
+       
+        
+    }, [task  ]);
 
     if (!isOpen || !task) return null;
 
@@ -103,6 +108,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
                                 />
 
                                 <span className="text-muted small ms-1">in list <strong>{formData.status}</strong></span>
+                                <span className="text-muted small ms-1">Employee <strong>{formData.status}</strong></span>
                             </div>
                         </div>
                         <button type="button" className="btn-close" onClick={onClose}></button>

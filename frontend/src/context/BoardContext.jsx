@@ -56,8 +56,25 @@ async function getBoardByItsId (id) {
     return response.data.board;
 }
 
+async function deleteBoardByItsId (id) {
+    let response= await api.delete(`/api/v1/board/delete/${id}` , {
+        headers:getAuthHeader()
+    })
+    console.log(response.data);
+    return response.data;
+}
+
 async function addUserToBoard(id , email){
     let response= await api.put(`/api/v1/board/by-email/${id}` , {email} , {
+        headers:getAuthHeader()
+    })
+    console.log(response.data);
+    
+    return response.data;
+}
+
+async function updateBoard(id , data){
+    let response= await api.put(`/api/v1/board/update/${id}` ,data , {
         headers:getAuthHeader()
     })
     console.log(response.data);
@@ -73,7 +90,9 @@ export default  function BoardContextProvider({children}){
         setBoardsData,
         addBoard,
         getBoardByItsId,
-        addUserToBoard
+        addUserToBoard,
+        deleteBoardByItsId,
+        updateBoard
     }}>
         {children}
         

@@ -167,7 +167,8 @@ export default function BoardDetails() {
 
 
       {/* Task Detail Modal */}
-      <TaskDetailModal
+      <TaskDetailModal 
+      board={data}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         task={selectedTask}

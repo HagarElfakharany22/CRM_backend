@@ -22,7 +22,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: "*", // أو ["http://192.168.1.5:5173"] لو عايز تحدد
-        methods: ["GET", "POST"],
+        methods: ["GET", "POST" , "PUT" , "DELETE"],
     }
 });
 
@@ -55,10 +55,10 @@ io.on('connection', (socket) => {
 // });
 
 
-io.engine.on("connection_error", (err) => {
-  console.log("Connection Error:", err.message);
-  console.log("Context:", err.context);
-});
+// io.engine.on("connection_error", (err) => {
+//   console.log("Connection Error:", err.message);
+//   console.log("Context:", err.context);
+// });
 
 bootstrap(app , express , io)
 

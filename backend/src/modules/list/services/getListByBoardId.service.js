@@ -6,7 +6,7 @@ const getListByBoardId= asyncHandler(async(req , res , next)=>{
     const tasks= await Tasks.find({listId:id});
     // console.log(`tasks : ` , tasks);
     
-    const lists= await Lists.find({boardId:id}).populate('tasks');
+    const lists= await Lists.find({boardId:id}).populate('tasks')
     console.log(`lists length : ${lists.length}`);
     
     // if(lists.length===0){
