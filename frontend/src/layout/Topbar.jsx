@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import styles from './style.module.css'
 const Topbar = ({user}) => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   return (
-    <div className="d-flex justify-content-between align-items-center bg-white border-bottom p-3">
+    <div className={`${styles.bg_dark} ${styles.fit_screen} d-flex justify-content-between align-items-center text-white border-bottom py-3 px-5`}>
       {/* Search Input */}
       {/* <input
         type="text"
@@ -15,7 +16,7 @@ const Topbar = ({user}) => {
       /> */}
      <h3>hello <span style={{color:"#6495ED"}}>{user.name}</span></h3>
       {/* Right Section */}
-      <div className="d-flex align-items-center gap-2">
+      <div className="d-flex align-items-center gap-2 ">
         {/* <button className="btn btn-primary">
           + Create New
         </button> */}

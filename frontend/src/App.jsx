@@ -30,18 +30,18 @@ export default function App() {
   const [deals, setDeals] = useState(dumyData.deals);
 
   
- useEffect(() => {
-    // استقبال الرسالة من السيرفر
-    socket.on('server-notification', (data) => {
-      alert(`رسالة من السيرفر: ${data?.message}`);
-      console.log("message from socket : ", data.message);
-    });
+//  useEffect(() => {
+//     // استقبال الرسالة من السيرفر
+//     socket.on('server-notification', (data) => {
+//       alert(`رسالة من السيرفر: ${data?.message}`);
+//       console.log("message from socket : ", data.message);
+//     });
   
-    // مهم جداً: نقفل الوصلة لما الـ Component يتمسح
-    return () => {
-      socket.off('server-notification');
-    };
-  }, []);
+//     // مهم جداً: نقفل الوصلة لما الـ Component يتمسح
+//     return () => {
+//       socket.off('server-notification');
+//     };
+//   }, []);
     
   
   const addLead = (lead) => setLeads([...leads, { ...lead, id: Date.now() }]);

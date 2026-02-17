@@ -11,7 +11,7 @@ import { endpoint } from "./user.endpoint.js";
 import getAttendace from "./services/getAttendence.service.js";
 import { logout } from "./services/logout.service.js";
 import testSocket from "./services/testSocket.js";
-
+import getUserById from "./services/getUserById.service.js";
 
 const router=Router();
 router.post('/register' , signup)
@@ -23,4 +23,5 @@ router.get('/profile',authentication() , getProfileData)
 router.get('/attendance',authentication() , getAttendace)
 router.put('/password',authentication() , changePassword)
 router.get('/test-socket', testSocket)
+router.get('/by-id/:id' , authentication() , getUserById)
 export default router;

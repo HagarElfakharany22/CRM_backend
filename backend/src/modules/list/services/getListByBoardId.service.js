@@ -6,13 +6,12 @@ const getListByBoardId= asyncHandler(async(req , res , next)=>{
     const tasks= await Tasks.find({listId:id});
     // console.log(`tasks : ` , tasks);
     
-    const lists= await Lists.find({boardId:id}).populate('tasks');
-    if(lists.length===0){
-        return res.status(404).json({message:'no lists found for this board'})
-    }
-  
-    // console.log('lists : ' , lists);
+    const lists= await Lists.find({boardId:id}).populate('tasks')
+    console.log(`lists length : ${lists.length}`);
     
+    // if(lists.length===0){
+    //     return res.status(404).json({message:'no lists found for this board'})
+    // }
     return res.status(200).json({
         message:'lists retrieved successfully',
         lists

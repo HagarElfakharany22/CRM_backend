@@ -1,6 +1,12 @@
 .bg_dark{
     background-color: #212529;
 }
+.fit-screen {
+  width: 100vw;     
+  max-width: 100%;    
+  box-sizing: border-box;
+  overflow-x: hidden;  
+}
 .iconColor{
     color:#2ff3e0 !important;
 }

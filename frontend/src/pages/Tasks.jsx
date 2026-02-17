@@ -220,6 +220,7 @@ function TasksPage() {
 
       {/* New Trello-like Detail Modal */}
       <TaskDetailModal
+     
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         task={selectedTask}

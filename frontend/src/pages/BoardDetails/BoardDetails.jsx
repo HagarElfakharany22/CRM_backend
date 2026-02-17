@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { BoardContext } from "../../context/BoardContext.jsx";
-import { useQuery, useQueryClient , useMutation } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import styles from "./BoardDetails.module.css";
 import Employees from "../../layout/Employees.jsx";
 import Lists from "../../layout/Lists.jsx";
@@ -10,26 +10,27 @@ import ShareModal from "../../layout/ShareModal.jsx";
 import TaskDetailModal from "../../components/TaskDetailModal.jsx";
 import { TaskContext } from "../../context/TaskContext.jsx";
 import { toast } from "react-toastify";
-
+import { TailSpin } from 'react-loader-spinner'
 export default function BoardDetails() {
   const { id } = useParams();
+  let [loading, setloading] = useState(true);
   const queryClient = useQueryClient();
-  const { getBoardByItsId , addUserToBoard } = useContext(BoardContext);
+  const { getBoardByItsId, addUserToBoard } = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
   const { EditTasks, DeleteTasks } = useContext(TaskContext);
 
   // Modal State
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-//   ----------------------------------------
-  let { getListsByBoardId , createList } = useContext(ListContext);
-//   --------------------------------------------
+  //   ----------------------------------------
+  let { getListsByBoardId, createList } = useContext(ListContext);
+  //   --------------------------------------------
   const [isAddingList, setIsAddingList] = useState(false);
   const [listTitle, setListTitle] = useState("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["boardDetails" , id],
+    queryKey: ["boardDetails", id],
     queryFn: () => getBoardByItsId(id),
     placeholderData: (prev) => prev,
     staleTime: 30_000,
@@ -60,11 +61,9 @@ export default function BoardDetails() {
   };
 
   useEffect(() => {
-    console.log(data?._id);
-    console.log(listData);
-  
- 
-  }, [data, listData ]);
+   console.log(listData);
+   
+  }, [data, listData]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -94,27 +93,38 @@ export default function BoardDetails() {
     }
   };
 
+  if (isLoading) return (
+    <div className={`${styles.bg_dark} p-0 m-0 h-100 d-flex justify-content-center align-items-center `}>
+      <TailSpin
+        height="80"
+        width="80"
+        color="#2f0df0"
+        ariaLabel="tail-spin-loading"
+        visible={loading}
+      />
+    </div>
+  )
 
   return (
-    <div className={`${styles.bg_gredient} container p-0 vh-100 `}>
+    <div className={`${styles.bg_gredient}  p-0 h-100 `}>
       <div
-        className={`${styles.boardNav} ${styles.bg_dark_transparent} p-2 text-white d-flex align-items-center justify-content-between`}
+        className={`${styles.boardNav} ${styles.bg_dark_transparent} py-2 px-5 text-white d-flex align-items-center justify-content-between  `}
       >
-        <div>
+        <div className=" me-5">
           <h5>{data?.title}</h5>
         </div>
         <div className="d-flex align-items-center gap-3">
-          <Employees users={data?.users} owner={data?.owner}  />
+          <Employees users={data?.users} owner={data?.owner} />
           {/* Trigger Icon */}
-          <i 
+          <i
             className={`${styles.cursor} fa-solid fa-user-plus`}
             onClick={() => setIsShareModalOpen(true)}
           ></i>
         </div>
-        
+
       </div>
       <div className={`${styles.board}`}>
-        
+       
         {listData?.map((list) => (
           <Lists key={list._id} list={list} onTaskClick={handleTaskClick} />
         ))}
@@ -139,25 +149,26 @@ export default function BoardDetails() {
         )}
       </div>
       {/* Share Modal Component */}
-     
-      
-         {isShareModalOpen && (
+
+
+      {isShareModalOpen && (
         <div className={` ${styles.bg_dark_transparent} d-flex justify-content-center align-items-center position-absolute top-0 bottom-0 end-0 start-0 h-100`}>
-            <ShareModal className=" m-auto"
-            users={data?.users}  
-          board={data}
-          onClose={() => setIsShareModalOpen(false)} 
-          onSubmit={()=> {
-            setIsShareModalOpen(false);
-            queryClient.invalidateQueries(["boardDetails" , id]);
-          }}
-        />
-            </div>
+          <ShareModal className=" m-auto"
+            users={data?.users}
+            board={data}
+            onClose={() => setIsShareModalOpen(false)}
+            onSubmit={() => {
+              setIsShareModalOpen(false);
+              queryClient.invalidateQueries(["boardDetails", id]);
+            }}
+          />
+        </div>
       )}
-      
+
 
       {/* Task Detail Modal */}
-      <TaskDetailModal
+      <TaskDetailModal 
+      board={data}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         task={selectedTask}
