@@ -1,6 +1,6 @@
 
 import { createContext, useState, useEffect } from "react";
-
+import api from "./baseURL.jsx";
 export const AuthContext = createContext();
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -88,16 +88,20 @@ export const AuthProvider = ({ children }) => {
 };
 
 async function getUserById (id) {
-    let response= await api.get(`/api/v1/board/${id}` , {
+  
+    let response= await api.get(`/api/v1/user/by-id/${id}` , {
         headers:getAuthHeader()
     })
 
+    console.log(response.data);
     
-    return response.data.board;
+    return response.data;
 }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout ,
+      getUserById
+    }}>
       {children}
     </AuthContext.Provider>
   );

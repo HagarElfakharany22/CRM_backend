@@ -150,7 +150,7 @@ export default function Lists({list , onTaskClick}){
             onChange={(e) => setTaskTitle(e.target.value)}
           />
           <div className="d-flex gap-2">
-            <button className="btn btn-primary btn-sm" onClick={handlAddTask}>Add card</button>
+            <button className="btn btn-primary btn-sm" onClick={handleAddTask}>Add card</button>
             <button className="btn-close ms-2 mt-1" onClick={() => setIsAddingTask(false)}></button>
           </div>
         </div>

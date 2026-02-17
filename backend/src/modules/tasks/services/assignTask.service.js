@@ -1,12 +1,15 @@
 import Tasks from "../../../DB/models/tasks.model.js";
+import User from "../../../DB/models/User.model.js";
 import { asyncHandler } from "../../../utilities/error/error.js";
 
 const assignTask = asyncHandler(async (req, res, next) => {
-    const { userId } = req.body;
+    const { email } = req.body;
     const { taskId } = req.params;
+    let user= await User.findOne({email})
+
     const task = await Tasks.findByIdAndUpdate(
   taskId,
-  { $set: { userId: userId }},
+  { $set: { userId: user._id }},
   { new: true }
 );
     if (!task) {

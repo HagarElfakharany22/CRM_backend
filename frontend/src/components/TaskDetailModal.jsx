@@ -1,14 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAlignLeft, faList, faTag, faClock, faTrash, faTimes, faSave, faImage, faPaperclip, faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { AuthContext } from '../context/AuthContext';
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
-const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete   }) => {
+const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
+    const queryClient = useQueryClient();
     const [formData, setFormData] = useState({ ...task });
+    const [userName, setUserName] = useState(null);
     const [showImageInput, setShowImageInput] = useState(false);
     const [showLinkInput, setShowLinkInput] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
-    const API_URL = import.meta.env.VITE_API_URL ;
+    const { getUserById } = useContext(AuthContext);
+
+    const API_URL = import.meta.env.VITE_API_URL;
+    const getUserNameMutation = useMutation({
+        mutationFn: (userId) => getUserById(userId),
+        onSuccess: (data) => {
+            setUserName(data?.user?.name)
+            queryClient.invalidateQueries(["lists", list.boardId]);
+
+            //   setIsAddingTask(false);
+            //   setTaskTitle("");
+        },
+    });
 
     useEffect(() => {
         setFormData({ ...task });
@@ -16,17 +32,18 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete   }) => {
         setShowLinkInput(false);
         setSelectedFile(null);
         console.log(task?.userId);
-        
-        
-       
-        
-    }, [task  ]);
+        getUserNameMutation.mutate(task?.userId)
+        console.log(task);
+
+
+
+    }, [task, userName]);
 
     if (!isOpen || !task) return null;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name,value);
+        console.log(name, value);
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
@@ -46,9 +63,9 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete   }) => {
             Object.keys(formData).forEach(key => {
                 if (key !== 'image' && key !== '_id' && key !== '__v') {
                     data.append(key, formData[key] || '');
-                    console.log("key",key,"formData",formData[key])
+                    console.log("key", key, "formData", formData[key])
                 }
-                 console.log("key",key,"formData",formData[key])
+                console.log("key", key, "formData", formData[key])
             });
             data.append('image', selectedFile);
             onUpdate(task._id, data);
@@ -107,8 +124,8 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete   }) => {
                                     placeholder="Task Title"
                                 />
 
-                                <span className="text-muted small ms-1">in list <strong>{formData.status}</strong></span>
-                                <span className="text-muted small ms-1">Employee <strong>{formData.status}</strong></span>
+                                <span className="text-muted small ms-1">Task : <strong className='text-warning'>{formData.status}</strong></span>
+                                <h5 className="text-muted small ms-1">Employee : <strong className='text-success'>{userName}</strong></h5>
                             </div>
                         </div>
                         <button type="button" className="btn-close" onClick={onClose}></button>
@@ -251,6 +268,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete   }) => {
                                             value={formData.status || 'Pending'}
                                             onChange={handleChange}
                                         >
+                                            <option hidden>{task?.status}</option>
                                             <option value="pending">Pending</option>
                                             <option value="in progress">In Progress</option>
                                             <option value="completed">Completed</option>
