@@ -21,6 +21,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 // const socket = io("http://localhost:8000");
 
 const socket = io(API_URL);
+console.log(socket);
 
 export default function App() {
   const [message, setMessage] = useState("");

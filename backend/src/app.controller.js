@@ -40,7 +40,7 @@ const bootstrap=(app , express , io)=>{
         },
         credentials: true
       }));
-
+app.options('*', cors());
       // -----------------socket io middleware-----------------
       app.use((req, res, next) => {
         req.io = io; 
