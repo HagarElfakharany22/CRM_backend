@@ -1,40 +1,40 @@
 
+import bootstrap from './src/app.controller.js';
+import express from 'express'
+const app=express();
+const port =8000;
+
+bootstrap(app , express)
+
+
+
+app.listen(port , ()=>{console.log(`listening on ${port}`);
+})
+
 // import bootstrap from './src/app.controller.js';
 // import express from 'express'
+// import { Server } from 'socket.io';
+// import { createServer } from 'http';
 // const app=express();
 // const port =8000;
 
-// bootstrap(app , express)
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+//     cors: {
+//         origin: ["https://crm-backend-theta-liard.vercel.app/"], 
+//         methods: ["GET", "POST" , "PUT" , "DELETE"],
+//     }
+// });
 
+// io.on('connection', (socket) => {
 
+//     console.log('User connected:', socket.id);
+//     io.emit('server-notification' , {message:'Hello from the server!'});
 
-// app.listen(port , ()=>{console.log(`listening on ${port}`);
-// })
-
-import bootstrap from './src/app.controller.js';
-import express from 'express'
-import { Server } from 'socket.io';
-import { createServer } from 'http';
-const app=express();
-// const port =8000;
-
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-    cors: {
-        origin: "*", // أو ["http://192.168.1.5:5173"] لو عايز تحدد
-        methods: ["GET", "POST" , "PUT" , "DELETE"],
-    }
-});
-
-io.on('connection', (socket) => {
-
-    // console.log('User connected:', socket.id);
-    io.emit('server-notification' , {message:'Hello from the server!'});
-
-    socket.on('disconnect', () => {
-        // console.log('User disconnected');
-    });
-});
+//     socket.on('disconnect', () => {
+//         console.log('User disconnected');
+//     });
+// });
 
 // io.on("connection", async (socket) => {
 //     console.log('User connected:', socket.id);
@@ -60,12 +60,12 @@ io.on('connection', (socket) => {
 //   console.log("Context:", err.context);
 // });
 
-bootstrap(app , express , io)
+// bootstrap(app , express , io)
 
-const PORT = process.env.PORT || 8000;
+// const PORT = process.env.PORT || 8000;
 // httpServer.listen(PORT, () => {
 //     console.log(`listening on ${PORT} with Socket.io support`);
 // });
-httpServer.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// httpServer.listen(PORT, "0.0.0.0", () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
