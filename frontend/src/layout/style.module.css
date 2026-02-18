@@ -306,3 +306,14 @@ textarea.form_control {
     top:25px;
     cursor: pointer;
 }
+@media (max-width: 768px) {
+  /* .logoutBtn {
+    font-size: 15px;
+    padding: 10px 40px;
+   
+} */
+ .user_avatar{
+  color: #0a58b8;
+  display: none;
+ }
+}

@@ -108,8 +108,8 @@ function TasksPage() {
           />
 
         </div>
-        <button className="btn btn-primary shadow-sm px-4" onClick={openAddModal}>
-          New Task</button>
+        {/* <button className="btn btn-primary shadow-sm px-4" onClick={openAddModal}>
+          New Task</button> */}
       </div>
 
       {/* Main Table Card */}

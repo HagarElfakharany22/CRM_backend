@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { BoardContext } from "../../context/BoardContext.jsx";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import styles from "./BoardDetails.module.css";
 import Employees from "../../layout/Employees.jsx";
 import Lists from "../../layout/Lists.jsx";
@@ -21,7 +22,7 @@ export default function BoardDetails() {
   const { getBoardByItsId, addUserToBoard , getUserRole} = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
   const { EditTasks, DeleteTasks } = useContext(TaskContext);
-
+const navigate = useNavigate();
   // Modal State
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -118,6 +119,7 @@ export default function BoardDetails() {
   }
   return (
     <div className={`${styles.bg_gredient}  p-0 h-100 `}>
+      
       <div
         className={`${styles.boardNav} ${styles.bg_dark_transparent} py-2 px-5 text-white d-flex align-items-center justify-content-between  `}
       >
@@ -142,6 +144,11 @@ export default function BoardDetails() {
         </div>
 
       </div>
+      <div className={styles.back} >
+<i class="fa-solid fa-arrow-left" style={{color:"black", fontSize:"30px" ,textAlign:"center" , cursor: "pointer"}} onClick={()=>navigate("/boards")}></i>
+      </div>
+               
+
       <div className={`${styles.board}`}>
        
         {listData?.map((list) => (

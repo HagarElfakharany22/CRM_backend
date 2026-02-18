@@ -13,6 +13,7 @@ export default function Board({ item }) {
   title: item.title,
   description: item.description,
 });
+const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const deleteBoardMutation = useMutation({
@@ -47,8 +48,9 @@ const handleEditChange = (e) => {
     <>
 
       {/* onClick={()=>navigate("/boards/" + item._id)} */}
-      <div className={`col-lg-4 col-sm-4 rounded-4 pt-5 `} >
+     
 
+      <div className={`col-lg-4 col-sm-4 rounded-4 pt-5 `} >
         <div className={`${styles.product} text-white cursor-pointer rounded-3 gray-border my-3 w-100 h-100 pt-5 ps-1 position-relative`}>
           <i class={`fa-solid fa-ellipsis-vertical  position-absolute fs-4 ${styles.threeDots}`} onClick={() => setMenuOptions(!menuOptions)}></i>
           {/* --------- start list options menu ---------- */}

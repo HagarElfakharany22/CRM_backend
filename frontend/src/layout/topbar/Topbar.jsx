@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import styles from './style.module.css'
-const Topbar = ({user}) => {
+import styles from '../style.module.css';
+import topStyle from './top.module.css'
+const Topbar = ({ user }) => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   return (
@@ -14,7 +15,7 @@ const Topbar = ({user}) => {
         className="form-control me-3"
         style={{ maxWidth: "24rem" }} 
       /> */}
-     <h3>hello <span style={{color:"#6495ED"}}>{user.name}</span></h3>
+      <h3>hello <span style={{ color: "#6495ED" }}>{user.name}</span></h3>
       {/* Right Section */}
       <div className="d-flex align-items-center gap-2 ">
         {/* <button className="btn btn-primary">
@@ -22,13 +23,14 @@ const Topbar = ({user}) => {
         </button> */}
 
         {/* User Avatar */}
-        <div className="d-flex justify-content-center align-items-center bg-primary text-white rounded-circle fw-bold" 
-             style={{ width: "2.5rem", height: "2.5rem" }}>
-          {user.name.slice(0,2)}
+        <div className={`d-flex justify-content-center align-items-center bg-primary text-white rounded-circle fw-bold ${topStyle.user_avatar}` }
+          style={{ width: "3rem", height: "3rem" }}>
+          {user.name.slice(0, 2)}
         </div>
-         <button className="btn btn-danger" onClick={() => logout(navigate)}>
-        Log Out
-      </button>
+        <button className={` ${topStyle.logoutBtn}`} onClick={() => logout(navigate)} >
+          Log Out
+        </button>
+     
       </div>
     </div>
   );

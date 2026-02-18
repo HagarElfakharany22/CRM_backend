@@ -144,3 +144,13 @@ textarea.form_control {
 .btn_primary:hover {
   background-color: #0a58b8;
 }
+.back{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:3.5rem;
+  height: 3.5rem;
+  background-color: white;
+  border-radius: 50%;
+  margin: 20px 0px 0px 20px;
+}
