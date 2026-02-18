@@ -11,11 +11,14 @@ import TaskDetailModal from "../../components/TaskDetailModal.jsx";
 import { TaskContext } from "../../context/TaskContext.jsx";
 import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner'
+import AssignTaskModal from "../../layout/assignTaskModal.jsx";
 export default function BoardDetails() {
   const { id } = useParams();
   let [loading, setloading] = useState(true);
+  let [assignTaskModalAppear, setAssignTaskModalAppear] = useState(false);
+  let [userRole, setUserRole] = useState(null);
   const queryClient = useQueryClient();
-  const { getBoardByItsId, addUserToBoard } = useContext(BoardContext);
+  const { getBoardByItsId, addUserToBoard , getUserRole} = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
   const { EditTasks, DeleteTasks } = useContext(TaskContext);
 
@@ -62,8 +65,13 @@ export default function BoardDetails() {
 
   useEffect(() => {
    console.log(listData);
+   let role= getUserRole(); 
+   if(role){
+    setUserRole(role)
+   }
    
-  }, [data, listData]);
+   
+  }, [data, listData , userRole]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -105,6 +113,9 @@ export default function BoardDetails() {
     </div>
   )
 
+  const handleAssignTaskModal=(value)=>{
+    setAssignTaskModalAppear(value)
+  }
   return (
     <div className={`${styles.bg_gredient}  p-0 h-100 `}>
       <div
@@ -114,6 +125,14 @@ export default function BoardDetails() {
           <h5>{data?.title}</h5>
         </div>
         <div className="d-flex align-items-center gap-3">
+          {userRole=='admin' && (
+            <button className={`btn ${styles.assignTask_btn} ${styles.btn_primary} text-white`} 
+            onClick={()=>{
+              setAssignTaskModalAppear(true)
+            }}
+            >Assign Task</button>
+          )}
+          
           <Employees users={data?.users} owner={data?.owner} />
           {/* Trigger Icon */}
           <i
@@ -175,6 +194,13 @@ export default function BoardDetails() {
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}
       />
+      {
+        assignTaskModalAppear&&(
+          <AssignTaskModal board={data} handleModal={handleAssignTaskModal}>
+        
+      </AssignTaskModal>
+        )
+      }
     </div>
   );
 }

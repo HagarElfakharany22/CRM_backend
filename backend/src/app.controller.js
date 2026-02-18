@@ -6,6 +6,7 @@ import boardController from './modules/board/board.controller.js'
 import listController from './modules/list/list.controller.js'
 import departmentController from './modules/department/department.controller.js'
 import reportController from './modules/report/report.controller.js'
+import assignedtasksController from './modules/assignedTasks/assignedTasks.controller.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -71,8 +72,7 @@ app.options('*', cors());
     app.use('/api/v1/list' , listController)
     app.use('/api/v1/department' , departmentController)
     app.use('/api/v1/report' , reportController)
-
-  
+    app.use('/api/v1/assignedTasks' , assignedtasksController)
 
     app.all('*' , (req,res,next)=>{
         return res.status(404).json({

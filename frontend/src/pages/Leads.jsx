@@ -1,13 +1,14 @@
-import { useState } from 'react';
 
+import React, { useEffect, useState, useContext } from "react";
 import LeadForm from '../forms/Leadform';
 import Modal from '../common/Modal';
-
+import { BoardContext } from '../context/BoardContext';
 const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({ name: '', company: '', email: '', phone: '', status: '', source: '' });
+  const {  getUserRole} = useContext(BoardContext);
 
 
   const filtered = leads.filter(l =>
@@ -20,7 +21,11 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
     else onAdd(formData);
     setOpen(false);
   };
-
+  useEffect(() => {
+   let role= getUserRole(); 
+   console.log(role);
+ 
+  }, []);
   return (
     <>
       <h1 className="text-2xl font-semibold mb-4">Leads</h1>

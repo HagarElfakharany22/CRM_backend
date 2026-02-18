@@ -8,18 +8,27 @@ import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner'
 export default function Boards() {
   const queryClient = useQueryClient();
-  let { getAllBoards, BoardsData, setBoardsData, addBoard } =
+  let { getAllBoards, getEmployeesBoards,getUserRole, addBoard } =
     useContext(BoardContext);
+    let [userRole, setUserRole] = useState(null);
   let [loading, setloading] = useState(true);
   let [Errmsg, setErrmsg] = useState("");
   let [showForm, setShowForm] = useState(false);
+
   const { data, error, isLoading } = useQuery({
     queryKey: ["boards"],
-    queryFn: getAllBoards,
+    queryFn: userRole=='admin'? getAllBoards :getEmployeesBoards,
+    enabled: !!userRole,
   });
   useEffect(() => {
     console.log(data?.boards);
-  }, [data]);
+    let role= getUserRole(); 
+    console.log(role);
+    
+   if(role){
+    setUserRole(role)
+   }
+  }, []);
   // send data to API
   const sendDataToApi = async (values, resetForm) => {
     setloading(false);

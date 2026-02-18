@@ -15,6 +15,7 @@ const menuItems =
       ]
     : user.role === "employee"
     ? [
+      { name: "Boards", path: "/boards", end: false },
         { name: "Tasks", path: "/tasks", end: false },
         { name: "Leads", path: "/leads", end: false },
       ]

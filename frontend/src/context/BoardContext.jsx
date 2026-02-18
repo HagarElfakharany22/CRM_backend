@@ -16,6 +16,7 @@ export  let BoardContext=createContext(0)
 //      console.log(auth);
 function getAuthHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
+
   const token = localStorage.getItem("token");
 
   if (!token) return {};
@@ -27,11 +28,32 @@ function getAuthHeader() {
     Authorization: `${authType} ${token}`,
   };
 }
+
+function getUserRole() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user?.role);
+  
+  return user?.role;
+}
+
 async function getAllBoards(){
     
  let response=await api.get(`/api/v1/board/all` , {
     headers:getAuthHeader()
   });
+  console.log('get all boards');
+  
+  console.log(response.data);
+  
+  
+  return response.data;
+}
+async function getEmployeesBoards(){
+    
+ let response=await api.get(`/api/v1/board/owner` , {
+    headers:getAuthHeader()
+  });
+  console.log('get emp boards');
   console.log(response.data);
   
   
@@ -92,7 +114,9 @@ export default  function BoardContextProvider({children}){
         getBoardByItsId,
         addUserToBoard,
         deleteBoardByItsId,
-        updateBoard
+        updateBoard,
+        getUserRole,
+        getEmployeesBoards
     }}>
         {children}
         

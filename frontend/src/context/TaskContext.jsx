@@ -17,6 +17,21 @@ const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const { user } = useContext(AuthContext);
 
+  function getAuthHeader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const token = localStorage.getItem("token");
+
+  if (!token) return {};
+
+  const role = user?.role;
+  const authType = role === "admin" ? "admin" : "Bearer";
+
+  return {
+    Authorization: `${authType} ${token}`,
+  };
+}
+
   function getAuthData() {
     const token = localStorage.getItem("token");
    
@@ -111,9 +126,27 @@ const TaskProvider = ({ children }) => {
     }
   }
 
+   async function AssignTask(data) {
+    const authData = getAuthData();
+    if (!authData) return;
+
+    try {
+      const response = await api.post(`/api/v1/task/create-by-admin`, data, {
+        headers: getAuthHeader(),
+      });
+      console.log(response?.data);
+      return response?.data
+
+    } catch (err) {
+      console.error("Error adding task:", err);
+    }
+  }
+
   return (
     <TaskContext.Provider
-      value={{ tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask }}
+      value={{ tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask ,
+        AssignTask
+      }}
     >
       {children}
     </TaskContext.Provider>

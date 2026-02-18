@@ -289,3 +289,20 @@ textarea.form_control {
 .deleteCheckHolder{
   background-color: rgba(0,0,0,0.4);
 }
+
+/* ------------------------- assign task --------------------------- */
+.bg_dark_transparent {
+  background-color: RGBA(0, 0, 0, 0.5);
+}
+.formHolder{
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 10px;
+}
+.form{
+    position: relative;
+}
+.closeIcon{
+    right:25px;
+    top:25px;
+    cursor: pointer;
+}
