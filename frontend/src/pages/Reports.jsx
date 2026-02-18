@@ -11,7 +11,7 @@ export default function Reports() {
   }, []);
 
   return (
-    <div className='container-fluid py-4 bg-light min-vh-100'>
+    <div className='container-fluid py-4 bg-light min-vh-100 bg-dark'>
       <h2 className='mb-1 fw-bold text-dark'> Attendance Records</h2>
       <div className='card shadow-sm border-0 overflow-hide'>
         <table className='table table-hover align middle mb-0'>
@@ -19,6 +19,7 @@ export default function Reports() {
             {`
                 .task-row {
                   transition: background-color 0.2s;
+              
                 }
                 .task-row:hover {
                   background-color: #f8f9fa;
@@ -34,16 +35,16 @@ export default function Reports() {
           </style>
           <thead className='bg-white border-bottom'>
             <tr>
-              <th className='ps-4 py-3 text-uppercase small fw-bold text-muted'>Name</th>
-              <th className='ps-4 py-3 text-uppercase small fw-bold text-muted'>In</th>
-              <th className='ps-4 py-3 text-uppercase small fw-bold text-muted'>out</th>
+              <th className='ps-4 py-3 text-uppercase small fw-bold text-muted' >Name</th>
+              <th className='ps-4 py-3 text-uppercase small fw-bold ' style={{color:'#478778'}}>In</th>
+              <th className='ps-4 py-3 text-uppercase small fw-bold ' style={{color:'red'}}>out</th>
 
             </tr>
           </thead>
         <tbody>
   {attendance.map(a => (
     <tr key={a._id} className="task-row">
-      <td className='ps-4 py-3'>
+      <td className='ps-4 py-3 ' style={{color:'#4682B4', fontWeight:"bold"}}>
         {a.user?.name }
       </td>
 

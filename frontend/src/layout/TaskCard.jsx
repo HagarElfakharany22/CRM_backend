@@ -4,6 +4,10 @@ import { faClock, faPaperclip, faImage, faAlignLeft } from '@fortawesome/free-so
 
 export default function TaskCard({ task, onClick }) {
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
+const API_URL = import.meta.env.VITE_API_URL;
+  const imageSrc = task.image?.startsWith("http")
+  ? task.image
+  : `${API_URL}/uploads/${task.image}`;
 
   return (
     <div className={`${styles.task} card shadow-sm mb-2 p-2 border-0`} onClick={() => onClick(task)} style={{ cursor: 'pointer' }}>
@@ -11,7 +15,7 @@ export default function TaskCard({ task, onClick }) {
       {/* Cover Image Preview if exists */}
       {task.image && (
         <div className="mb-2 rounded overflow-hidden" style={{ height: '120px' }}>
-          <img src={task.image} alt="cover" className="w-100 h-100 object-fit-cover" />
+          <img src={imageSrc} alt="cover" className="w-100 h-100 object-fit-cover" />
         </div>
       )}
 

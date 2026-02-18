@@ -1,0 +1,21 @@
+.user_avatar{
+    background-color: aqua;
+}
+.logoutBtn{
+    padding: 10px 15px;
+    background-color: rgb(219, 28, 28);
+    border: none;
+    border-radius: 12px;
+    color: white;
+}
+@media (max-width: 768px) {
+  /* .logoutBtn {
+    font-size: 15px;
+    padding: 10px 40px;
+   
+} */
+ .user_avatar{
+  color: #0a58b8;
+  display: none !important;
+ }
+}

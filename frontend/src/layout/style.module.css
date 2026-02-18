@@ -289,3 +289,14 @@ textarea.form_control {
 .deleteCheckHolder{
   background-color: rgba(0,0,0,0.4);
 }
+@media (max-width: 768px) {
+  /* .logoutBtn {
+    font-size: 15px;
+    padding: 10px 40px;
+   
+} */
+ .user_avatar{
+  color: #0a58b8;
+  display: none;
+ }
+}
