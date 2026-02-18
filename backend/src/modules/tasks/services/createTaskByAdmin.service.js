@@ -24,6 +24,7 @@ const createTaskByAdmin=asyncHandler(async(req , res , next)=>{
    const updatedList=await AssignedTasksList.findByIdAndUpdate(assignedTasksList._id , {$push:{tasks:newTask._id}} , {new:true} );
 
     return res.status(201).json({
+        status:"success",
         message:'Task added successfully',
         newTask,
         updatedList

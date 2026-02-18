@@ -31,12 +31,15 @@ export default function AssignTaskModal({ board, handleModal }) {
                 boardId:board._id
             });
             console.log(response);
-            // setloading(true);
-            // toast.success("Board added successfully !");
-            // resetForm(); 
-            // handleModal(false);
-            // queryClient.invalidateQueries({ queryKey: ["boards"] });
+            setloading(true);
+            if(response.status=='success'){
+                setloading(false);
+            toast.success("Board added successfully !");
+            resetForm(); 
+            handleModal(false);
+            queryClient.invalidateQueries({ queryKey: ["boards"] });
             //   setSelectedFiles([]); // يفضي الصور
+            }
            
         } catch (err) {
             setErrmsg(err?.response?.data?.message);

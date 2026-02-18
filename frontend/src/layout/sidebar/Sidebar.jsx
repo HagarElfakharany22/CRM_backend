@@ -15,6 +15,7 @@ export default function Sidebar({ user, isOpen, toggleSidebar }) {
         ]
       : user.role === "employee"
       ? [
+        { name: "Boards", path: "/boards", end: false },
           { name: "Tasks", path: "/tasks" },
           { name: "Leads", path: "/leads" },
         ]
