@@ -185,8 +185,8 @@ export default function AssignTaskModal({ board, handleModal }) {
                                             </div>
                                             <div className="flex-grow-1 overflow-hidden">
                                                 <div className="fw-bold text-truncate">Link Reference</div>
-                                                <a href={formData.linkReference} target="_blank" rel="noopener noreferrer" className="small text-primary text-decoration-none text-truncate d-block">
-                                                    {formData.linkReference}
+                                                <a href={Register.values.linkReference} target="_blank" rel="noopener noreferrer" className="small text-primary text-decoration-none text-truncate d-block">
+                                                    {Register.values.linkReference}
                                                 </a>
                                             </div>
                                             <button className="btn btn-sm btn-light" onClick={() => setFormData(prev => ({ ...prev, linkReference: '' }))}>
@@ -203,7 +203,7 @@ export default function AssignTaskModal({ board, handleModal }) {
                                             className="form-control"
                                             placeholder="Paste link URL here..."
                                             name="linkReference"
-                                            value={formData.linkReference || ''}
+                                            value={Register.values.linkReference || ''}
                                             onChange={handleChange}
                                             autoFocus
                                         />
@@ -253,7 +253,7 @@ export default function AssignTaskModal({ board, handleModal }) {
                             <select
                                 className="form-select form-select-sm rounded-5"
                                 name="status"
-                                value={formData.status || 'Pending'}
+                                value={Register.values.status || 'Pending'}
                                 onChange={handleChange}
                             >
                                 <option hidden>status</option>
