@@ -19,7 +19,7 @@ const TaskProvider = ({ children }) => {
 
   function getAuthHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
-
+ 
   const token = localStorage.getItem("token");
 
   if (!token) return {};
@@ -125,6 +125,7 @@ const TaskProvider = ({ children }) => {
       console.error("Error adding task:", err);
     }
   }
+
 
    async function AssignTask(data) {
     const authData = getAuthData();

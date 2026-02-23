@@ -12,7 +12,8 @@ import TaskDetailModal from "../../components/TaskDetailModal.jsx";
 import { TaskContext } from "../../context/TaskContext.jsx";
 import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner'
-import AssignTaskModal from "../../layout/assignTaskModal.jsx";
+import AssignTaskModal from "../../layout/AssignTaskModal.jsx";
+
 export default function BoardDetails() {
   const { id } = useParams();
   let [loading, setloading] = useState(true);

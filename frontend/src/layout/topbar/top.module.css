@@ -15,7 +15,8 @@
    
 } */
  .user_avatar{
-  color: #0a58b8;
+  /* color: #0d58b4; */
+  color:cadetblue;
   display: none !important;
  }
 }
