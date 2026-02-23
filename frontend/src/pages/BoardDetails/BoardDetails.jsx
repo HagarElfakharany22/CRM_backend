@@ -13,6 +13,7 @@ import { TaskContext } from "../../context/TaskContext.jsx";
 import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner'
 import AssignTaskModal from "../../layout/AssignTaskModal.jsx";
+import AssignedTasksLists from "../../layout/AssignedTasksLists.jsx";
 
 export default function BoardDetails() {
   const { id } = useParams();
@@ -22,7 +23,7 @@ export default function BoardDetails() {
   const queryClient = useQueryClient();
   const { getBoardByItsId, addUserToBoard , getUserRole} = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
-  const { EditTasks, DeleteTasks } = useContext(TaskContext);
+  const { EditTasks, DeleteTasks, getAllAssignedTasks , getAssignedTasksByEmpId} = useContext(TaskContext);
 const navigate = useNavigate();
   // Modal State
   const [selectedTask, setSelectedTask] = useState(null);
@@ -50,7 +51,12 @@ const navigate = useNavigate();
     queryKey: ["lists", data?._id],
     queryFn: () => getListsByBoardId(data._id),
     enabled: !!data?._id,
-  });
+  })
+    const { data:assignedTasksListsData } = useQuery({
+        queryKey: ["assignedTasks"],
+        queryFn: userRole == 'admin' ? getAllAssignedTasks : getAssignedTasksByEmpId,
+        enabled: !!userRole,
+    });
 
   const addListMutation = useMutation({
     mutationFn: (newList) => createList(newList), // Ensure this matches your API helper
@@ -66,14 +72,14 @@ const navigate = useNavigate();
   };
 
   useEffect(() => {
-   console.log(listData);
+   console.log(assignedTasksListsData);
    let role= getUserRole(); 
    if(role){
     setUserRole(role)
    }
    
    
-  }, [data, listData , userRole]);
+  }, [data, listData , userRole , assignedTasksListsData]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -151,7 +157,11 @@ const navigate = useNavigate();
                
 
       <div className={`${styles.board}`}>
-       
+       {/* -----------------------assigned lists starts here ------------- */}
+       {assignedTasksListsData?.map((list) => (
+          <AssignedTasksLists key={list._id} list={list} onTaskClick={handleTaskClick}  />
+        ))}
+        {/* -----------------------assigned lists ends here ------------- */}
         {listData?.map((list) => (
           <Lists key={list._id} list={list} onTaskClick={handleTaskClick} />
         ))}

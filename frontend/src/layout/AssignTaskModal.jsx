@@ -19,17 +19,6 @@ export default function AssignTaskModal({ board, handleModal }) {
     const sendDataToApi = async (values, resetForm) => {
         setloading(false);
         try {
-            // const response = await AssignTask({
-            //     title: values.title,
-            //     description: values.description,
-            //     image:values.image,
-            //     linkReference:values.linkReference,
-            //     status:values.status,
-            //     dueDate:values.dueDate,
-            //     priority:values.priority,
-            //     email:values.email,
-            //     boardId:board._id
-            // });
             const data = new FormData();
 
             data.append("title", values.title);
@@ -53,7 +42,7 @@ export default function AssignTaskModal({ board, handleModal }) {
                 toast.success("Task Assigned successfully !");
                 resetForm();
                 handleModal(false);
-                queryClient.invalidateQueries({ queryKey: ["boards"] });
+                queryClient.invalidateQueries({ queryKey: ["assignedTasks"] });
                 //   setSelectedFiles([]); // يفضي الصور
             }
 
