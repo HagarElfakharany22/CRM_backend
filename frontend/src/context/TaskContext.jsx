@@ -19,7 +19,7 @@ const TaskProvider = ({ children }) => {
 
   function getAuthHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
-   console.log(user)
+ 
   const token = localStorage.getItem("token");
 
   if (!token) return {};
