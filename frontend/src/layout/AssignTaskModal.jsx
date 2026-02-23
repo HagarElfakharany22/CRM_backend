@@ -14,33 +14,49 @@ export default function AssignTaskModal({ board, handleModal }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [showLinkInput, setShowLinkInput] = useState(false);
     const fileInputRef = useRef(null);
-    const [formData, setFormData] = useState({});
     let [Errmsg, setErrmsg] = useState("");
+    const API_URL = import.meta.env.VITE_API_URL;
     const sendDataToApi = async (values, resetForm) => {
         setloading(false);
         try {
-            const response = await AssignTask({
-                title: values.title,
-                description: values.description,
-                image:values.image,
-                linkReference:values.linkReference,
-                status:values.status,
-                dueDate:values.dueDate,
-                priority:values.priority,
-                email:values.email,
-                boardId:board._id
-            });
+            // const response = await AssignTask({
+            //     title: values.title,
+            //     description: values.description,
+            //     image:values.image,
+            //     linkReference:values.linkReference,
+            //     status:values.status,
+            //     dueDate:values.dueDate,
+            //     priority:values.priority,
+            //     email:values.email,
+            //     boardId:board._id
+            // });
+            const data = new FormData();
+
+            data.append("title", values.title);
+            data.append("description", values.description);
+            data.append("linkReference", values.linkReference);
+            data.append("status", values.status);
+            data.append("priority", values.priority);
+            data.append("dueDate", values.dueDate);
+            data.append("email", values.email);
+            data.append("boardId", board._id);
+
+            if (selectedFile) {
+                data.append("image", selectedFile);
+            }
+
+            const response = await AssignTask(data);
             console.log(response);
             setloading(true);
-            if(response.status=='success'){
+            if (response?.status == 'success') {
                 setloading(false);
-            toast.success("Board added successfully !");
-            resetForm(); 
-            handleModal(false);
-            queryClient.invalidateQueries({ queryKey: ["boards"] });
-            //   setSelectedFiles([]); // يفضي الصور
+                toast.success("Task Assigned successfully !");
+                resetForm();
+                handleModal(false);
+                queryClient.invalidateQueries({ queryKey: ["boards"] });
+                //   setSelectedFiles([]); // يفضي الصور
             }
-           
+
         } catch (err) {
             setErrmsg(err?.response?.data?.message);
             console.log(err);
@@ -71,7 +87,7 @@ export default function AssignTaskModal({ board, handleModal }) {
             status: "",
             dueDate: "",
             priority: "",
-            email:""
+            email: ""
 
         },
         validate,
@@ -82,27 +98,37 @@ export default function AssignTaskModal({ board, handleModal }) {
             // {isChecked? <AdminLayOut/> :<MainLayOut/>}
         },
     });
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        console.log(name, value);
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     console.log(name, value);
+    //     setFormData(prev => ({ ...prev, [name]: value }));
+    // };
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         console.log(file)
         if (file) {
             setSelectedFile(file);
             // Create preview URL
-            setFormData(prev => ({ ...prev, image: URL.createObjectURL(file) }));
+            // setFormData(prev => ({ ...prev, image: URL.createObjectURL(file) }));
         }
     };
 
     useEffect(() => {
         setShowImageInput(false);
         setShowLinkInput(false);
-        setSelectedFile(null);
+       
+        console.log(`selectedFile : ${selectedFile}`);
+        
 
-    }, []);
+    }, [selectedFile]);
+
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return null;
+        if (imagePath.startsWith('blob:') || imagePath.startsWith('http')) {
+            return imagePath;
+        }
+        return `${API_URL}/uploads/${imagePath}`;
+    };
 
     return (
         <div className={`${styles.bg_dark_transparent} d-flex justify-content-center align-items-center position-absolute top-0 bottom-0 end-0 start-0 h-100`}>
@@ -166,18 +192,18 @@ export default function AssignTaskModal({ board, handleModal }) {
                         {/* ------------------------------------------ end description ---------------------------- */}
 
                         {/* ------------------------------------------ start attachements ------------------------ */}
-                        
+
                         <button className={`${styles.MyInput} rounded-5 btn btn-light btn-sm w-100 text-start my-3`} onClick={() => setShowLinkInput(!showLinkInput)} type='button'>
                             <i className="fa-solid fa-paperclip text-muted"></i> Attachment
                         </button>
-                        {(formData.linkReference || showLinkInput) && (
+                        {(Register.values.linkReference || showLinkInput) && (
                             <div className="mb-4">
                                 <div className="d-flex align-items-center gap-2 mb-2">
                                     <i class="fa-solid fa-paperclip text-muted"></i>
                                     <h6 className="fw-bold mb-0">Attachments</h6>
                                 </div>
 
-                                {formData.linkReference && (
+                                {Register.values.linkReference && (
                                     <div className="card mb-2">
                                         <div className="card-body p-2 d-flex align-items-center gap-3">
                                             <div className="bg-light rounded p-3 text-muted">
@@ -204,7 +230,7 @@ export default function AssignTaskModal({ board, handleModal }) {
                                             placeholder="Paste link URL here..."
                                             name="linkReference"
                                             value={Register.values.linkReference || ''}
-                                            onChange={handleChange}
+                                            onChange={Register.handleChange}
                                             autoFocus
                                         />
                                         <button className="btn btn-outline-secondary" onClick={() => setShowLinkInput(false)}>Done</button>
@@ -238,11 +264,16 @@ export default function AssignTaskModal({ board, handleModal }) {
                                         className="form-control"
                                         placeholder="Paste image URL here..."
                                         name="image"
-                                        value={formData.image || ''}
-                                        onChange={handleChange}
+                                        value={Register.values.image || ''}
+                                        onChange={Register.handleChange}
                                         autoFocus
                                     />
-                                    <button className="btn btn-outline-secondary" onClick={() => setShowImageInput(false)}>Done</button>
+                                    <button className="btn btn-outline-secondary" onClick={() => {
+                                        console.log(`Register.values.image : ${Register.values.image}`);
+                                        
+                                        setSelectedFile(Register.values.image)
+                                        setShowImageInput(false)
+                                    }}>Done</button>
                                 </div>
                             </div>
                         )}
@@ -254,7 +285,7 @@ export default function AssignTaskModal({ board, handleModal }) {
                                 className="form-select form-select-sm rounded-5"
                                 name="status"
                                 value={Register.values.status || 'Pending'}
-                                onChange={handleChange}
+                                onChange={Register.handleChange}
                             >
                                 <option hidden>status</option>
                                 <option value="pending">Pending</option>
@@ -270,8 +301,9 @@ export default function AssignTaskModal({ board, handleModal }) {
                             <select
                                 className="form-select form-select-sm rounded-5"
                                 name="priority"
-                                value={''}
-                                onChange={handleChange}
+                                value={Register.values.priority}
+                                onChange={Register.handleChange}
+
                             >
                                 <option hidden >priority</option>
                                 <option value="Low">Low</option>
@@ -308,8 +340,8 @@ export default function AssignTaskModal({ board, handleModal }) {
                                 type="date"
                                 className="form-control form-control-sm"
                                 name="dueDate"
-                                value={formData.dueDate ? formData.dueDate.split('T')[0] : ''}
-                                onChange={handleChange}
+                                value={Register.values.dueDate ? Register.values.dueDate.split('T')[0] : ''}
+                                onChange={Register.handleChange}
                             />
                         </div>
                         {/* ----------------------------------------- end deadline ------------------------------- */}
