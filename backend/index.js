@@ -3,7 +3,9 @@ import bootstrap from './src/app.controller.js';
 import express from 'express'
 const app=express();
 const port =8000;
+import { setServers } from "node:dns/promises";
 
+setServers(["1.1.1.1", "8.8.8.8"]);
 bootstrap(app , express)
 
 
