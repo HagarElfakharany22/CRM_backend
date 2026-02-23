@@ -138,6 +138,7 @@ textarea.form_control {
 .btn_primary {
   background-color: #0c66e4;
   border: none;
+  padding: 10px 15px;
   font-weight: 500;
 }
 
@@ -153,4 +154,18 @@ textarea.form_control {
   background-color: white;
   border-radius: 50%;
   margin: 20px 0px 0px 20px;
+}
+.assignIcon{
+  font-size: 25px;
+  color: white;
+  display: none;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .btn_primary{
+    display: none;
+  }
+  .assignIcon{
+    display: block;
+  }
 }

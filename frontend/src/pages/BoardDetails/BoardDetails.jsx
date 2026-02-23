@@ -129,13 +129,19 @@ const navigate = useNavigate();
         </div>
         <div className="d-flex align-items-center gap-3">
           {userRole=='admin' && (
-            <button className={`btn ${styles.assignTask_btn} ${styles.btn_primary} text-white`} 
+            <button className={`btn  ${styles.btn_primary} text-white`} 
             onClick={()=>{
               setAssignTaskModalAppear(true)
             }}
             >Assign Task</button>
+            
           )}
-          
+        {userRole=='admin' &&(
+          <i  className={` fa-solid fa-file-circle-plus assign-icon ${styles.assignIcon} `} title="assign task"  onClick={()=>{
+              setAssignTaskModalAppear(true)
+            }} ></i> 
+
+        )}
           <Employees users={data?.users} owner={data?.owner} />
           {/* Trigger Icon */}
           <i
