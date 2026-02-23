@@ -145,7 +145,7 @@ const navigate = useNavigate();
 
       </div>
       <div className={styles.back} >
-<i class="fa-solid fa-arrow-left" style={{color:"black", fontSize:"30px" ,textAlign:"center" , cursor: "pointer"}} onClick={()=>navigate("/boards")}></i>
+<i className="fa-solid fa-arrow-left" style={{color:"black", fontSize:"30px" ,textAlign:"center" , cursor: "pointer"}} onClick={()=>navigate("/boards")}></i>
       </div>
                
 

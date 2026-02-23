@@ -131,8 +131,12 @@ const TaskProvider = ({ children }) => {
     if (!authData) return;
 
     try {
+      let {Authorization}=getAuthHeader();
       const response = await api.post(`/api/v1/task/create-by-admin`, data, {
-        headers: getAuthHeader(),
+        headers: {
+          Authorization, 
+          "Content-Type": "multipart/form-data"
+        }
       });
       console.log(response?.data);
       return response?.data
