@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 
@@ -139,11 +139,17 @@ const TaskProvider = ({ children }) => {
           "Content-Type": "multipart/form-data"
         }
       });
+      console.log(`response : `, response);
+
       console.log(response?.data);
       return response?.data
 
     } catch (err) {
-      console.error("Error adding task:", err);
+      console.log(err);
+      const message =
+        err?.response?.data?.message || "Something went wrong";
+
+      toast.error(message);
     }
   }
 
@@ -154,7 +160,20 @@ const TaskProvider = ({ children }) => {
       });
       console.log(response?.data?.assignedTasks);
       return response?.data?.assignedTasks
-      
+
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+
+  }
+  async function getAssignedTasksByEmpId() {
+    try {
+      const response = await api.get("/api/v1/assignedTasks/byEmpId", {
+        headers: getAuthHeader()
+      });
+      console.log(response?.data?.assignedTasks);
+      return response?.data?.assignedTasks
+
     } catch (err) {
       console.error("Error fetching tasks:", err);
     }
@@ -165,7 +184,8 @@ const TaskProvider = ({ children }) => {
       value={{
         tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask,
         AssignTask,
-        getAllAssignedTasks
+        getAllAssignedTasks,
+        getAssignedTasksByEmpId
       }}
     >
       {children}

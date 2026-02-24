@@ -4,7 +4,7 @@ import { asyncHandler } from "../../../utilities/error/error.js";
 const getAssignedtasksByEmpId=asyncHandler(async(req , res , next)=>{
     const id=req.user._id;
     // console.log(`user id : ${id}`);
-    const assignedTasks= await AssignedTasksList.find({userId : id})
+    const assignedTasks= await AssignedTasksList.find({userId : id}).populate('tasks').populate('userId' , 'name')
     if(assignedTasks.length==0){
         return res.status(404).json({
             status:'fail',
