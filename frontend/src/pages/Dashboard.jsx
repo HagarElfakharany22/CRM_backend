@@ -5,12 +5,13 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid
 } from "recharts";
 import { AuthContext } from "../context/AuthContext";
-
+import { useOutletContext } from "react-router-dom";
+import styles from './styles.module.css'
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF3366"];
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
-
+  const { toggleSidebar } = useOutletContext();
   // --- Leads by Status ---
   const leadsStatus = dumyData.leads.reduce((acc, lead) => {
     acc[lead.status] = (acc[lead.status] || 0) + 1;
@@ -52,8 +53,13 @@ export default function Dashboard() {
   }));
 
   return (
-    <div className="container-fluid">
-      <h2 className="mb-4">Dashboard</h2>
+    <div className="container-fluid ">
+      <div className="d-flex justify-content-between p-2">
+      <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 text-white mb-3`}
+        onClick={toggleSidebar}
+      ></i>
+      <h2 className="mb-4 text-white">Dashboard</h2>
+      </div>
       <div className="row g-4">
         {/* Leads Pie */}
         <div className="col-md-6 col-lg-4">

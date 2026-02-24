@@ -4,8 +4,10 @@ import Modal from "../common/Modal";
 import TaskForm from "../forms/TaskForm";
 import TaskDetailModal from "../components/TaskDetailModal";
 import { toast } from "react-toastify";
-
+import { useOutletContext } from "react-router-dom";
+import styles from './styles.module.css'
 function TasksPage() {
+  const { toggleSidebar } = useOutletContext();
   const emptyTask = {
     title: '',
     status: 'Pending',
@@ -89,6 +91,9 @@ function TasksPage() {
 
   return (
     <div className="container-fluid py-4 bg-light min-vh-100">
+      <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3`}
+              onClick={toggleSidebar}
+            ></i>
       {/* Header Section */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
