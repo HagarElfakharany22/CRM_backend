@@ -8,15 +8,9 @@
     border-radius: 12px;
     color: white;
 }
-@media (max-width: 768px) {
-  /* .logoutBtn {
-    font-size: 15px;
-    padding: 10px 40px;
-   
-} */
+@media (max-width: 540px) {
+
  .user_avatar{
-  /* color: #0d58b4; */
-  color:cadetblue;
   display: none !important;
  }
 }

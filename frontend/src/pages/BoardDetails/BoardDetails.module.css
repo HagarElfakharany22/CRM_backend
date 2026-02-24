@@ -161,11 +161,21 @@ textarea.form_control {
   display: none;
   cursor: pointer;
 }
+.toggle_btn{
+  display: none;
+}
+@media (max-width: 320px) {
+  .boardNav{
+   padding: 15px  !important;
+  }
+  .toggle_btn{
+  display: block
+  }
+ 
+}
 @media (max-width: 768px) {
-  .btn_primary{
-    display: none;
+  .toggle_btn{
+  display: block
   }
-  .assignIcon{
-    display: block;
-  }
+ 
 }

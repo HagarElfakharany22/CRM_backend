@@ -21,13 +21,13 @@ export default function Layout() {
 
         {/* Page Content */}
         <main className={`${styles.mainContent} flex-grow-1`}>
-         <button
+         {/* <button
           className="btn btn-dark m-2 d-md-none"
           onClick={toggleSidebar}
         >
           ☰
-        </button>
-           <Outlet /> 
+        </button> */}
+           <Outlet context={{ toggleSidebar }} /> 
         </main>
       </div>
     </div>
