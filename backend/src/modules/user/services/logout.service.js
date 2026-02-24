@@ -1,17 +1,25 @@
 import Attendance from "../../../DB/models/attendance.model.js";
 
 export const logout = async (req, res) => {
-  const { attendanceId } = req.body;
+  try {
+    const userId = req.user._id;
+console.log(userId)
+    const attendance = await Attendance.findOne({
+      user: userId,
+      checkOutAt: null,
+    });
 
-  if (!attendanceId) {
-    return res.status(400).json({ message: "attendanceId is required" });
+    if (!attendance) {
+      return res.status(400).json({
+        message: "No active check-in found",
+      });
+    }
+
+    attendance.checkOutAt = new Date();
+    await attendance.save();
+
+    res.status(200).json(attendance);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  const attendance = await Attendance.findByIdAndUpdate(
-    attendanceId,
-    { logoutAt: new Date() },
-    { new: true }
-  );
-
-  res.json({ message: "logout success", attendance });
 };

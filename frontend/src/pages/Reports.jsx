@@ -2,67 +2,88 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AttendanceContext } from '../context/AttendenceContext'
 
 export default function Reports() {
-  const { getAttendance } = useContext(AttendanceContext)
-  const [attendance, setAttendance] = useState([]);
+  const { getAttendance } = useContext(AttendanceContext);
 
+    const [attendance, setAttendance] = useState([]);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
+
+  // 🔹 نجيب حالة اليوزر الحالية
+  // useEffect(() => {
+  //   fetch("/api/v1/user/attendance/status")
+  //     .then((res) => res.json())
+  //     .then((data) => setIsCheckedIn(data.isCheckedIn));
+  // }, []);
   useEffect(() => {
     getAttendance().then(setAttendance);
-    // console.log(attendance)
+    console.log(attendance)
   }, []);
+  // 🔹 نجيب الريكوردز
+
+
+  // useEffect(() => {
+  //   getAttendance().then(setAttendance);
+  //   // console.log(attendance)
+  // }, []);
 
   return (
-    <div className='container-fluid py-4 bg-light min-vh-100 bg-dark'>
-      <h2 className='mb-1 fw-bold text-dark'> Attendance Records</h2>
-      <div className='card shadow-sm border-0 overflow-hide'>
-        <table className='table table-hover align middle mb-0'>
-          <style>
-            {`
-                .task-row {
-                  transition: background-color 0.2s;
-              
-                }
-                .task-row:hover {
-                  background-color: #f8f9fa;
-                }
-                .task-row .view-icon {
-                  opacity: 0;
-                  transition: opacity 0.2s;
-                }
-                .task-row:hover .view-icon {
-                  opacity: 1;
-                }
-              `}
-          </style>
-          <thead className='bg-white border-bottom'>
-            <tr>
-              <th className='ps-4 py-3 text-uppercase small fw-bold text-muted' >Name</th>
-              <th className='ps-4 py-3 text-uppercase small fw-bold ' style={{color:'#478778'}}>In</th>
-              <th className='ps-4 py-3 text-uppercase small fw-bold ' style={{color:'red'}}>out</th>
+    <div className="container-fluid py-4 bg-light min-vh-100">
+      <h2 className="mb-3 fw-bold text-dark">Attendance Records</h2>
 
+      {/* 🔘 زرار ذكي */}
+      
+
+      <div className="card shadow-sm border-0 overflow-hidden">
+        <table className="table table-hover align-middle mb-0">
+          <thead className="bg-white border-bottom">
+            <tr>
+              <th className="ps-4 py-3 text-uppercase small fw-bold text-muted">
+                Name
+              </th>
+              <th
+                className="ps-4 py-3 text-uppercase small fw-bold"
+                style={{ color: "#478778" }}
+              >
+                In
+              </th>
+              <th
+                className="ps-4 py-3 text-uppercase small fw-bold"
+                style={{ color: "red" }}
+              >
+                Out
+              </th>
             </tr>
           </thead>
-        <tbody>
-  {attendance.map(a => (
-    <tr key={a._id} className="task-row">
-      <td className='ps-4 py-3 ' style={{color:'#4682B4', fontWeight:"bold"}}>
-        {a.user?.name }
-      </td>
 
-      <td className='ps-4 py-3'>
-        {new Date(a.loginAt).toLocaleString()}
-      </td>
+          <tbody>
+            {attendance.map((a) => (
+              <tr key={a._id} className="task-row">
+                <td
+                  className="ps-4 py-3"
+                  style={{ color: "#4682B4", fontWeight: "bold" }}
+                >
+                  {a.user?.name}
+                </td>
 
-      <td className='ps-4 py-3'>
-        {a.logoutAt
-          ? new Date(a.logoutAt).toLocaleString()
-          : "Still logged in"}
-      </td>
-    </tr>
-  ))}
-</tbody>
-      </table>
+                {/* ✅ checkInAt */}
+                <td className="ps-4 py-3">
+                  {new Date(a.checkInAt).toLocaleString()}
+                </td>
+
+                {/* ✅ checkOutAt */}
+                <td className="ps-4 py-3">
+                  {a.checkOutAt ? (
+                    new Date(a.checkOutAt).toLocaleString()
+                  ) : (
+                    <span className="text-success fw-semibold">
+                      Still working
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    </div >
   );
 }

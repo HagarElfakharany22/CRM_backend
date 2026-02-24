@@ -12,12 +12,7 @@ const login = asyncHandler(async (req, res, next) => {
     if (!user) {
         return next(new Error('user not found', { cause: 404 }))
     }
-    const attendance = await Attendance.create({
-        user: user._id,
-        loginAt: new Date(),
-        ipAddress: req.ip,
-        userAgent: req.headers["user-agent"],
-    });
+  
     if (!compareHash({ plaintext: password, hashValue: user.password })) {
         return next(new Error('In-Valid login data!!', { cause: 400 }))
 
@@ -32,7 +27,7 @@ const login = asyncHandler(async (req, res, next) => {
         id: user._id,
         user,
         token,
-        attendanceId: attendance._id,
+       
     })
 })
 
