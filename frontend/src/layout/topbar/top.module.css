@@ -20,3 +20,16 @@
   display: none !important;
  }
 }
+
+@media (max-width: 375px) {
+  .logoutBtn {
+    /* font-size: 10px; */
+    /* padding: 0px 0px; */
+    width: 90px !important;
+   
+}
+.button_holder{
+   padding: 15px  !important;
+}
+
+}

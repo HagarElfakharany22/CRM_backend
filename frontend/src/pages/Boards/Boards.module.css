@@ -6,6 +6,7 @@
   max-width: 100%;    
   box-sizing: border-box;
   overflow-x: hidden;  
+  overflow-y: auto;
 }
 .iconColor{
     color:#2ff3e0 !important;
