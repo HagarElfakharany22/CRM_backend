@@ -7,7 +7,10 @@ import styles from "./Boards.module.css";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner'
+import { useOutletContext } from "react-router-dom";
+
 export default function Boards() {
+   const { toggleSidebar } = useOutletContext();
   const queryClient = useQueryClient();
   let { getAllBoards, getEmployeesBoards,getUserRole, addBoard } =
     useContext(BoardContext);
@@ -93,11 +96,17 @@ export default function Boards() {
   if (error) return <div>An error occurred: {error.message}</div>;
   return (
     <div className={`${styles.bg_dark} p-0 m-0  `}>
+      <div className="pt-3 ps-4">
+        <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 text-white mb-3`}
+        onClick={toggleSidebar}
+      ></i>
+      </div>
       <div className={`${styles.iconHolder} z-1`}>
         <i
           onClick={() => setShowForm(true)}
           className="fa-solid fa-plus fs-2 rounded-5 p-1 "
         ></i>
+        
       </div>
 
       {/*------------------------------ start form ---------------------------------*/}
