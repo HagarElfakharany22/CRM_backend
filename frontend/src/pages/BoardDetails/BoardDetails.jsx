@@ -52,11 +52,14 @@ const navigate = useNavigate();
     queryFn: () => getListsByBoardId(data._id),
     enabled: !!data?._id,
   })
-    const { data:assignedTasksListsData } = useQuery({
-        queryKey: ["assignedTasks"],
-        queryFn: userRole == 'admin' ? getAllAssignedTasks : getAssignedTasksByEmpId,
-        enabled: !!userRole,
-    });
+    const { data: assignedTasksListsData } = useQuery({
+  queryKey: ["assignedTasks", data?._id],
+  queryFn: () =>
+    userRole === "admin"
+      ? getAllAssignedTasks(data?._id)
+      : getAssignedTasksByEmpId(data?._id),
+  enabled: !!userRole && !!data?._id,
+});
 
   const addListMutation = useMutation({
     mutationFn: (newList) => createList(newList), // Ensure this matches your API helper

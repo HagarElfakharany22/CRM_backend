@@ -3,7 +3,8 @@ import { asyncHandler } from "../../../utilities/error/error.js";
 
 
 const getAllAssignedTasks= asyncHandler(async(req , res , next)=>{
-    const assignedTasks=await AssignedTasksList.find().populate('tasks').populate('userId' , 'name')
+    const { boardId } = req.params;
+    const assignedTasks=await AssignedTasksList.find({boardId}).populate('tasks').populate('userId' , 'name')
     if(!assignedTasks){
         return res.status(404).json({message:"no assigned tasks found"})
     }

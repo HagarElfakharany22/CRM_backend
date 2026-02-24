@@ -153,9 +153,9 @@ const TaskProvider = ({ children }) => {
     }
   }
 
-  async function getAllAssignedTasks() {
+  async function getAllAssignedTasks(boardId) {
     try {
-      const response = await api.get("/api/v1/assignedTasks/all", {
+      const response = await api.get(`/api/v1/assignedTasks/all/${boardId}`, {
         headers: getAuthHeader()
       });
       console.log(response?.data?.assignedTasks);
@@ -166,9 +166,9 @@ const TaskProvider = ({ children }) => {
     }
 
   }
-  async function getAssignedTasksByEmpId() {
+  async function getAssignedTasksByEmpId(boardId) {
     try {
-      const response = await api.get("/api/v1/assignedTasks/byEmpId", {
+      const response = await api.get(`/api/v1/assignedTasks/byEmpId/${boardId}`, {
         headers: getAuthHeader()
       });
       console.log(response?.data?.assignedTasks);

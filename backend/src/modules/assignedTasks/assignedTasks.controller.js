@@ -8,6 +8,6 @@ const router=Router()
 
 
 // router.post('/assign',authentication() ,upload.single("image"),assignTask)
-router.get('/all' , authentication() , getAllAssignedTasks)
-router.get('/byEmpId' , authentication() , getAssignedtasksByEmpId)
+router.get('/all/:boardId' , authentication() , getAllAssignedTasks)
+router.get('/byEmpId/:boardId' , authentication() , getAssignedtasksByEmpId)
 export default router;
