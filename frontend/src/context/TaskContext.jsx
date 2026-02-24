@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 
@@ -18,23 +18,23 @@ const TaskProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
 
   function getAuthHeader() {
-  const user = JSON.parse(localStorage.getItem("user"));
- 
-  const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!token) return {};
+    const token = localStorage.getItem("token");
 
-  const role = user?.role;
-  const authType = role === "admin" ? "admin" : "Bearer";
+    if (!token) return {};
 
-  return {
-    Authorization: `${authType} ${token}`,
-  };
-}
+    const role = user?.role;
+    const authType = role === "admin" ? "admin" : "Bearer";
+
+    return {
+      Authorization: `${authType} ${token}`,
+    };
+  }
 
   function getAuthData() {
     const token = localStorage.getItem("token");
-   
+
     if (!token || !user) return null;
     const role = user.role || "user";
     const auth = role === "admin" ? "admin" : "Bearer";
@@ -56,7 +56,7 @@ const TaskProvider = ({ children }) => {
     if (!authData) return;
 
     try {
-      console.log(authData.auth,authData.token)
+      console.log(authData.auth, authData.token)
       const res = await api.get("/api/v1/task/done", {
         headers: {
           Authorization: `${authData.auth} ${authData.token}`,
@@ -127,30 +127,65 @@ const TaskProvider = ({ children }) => {
   }
 
 
-   async function AssignTask(data) {
+  async function AssignTask(data) {
     const authData = getAuthData();
     if (!authData) return;
 
     try {
-      let {Authorization}=getAuthHeader();
+      let { Authorization } = getAuthHeader();
       const response = await api.post(`/api/v1/task/create-by-admin`, data, {
         headers: {
-          Authorization, 
+          Authorization,
           "Content-Type": "multipart/form-data"
         }
       });
+      console.log(`response : `, response);
+
       console.log(response?.data);
       return response?.data
 
     } catch (err) {
-      console.error("Error adding task:", err);
+      console.log(err);
+      const message =
+        err?.response?.data?.message || "Something went wrong";
+
+      toast.error(message);
     }
   }
 
+  async function getAllAssignedTasks(boardId) {
+    try {
+      const response = await api.get(`/api/v1/assignedTasks/all/${boardId}`, {
+        headers: getAuthHeader()
+      });
+      console.log(response?.data?.assignedTasks);
+      return response?.data?.assignedTasks
+
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+
+  }
+  async function getAssignedTasksByEmpId(boardId) {
+    try {
+      const response = await api.get(`/api/v1/assignedTasks/byEmpId/${boardId}`, {
+        headers: getAuthHeader()
+      });
+      console.log(response?.data?.assignedTasks);
+      return response?.data?.assignedTasks
+
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+
+  }
   return (
     <TaskContext.Provider
-      value={{ tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask ,
-        AssignTask
+      value={{
+        tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask,
+        AssignTask,
+        getAllAssignedTasks,
+        getAssignedTasksByEmpId
       }}
     >
       {children}

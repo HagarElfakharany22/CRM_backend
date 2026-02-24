@@ -13,17 +13,20 @@ import { TaskContext } from "../../context/TaskContext.jsx";
 import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner'
 import AssignTaskModal from "../../layout/AssignTaskModal.jsx";
+import AssignedTasksLists from "../../layout/AssignedTasksLists.jsx";
+import { useOutletContext } from "react-router-dom";
 
 export default function BoardDetails() {
   const { id } = useParams();
+  const { toggleSidebar } = useOutletContext();
   let [loading, setloading] = useState(true);
   let [assignTaskModalAppear, setAssignTaskModalAppear] = useState(false);
   let [userRole, setUserRole] = useState(null);
   const queryClient = useQueryClient();
-  const { getBoardByItsId, addUserToBoard , getUserRole} = useContext(BoardContext);
+  const { getBoardByItsId, addUserToBoard, getUserRole } = useContext(BoardContext);
   const [boardDetails, setBoardDetails] = useState(null);
-  const { EditTasks, DeleteTasks } = useContext(TaskContext);
-const navigate = useNavigate();
+  const { EditTasks, DeleteTasks, getAllAssignedTasks, getAssignedTasksByEmpId } = useContext(TaskContext);
+  const navigate = useNavigate();
   // Modal State
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,6 +53,14 @@ const navigate = useNavigate();
     queryKey: ["lists", data?._id],
     queryFn: () => getListsByBoardId(data._id),
     enabled: !!data?._id,
+  })
+  const { data: assignedTasksListsData } = useQuery({
+    queryKey: ["assignedTasks", data?._id],
+    queryFn: () =>
+      userRole === "admin"
+        ? getAllAssignedTasks(data?._id)
+        : getAssignedTasksByEmpId(data?._id),
+    enabled: !!userRole && !!data?._id,
   });
 
   const addListMutation = useMutation({
@@ -66,14 +77,16 @@ const navigate = useNavigate();
   };
 
   useEffect(() => {
-   console.log(listData);
-   let role= getUserRole(); 
-   if(role){
-    setUserRole(role)
-   }
-   
-   
-  }, [data, listData , userRole]);
+    console.log(data);
+
+    console.log(assignedTasksListsData);
+    let role = getUserRole();
+    if (role) {
+      setUserRole(role)
+    }
+
+
+  }, [data, listData, userRole, assignedTasksListsData]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -115,33 +128,39 @@ const navigate = useNavigate();
     </div>
   )
 
-  const handleAssignTaskModal=(value)=>{
+  const handleAssignTaskModal = (value) => {
     setAssignTaskModalAppear(value)
   }
   return (
     <div className={`${styles.bg_gredient}  p-0 h-100 `}>
-      
+
       <div
         className={`${styles.boardNav} ${styles.bg_dark_transparent} py-2 px-5 text-white d-flex align-items-center justify-content-between  `}
       >
+
+       <div className="d-flex">
+         <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2`}
+          onClick={toggleSidebar}
+        ></i>
         <div className=" me-5">
           <h5>{data?.title}</h5>
         </div>
+       </div>
         <div className="d-flex align-items-center gap-3">
-          {userRole=='admin' && (
-            <button className={`btn  ${styles.btn_primary} text-white`} 
-            onClick={()=>{
-              setAssignTaskModalAppear(true)
-            }}
+          {userRole == 'admin' && (
+            <button className={`btn  ${styles.btn_primary} text-white`}
+              onClick={() => {
+                setAssignTaskModalAppear(true)
+              }}
             >Assign Task</button>
-            
-          )}
-        {userRole=='admin' &&(
-          <i  className={` fa-solid fa-file-circle-plus assign-icon ${styles.assignIcon} `} title="assign task"  onClick={()=>{
-              setAssignTaskModalAppear(true)
-            }} ></i> 
 
-        )}
+          )}
+          {userRole == 'admin' && (
+            <i className={` fa-solid fa-file-circle-plus assign-icon ${styles.assignIcon} `} title="assign task" onClick={() => {
+              setAssignTaskModalAppear(true)
+            }} ></i>
+
+          )}
           <Employees users={data?.users} owner={data?.owner} />
           {/* Trigger Icon */}
           <i
@@ -152,12 +171,16 @@ const navigate = useNavigate();
 
       </div>
       <div className={styles.back} >
-<i className="fa-solid fa-arrow-left" style={{color:"black", fontSize:"30px" ,textAlign:"center" , cursor: "pointer"}} onClick={()=>navigate("/boards")}></i>
+        <i className="fa-solid fa-arrow-left" style={{ color: "black", fontSize: "30px", textAlign: "center", cursor: "pointer" }} onClick={() => navigate("/boards")}></i>
       </div>
-               
+
 
       <div className={`${styles.board}`}>
-       
+        {/* -----------------------assigned lists starts here ------------- */}
+        {assignedTasksListsData?.map((list) => (
+          <AssignedTasksLists key={list._id} list={list} onTaskClick={handleTaskClick} />
+        ))}
+        {/* -----------------------assigned lists ends here ------------- */}
         {listData?.map((list) => (
           <Lists key={list._id} list={list} onTaskClick={handleTaskClick} />
         ))}
@@ -200,8 +223,8 @@ const navigate = useNavigate();
 
 
       {/* Task Detail Modal */}
-      <TaskDetailModal 
-      board={data}
+      <TaskDetailModal
+        board={data}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         task={selectedTask}
@@ -209,10 +232,10 @@ const navigate = useNavigate();
         onDelete={handleDeleteTask}
       />
       {
-        assignTaskModalAppear&&(
+        assignTaskModalAppear && (
           <AssignTaskModal board={data} handleModal={handleAssignTaskModal}>
-        
-      </AssignTaskModal>
+
+          </AssignTaskModal>
         )
       }
     </div>

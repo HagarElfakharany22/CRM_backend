@@ -7,7 +7,7 @@ const Topbar = ({ user }) => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   return (
-    <div className={`${styles.bg_dark} ${styles.fit_screen} d-flex justify-content-between align-items-center text-white border-bottom py-3 px-5`}>
+    <div className={`${topStyle.button_holder} ${styles.bg_dark} ${styles.fit_screen} d-flex justify-content-between align-items-center text-white border-bottom py-3 px-5`}>
       {/* Search Input */}
       {/* <input
         type="text"
@@ -17,7 +17,7 @@ const Topbar = ({ user }) => {
       /> */}
       <h3>hello <span style={{ color: "#6495ED" }}>{user.name}</span></h3>
       {/* Right Section */}
-      <div className="d-flex align-items-center gap-2 ">
+      <div className={` d-flex align-items-center gap-2`}>
         {/* <button className="btn btn-primary">
           + Create New
         </button> */}

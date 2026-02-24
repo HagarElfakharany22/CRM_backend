@@ -8,15 +8,22 @@
     border-radius: 12px;
     color: white;
 }
-@media (max-width: 768px) {
-  /* .logoutBtn {
-    font-size: 15px;
-    padding: 10px 40px;
-   
-} */
+@media (max-width: 540px) {
+
  .user_avatar{
-  /* color: #0d58b4; */
-  color:cadetblue;
   display: none !important;
  }
+}
+
+@media (max-width: 375px) {
+  .logoutBtn {
+    /* font-size: 10px; */
+    /* padding: 0px 0px; */
+    width: 90px !important;
+   
+}
+.button_holder{
+   padding: 15px  !important;
+}
+
 }

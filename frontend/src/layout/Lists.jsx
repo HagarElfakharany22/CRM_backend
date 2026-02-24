@@ -14,7 +14,7 @@ export default function Lists({list , onTaskClick}){
   const [editTitle, setEditTitle] = useState(list.title);
 
   const queryClient = useQueryClient();
-  const { AddTask } = useContext(TaskContext);
+  const { AddTask , getAllAssignedTasks } = useContext(TaskContext);
   const { deleteList , updateList} = useContext(ListContext);
 
   const addTaskMutation = useMutation({
