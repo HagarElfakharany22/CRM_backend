@@ -12,15 +12,20 @@ import getAttendace from "./services/getAttendence.service.js";
 import { logout } from "./services/logout.service.js";
 import testSocket from "./services/testSocket.js";
 import getUserById from "./services/getUserById.service.js";
+import { checkIn } from "./services/checkIn.service.js";
+import { getMyAttendanceStatus } from "./services/getattendanceStatus.service.js";
 
 const router=Router();
 router.post('/register' , signup)
 router.post('/login' , login)
-router.post('/logout' , logout)
+router.post('/attendance/checkIn',authentication() , checkIn)
+router.post('/attendance/logout' ,authentication() , logout)
+router.get('/attendance/me' ,authentication() , getMyAttendanceStatus)
 router.post('/confirm-email' , confirmEmail)
 router.put('/update',authentication()  , updateProfile)
 router.get('/profile',authentication() , getProfileData)
 router.get('/attendance',authentication() , getAttendace)
+// router.get('/attendance/status',authentication() , getMyAttendanceStatus)
 router.put('/password',authentication() , changePassword)
 router.get('/test-socket', testSocket)
 router.get('/by-id/:id' , authentication() , getUserById)

@@ -15,6 +15,9 @@ export const authentication = ()=>{
   return  async (req, res, next) => {
         try {
             const { authorization } = req.headers;
+              if (!authorization) {
+        return res.status(401).json({ message: "No authorization header" });
+      }
             const [Bearer , token]=authorization.split(" ")||[];
             if(!token || ! Bearer){
                 return res.status(400).json({message:"In-Valid token components"})
@@ -31,6 +34,7 @@ export const authentication = ()=>{
                 default:
                     break;
             }
+          
             const decoded = verifyToken({token:token , signature:signature})
             if (!decoded?.id) {
                 return res.status(400).json({ message: "In-Valid token payload" })
@@ -39,6 +43,7 @@ export const authentication = ()=>{
             if (!user) {
                 return res.status(404).json({ message: "not register account" })
             }
+             
            
             req.user = user;
     

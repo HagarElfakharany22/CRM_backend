@@ -18,6 +18,7 @@ export default function Sidebar({ user, isOpen, toggleSidebar }) {
         { name: "Boards", path: "/boards", end: false },
           { name: "Tasks", path: "/tasks" },
           { name: "Leads", path: "/leads" },
+          { name: "attendance", path: "/attendance" },
         ]
       : [{ name: "Leads", path: "/leads" }];
 
@@ -27,17 +28,21 @@ export default function Sidebar({ user, isOpen, toggleSidebar }) {
       {isOpen && <div className={styles.overlay} onClick={toggleSidebar}></div>}
 
       <aside
-        className={`bg-dark text-white ${styles.sidebar} ${
+        className={` ${styles.sidebar} ${
           isOpen ? styles.open : ""
         }`}
       >
         {/* Logo */}
         <Link
-          to="/dashboard"
-          className="p-3 fs-4 fw-bold text-primary text-decoration-none d-block"
-        >
-          CRM Pro
-        </Link>
+  to="/dashboard"
+  className="d-flex align-items-center justify-content-center p-2 text-decoration-none"
+>
+  <img
+    src="https://res.cloudinary.com/dvxokqq78/image/upload/v1771939975/%D9%85%D8%AF%D8%A7%D8%B1-02_jjarln.png"
+    alt="logo"
+    style={{ height: "150px", width:"150px"}}
+  />
+</Link>
 
         {/* Menu */}
         <nav className="flex-grow-1 px-2">
@@ -48,10 +53,11 @@ export default function Sidebar({ user, isOpen, toggleSidebar }) {
               end={item.end}
               onClick={toggleSidebar} // يقفل بعد الضغط في الموبايل
               className={({ isActive }) =>
-                `d-block px-3 py-2 mb-1 rounded text-decoration-none ${
-                  isActive ? "bg-primary text-white" : "text-white"
-                }`
-              }
+    `d-block px-3 py-2 mb-1 rounded text-decoration-none `
+  }
+  style={({ isActive }) => ({
+    backgroundColor: isActive ? "#FF8911" : "transparent", color:"white"
+  })}
             >
               {item.name}
             </NavLink>

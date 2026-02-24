@@ -7,11 +7,12 @@ const attendanceSchema = new mongoose.Schema({
     ref: "users",
     required: true,
   },
-  loginAt: {
+
+  checkInAt: {
     type: Date,
-    required: true,
+    
   },
-  logoutAt: {
+  checkOutAt: {
     type: Date,
   },
   ipAddress: String,

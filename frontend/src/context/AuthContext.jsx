@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         if (typeof window !== "undefined") {
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("attendanceId", data.attendanceId);
+          // localStorage.setItem("attendanceId", data.attendanceId);
         }
         setUser(data.user);
         return data.user;
@@ -62,18 +62,18 @@ export const AuthProvider = ({ children }) => {
 
  const logout = async (navigate) => {
   try {
-    const attendanceId = localStorage.getItem("attendanceId");
+    // const attendanceId = localStorage.getItem("attendanceId");
 
-    if (attendanceId) {
-      await fetch(`${API_URL}/api/v1/user/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ attendanceId }),
-      });
-    }
+    // if (attendanceId) {
+    //   await fetch(`${API_URL}/api/v1/user/logout`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     },
+    //     body: JSON.stringify({ attendanceId }),
+    //   });
+    // }
   } catch (err) {
     console.error("Logout tracking error:", err);
   } finally {
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      localStorage.removeItem("attendanceId"); // 👈 مهم
+       // 👈 مهم
     }
     if (navigate) navigate("/login");
   }

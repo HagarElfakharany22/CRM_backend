@@ -7,7 +7,7 @@ const getAttendace= asyncHandler(async(req , res , next)=>{
     select: "name email role",
     match: { role: { $ne: "admin" } }
   })
-  .sort({ loginAt: -1 });
+
     if(!attendance){
       return res.status(404).json({message:'no attendance found'})
     }
