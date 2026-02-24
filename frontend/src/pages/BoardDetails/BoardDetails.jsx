@@ -75,6 +75,8 @@ const navigate = useNavigate();
   };
 
   useEffect(() => {
+    console.log(data);
+    
    console.log(assignedTasksListsData);
    let role= getUserRole(); 
    if(role){

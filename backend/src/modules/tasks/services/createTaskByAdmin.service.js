@@ -12,17 +12,21 @@ const createTaskByAdmin = asyncHandler(async (req, res, next) => {
             message: "user not found"
         })
     }
-    const board = await Board.findOne({
+    const userBoard = await Board.findOne({
         _id: boardId,
         users: user._id
     })
-    if(!board){
+    const ownerBoard = await Board.findOne({
+        _id: boardId,
+        owner: user._id
+    })
+    if(!userBoard && !ownerBoard){
         return res.status(404).json({
             status:'fail',
             message:'this employee does not belong to board'
         })
     }
-    let assignedTasksList = await AssignedTasksList.findOne({ userId: user._id })
+    let assignedTasksList = await AssignedTasksList.findOne({ boardId, userId: user._id })
     if (!assignedTasksList) {
         assignedTasksList = await AssignedTasksList.create({ boardId, userId: user._id })
 
