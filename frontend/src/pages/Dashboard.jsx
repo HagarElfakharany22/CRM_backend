@@ -7,7 +7,7 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import { useOutletContext } from "react-router-dom";
 import styles from './styles.module.css'
-const COLORS = ["#4d215d", "#219B9D", "#FF8911", "#FF8042", "#FF3366"];
+const COLORS = ["#4d215d", "#8B8589", "#FF8911", "#FF8042", "#FF3366"];
 
 
 
@@ -110,7 +110,7 @@ export default function Dashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="value" fill="#79155B" />
+                <Bar dataKey="value" fill="#4d215d" />
               </BarChart>
             </ResponsiveContainer>
           </div>
