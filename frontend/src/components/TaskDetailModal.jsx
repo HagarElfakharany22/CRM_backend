@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAlignLeft, faList, faTag, faClock, faTrash, faTimes, faSave, faImage, faPaperclip, faExternalLinkAlt, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../context/AuthContext';
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-
+import styles from './styles.module.css'
 const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
     const queryClient = useQueryClient();
     const [formData, setFormData] = useState({ ...task });
@@ -239,9 +239,9 @@ const TaskDetailModal = ({ isOpen, onClose, task, onUpdate, onDelete }) => {
                                         ></textarea>
                                     </div>
 
-                                    <div className="d-flex gap-2">
-                                        <button className="btn btn-primary" onClick={handleSave}>
-                                            <FontAwesomeIcon icon={faSave} className="me-2" />
+                                    <div className={`d-flex gap-2`}>
+                                        <button className={`btn btn-primary  ${styles.btn_main}`} onClick={handleSave}>
+                                            <FontAwesomeIcon icon={faSave} className={`me-2`} />
                                             Save Changes
                                         </button>
                                     </div>

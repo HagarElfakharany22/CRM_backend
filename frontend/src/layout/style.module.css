@@ -309,7 +309,12 @@ textarea.form_control {
     background-color: rgba(0,0,0,0.5);
     border-radius: 10px;
 }
-
+.btn_main{
+    background-color: #4d215d;
+  border: none;
+  padding: 10px 15px;
+  font-weight: 500;
+}
 .form{
     position: relative;
 }

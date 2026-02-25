@@ -71,12 +71,12 @@ export default function ShareModal({ board, onClose, onSubmit }) {
               <input
                 type="email"
                 className="form-control"
-                placeholder="Email address or name"
+                placeholder="Email address"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
               />
               <button
-                className="btn btn-primary px-4"
+                className={`btn btn-primary px-4 btn  ${styles.btn_main}`}
                 onClick={handleShare}
                 disabled={addMemberMutation.isPending}
               >
