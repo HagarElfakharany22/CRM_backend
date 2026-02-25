@@ -103,6 +103,15 @@ async function updateBoard(id , data){
     
     return response.data;
 }
+
+async function deleteMember(id , userId){
+    let response= await api.delete(`/api/v1/board/${id}/delete-emp?userId=${userId}` , {
+        headers:getAuthHeader()
+    })
+    console.log(response.data);
+    
+    return response.data;
+}
 export default  function BoardContextProvider({children}){
     const [BoardsData,setBoardsData]=useState();
 
@@ -116,7 +125,8 @@ export default  function BoardContextProvider({children}){
         deleteBoardByItsId,
         updateBoard,
         getUserRole,
-        getEmployeesBoards
+        getEmployeesBoards,
+        deleteMember
     }}>
         {children}
         

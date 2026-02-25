@@ -8,6 +8,7 @@ import getBoardByOwnerId from "./services/getBoardByOwnerId.service.js";
 import assignUsersToBoard from "./services/assignUrsersToBoard.service.js";
 import getBoardByItsId from "./services/getBoardByItsId.service.js";
 import assignUserToBoardByEmail from "./services/assignUserToBoardByEmail.service.js";
+import deleteUserByItsId from "./services/deleteUserbyItsId.service.js";
 const router=Router();
 
 router.post('/add' , authentication() , addBoard)
@@ -18,4 +19,5 @@ router.get('/owner' , authentication() , getBoardByOwnerId)
 router.put('/assign-Users/:id' , authentication() , assignUsersToBoard)
 router.get('/:id' , authentication() , getBoardByItsId)
 router.put('/by-email/:id' , authentication() , assignUserToBoardByEmail)
+router.delete('/:id/delete-emp' , authentication() , deleteUserByItsId)
 export default router;

@@ -167,11 +167,11 @@ export default function BoardDetails() {
           </div>
           {userRole === 'admin' || userId === data?.owner?._id ? (
             <i
-            className={`${styles.cursor} fa-solid fa-user-plus`}
-            onClick={() => setIsShareModalOpen(true)}
-          ></i>
+              className={`${styles.cursor} fa-solid fa-user-plus`}
+              onClick={() => setIsShareModalOpen(true)}
+            ></i>
           ) : null}
-          
+
         </div>
 
       </div>
@@ -179,14 +179,14 @@ export default function BoardDetails() {
         <i className="fa-solid fa-arrow-left fs-2" style={{ color: "black", fontSize: "30px", textAlign: "center", cursor: "pointer" }} onClick={() => navigate("/boards")}></i>
       </div>
       <div className={` d-flex justify-content-between px-3 my-2 position-relative  `}>
-      <div className="ps-4 pt-1">
-       <i class={`${styles.toggle_btn} ${styles.toggle_btn_mobile_screen} fa-solid fa-bars me-3 fs-2 d-none text-white`}
+        <div className="ps-4 pt-1">
+          <i class={`${styles.toggle_btn} ${styles.toggle_btn_mobile_screen} fa-solid fa-bars me-3 fs-2 d-none text-white`}
             onClick={toggleSidebar}
           ></i>
-     </div>
-     <div className={`${styles.employees_on_mobile} d-flex align-items-center`}>
-       <Employees users={data?.users} owner={data?.owner} />
-     </div>
+        </div>
+        <div className={`${styles.employees_on_mobile} d-flex align-items-center`}>
+          <Employees users={data?.users} owner={data?.owner} />
+        </div>
       </div>
 
 

@@ -298,7 +298,9 @@ textarea.form_control {
 .deleteCheckHolder{
   background-color: rgba(0,0,0,0.4);
 }
-
+.deleteMemberCheckHolder{
+  background-color: rgba(0,0,0,0.1);
+}
 /* ------------------------- assign task --------------------------- */
 .bg_dark_transparent {
   background-color: RGBA(0, 0, 0, 0.5);
