@@ -75,6 +75,7 @@ export default function BoardDetails() {
     if (!listTitle.trim()) return;
     addListMutation.mutate({ title: listTitle, boardId: data._id });
   };
+  const userId = JSON.parse(localStorage.getItem("user"))._id;
 
   useEffect(() => {
     console.log(data);
@@ -86,7 +87,7 @@ export default function BoardDetails() {
     }
 
 
-  }, [data, listData, userRole, assignedTasksListsData]);
+  }, [data, listData, userRole, assignedTasksListsData, userId]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -138,14 +139,14 @@ export default function BoardDetails() {
         className={`${styles.boardNav} ${styles.bg_dark_transparent} py-2 px-5 text-white d-flex align-items-center justify-content-between  `}
       >
 
-       <div className="d-flex">
-         <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2`}
-          onClick={toggleSidebar}
-        ></i>
-        <div className=" me-5">
-          <h5>{data?.title}</h5>
+        <div className="d-flex">
+          <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2`}
+            onClick={toggleSidebar}
+          ></i>
+          <div className=" me-5">
+            <h5>{data?.title}</h5>
+          </div>
         </div>
-       </div>
         <div className="d-flex align-items-center gap-3">
           {userRole == 'admin' && (
             <button className={`btn  ${styles.btn_primary} text-white`}
@@ -162,11 +163,13 @@ export default function BoardDetails() {
 
           )}
           <Employees users={data?.users} owner={data?.owner} />
-          {/* Trigger Icon */}
-          <i
+          {userRole === 'admin' || userId === data?.owner?._id ? (
+            <i
             className={`${styles.cursor} fa-solid fa-user-plus`}
             onClick={() => setIsShareModalOpen(true)}
           ></i>
+          ) : null}
+          
         </div>
 
       </div>
