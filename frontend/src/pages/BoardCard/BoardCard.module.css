@@ -1,5 +1,5 @@
 .product{
-   background: linear-gradient(to right, rgb(60, 60, 216), rgb(185, 185, 185));
+    background: linear-gradient(to right, #832388, #e3436b, #f0772f);
 }
 
 .cursor{
@@ -9,7 +9,7 @@
 .threeDots{
       top:10px;
       right:10px;
-      color: rgb(60, 60, 216);
+      color: #832388;
       cursor: pointer;
 }
 

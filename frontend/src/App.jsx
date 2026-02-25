@@ -176,7 +176,7 @@ export default function App() {
 
         {/* Reports */}
         <Route path="/reports" element={<Reports />} />
-        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/attendance" element={<Attendance/>} />
       </Route>
     </Routes>
   );
