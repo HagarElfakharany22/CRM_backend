@@ -1,5 +1,5 @@
 .user_avatar{
-    background-color: aqua;
+     background: linear-gradient(to right, #832388, #e3436b, #f0772f);
 }
 .logoutBtn{
     padding: 10px 15px;
@@ -7,6 +7,10 @@
     border: none;
     border-radius: 12px;
     color: white;
+}
+
+.topBar{
+     background: linear-gradient(to right, #832388, #e3436b, #f0772f);
 }
 @media (max-width: 540px) {
 

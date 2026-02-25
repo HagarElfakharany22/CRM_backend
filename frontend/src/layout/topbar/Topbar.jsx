@@ -7,7 +7,7 @@ const Topbar = ({ user }) => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   return (
-    <div className={`${topStyle.button_holder} ${styles.bg_dark} ${styles.fit_screen} d-flex justify-content-between align-items-center text-white border-bottom py-3 px-5`}>
+    <div className={`${topStyle.button_holder} ${styles.bg_dark} ${styles.fit_screen} d-flex justify-content-between align-items-center text-white border-bottom py-3 px-5 `}>
       {/* Search Input */}
       {/* <input
         type="text"
@@ -15,7 +15,7 @@ const Topbar = ({ user }) => {
         className="form-control me-3"
         style={{ maxWidth: "24rem" }} 
       /> */}
-      <h3>hello <span style={{ color: "#6495ED" }}>{user.name}</span></h3>
+      <h3>hello <span style={{ color: "#FF8911" }}>{user.name}</span></h3>
       {/* Right Section */}
       <div className={` d-flex align-items-center gap-2`}>
         {/* <button className="btn btn-primary">
@@ -23,7 +23,7 @@ const Topbar = ({ user }) => {
         </button> */}
 
         {/* User Avatar */}
-        <div className={`d-flex justify-content-center align-items-center bg-primary text-white rounded-circle fw-bold ${topStyle.user_avatar}` }
+        <div className={`d-flex justify-content-center align-items-center  text-white rounded-circle fw-bold ${topStyle.user_avatar}` }
           style={{ width: "3rem", height: "3rem" }}>
           {user.name.slice(0, 2)}
         </div>

@@ -16,7 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
-import Attendance from "./pages/attendance.jsx";
+import Attendance from './pages/Attendance.jsx'
 const API_URL = import.meta.env.VITE_API_URL;
 
 // const socket = io("http://localhost:8000");
@@ -176,7 +176,7 @@ export default function App() {
 
         {/* Reports */}
         <Route path="/reports" element={<Reports />} />
-        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/attendance" element={<Attendance/>} />
       </Route>
     </Routes>
   );

@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import { AuthContext } from "../context/AuthContext";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF3366"];
+const COLORS = ["#4d215d", "#219B9D", "#FF8911", "#FF8042", "#FF3366"];
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
@@ -102,7 +102,7 @@ export default function Dashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="value" fill="#82ca9d" />
+                <Bar dataKey="value" fill="#79155B" />
               </BarChart>
             </ResponsiveContainer>
           </div>
