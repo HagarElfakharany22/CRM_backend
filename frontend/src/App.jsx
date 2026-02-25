@@ -16,7 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
-import Attendance from './pages/Attendance.jsx'
+import Attendance from "./pages/Attendance.jsx";
 const API_URL = import.meta.env.VITE_API_URL;
 
 // const socket = io("http://localhost:8000");

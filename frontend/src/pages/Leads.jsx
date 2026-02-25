@@ -3,7 +3,10 @@ import React, { useEffect, useState, useContext } from "react";
 import LeadForm from '../forms/Leadform';
 import Modal from '../common/Modal';
 import { BoardContext } from '../context/BoardContext';
+import { useOutletContext } from "react-router-dom";
+import styles from './styles.module.css'
 const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
+  const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -28,7 +31,16 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
   }, []);
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-4">Leads</h1>
+    <div className="d-flex justify-content-between p-3">
+          <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 text-white mb-3`}
+            onClick={toggleSidebar}
+          ></i>
+          {/* <h2 className="mb-4 text-white">Leads</h2> */}
+          </div>
+    {/* <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 text-white`}
+                  onClick={toggleSidebar}
+                ></i>
+      <h1 className="text-2xl font-semibold mb-4 text-white">Leads</h1> */}
 
       <div className="bg-white rounded-lg shadow">
         {/* Header */}

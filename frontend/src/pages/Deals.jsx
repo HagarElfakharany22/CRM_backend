@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 import Modal from '../common/Modal';
 import Dealsforms from '../forms/Dealsforms';
+import { useOutletContext } from "react-router-dom";
+import styles from './styles.module.css'
 export default function Deals({ deals, onAdd, onEdit, onDelete }) {
+  const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [formData, setFormData] = useState({ name: '', company: '', stage: '', probability: '', status: ''});
+  const [formData, setFormData] = useState({ name: '', company: '', stage: '', probability: '', status: '' });
 
 
   const filtered = deals.filter(l =>
-    l.name.toLowerCase().includes(search.toLowerCase()) 
-    || l.company.toLowerCase().includes(search.toLocaleLowerCase())||
+    l.name.toLowerCase().includes(search.toLowerCase())
+    || l.company.toLowerCase().includes(search.toLocaleLowerCase()) ||
     l.stage.toLowerCase().includes(search.toLocaleLowerCase())
-    
+
   );
 
   const submit = () => {
@@ -21,8 +24,13 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
     setOpen(false);
   };
   return (
-     <>
-      <h1 className="text-2xl font-semibold mb-4">Deals</h1>
+    <>
+      {/* <h1 className="text-2xl font-semibold mb-4">Deals</h1> */}
+     <div className='p-3'>
+       <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 text-white `}
+        onClick={toggleSidebar}
+      ></i>
+     </div>
 
       <div className="bg-white rounded-lg shadow">
         {/* Header */}
@@ -38,7 +46,7 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
             />
             <button
               className="btn btn-primary text-white px-4 py-2 rounded"
-              onClick={() => { setEditing(null); setFormData({ name: '', company: '', stage: '', probability: '', status: ''}); setOpen(true); }}
+              onClick={() => { setEditing(null); setFormData({ name: '', company: '', stage: '', probability: '', status: '' }); setOpen(true); }}
             >
               + Add Deal
             </button>
@@ -49,7 +57,7 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500">
             <tr>
-              {["Name","Company","Stage","Probability","Status","Actions"].map(h => (
+              {["Name", "Company", "Stage", "Probability", "Status", "Actions"].map(h => (
                 <th key={h} className="text-left px-4 py-3">{h}</th>
               ))}
             </tr>
@@ -63,7 +71,7 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
                 <td className="px-4 py-3">{deal.stage}</td>
                 <td className="px-4 py-3 "  >{deal.probability}%</td>
                 <td className="px-4 py-3" style={{ width: "15%" }}>{deal.status}</td>
-      
+
                 <td className="px-4 py-3 d-flex gap-2">
                   <button
                     className="px-3 py-1 border rounded"

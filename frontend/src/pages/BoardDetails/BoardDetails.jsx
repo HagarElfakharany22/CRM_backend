@@ -75,6 +75,7 @@ export default function BoardDetails() {
     if (!listTitle.trim()) return;
     addListMutation.mutate({ title: listTitle, boardId: data._id });
   };
+  const userId = JSON.parse(localStorage.getItem("user"))._id;
 
   useEffect(() => {
     console.log(data);
@@ -86,7 +87,7 @@ export default function BoardDetails() {
     }
 
 
-  }, [data, listData, userRole, assignedTasksListsData]);
+  }, [data, listData, userRole, assignedTasksListsData, userId]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -135,20 +136,20 @@ export default function BoardDetails() {
     <div className={`${styles.bg_gredient}  p-0 h-100 `}>
 
       <div
-        className={`${styles.boardNav} ${styles.bg_dark_transparent} py-2 px-5 text-white d-flex align-items-center justify-content-between  `}
+        className={`${styles.boardNav} ${styles.bg_dark_transparent} py-2 px-5 text-white d-flex align-items-center justify-content-between `}
       >
 
-       <div className="d-flex">
-         <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2`}
-          onClick={toggleSidebar}
-        ></i>
-        <div className=" me-5">
-          <h5>{data?.title}</h5>
+        <div className={`${styles.toggle_title_holder} d-flex`}>
+          <i class={`${styles.toggle_btn} ${styles.toggle_btn_laptop_screen} fa-solid fa-bars me-3 fs-2 `}
+            onClick={toggleSidebar}
+          ></i>
+          <div className=" ">
+            <h5>{data?.title}</h5>
+          </div>
         </div>
-       </div>
-        <div className="d-flex align-items-center gap-3">
+        <div className={`${styles.second_part_holder} d-flex align-items-center gap-3`} >
           {userRole == 'admin' && (
-            <button className={`btn  ${styles.btn_primary} text-white`}
+            <button className={`btn  ${styles.btn_primary} ${styles.handle_btn_mobile_screen} text-white`}
               onClick={() => {
                 setAssignTaskModalAppear(true)
               }}
@@ -161,17 +162,31 @@ export default function BoardDetails() {
             }} ></i>
 
           )}
-          <Employees users={data?.users} owner={data?.owner} />
-          {/* Trigger Icon */}
-          <i
+          <div className={`${styles.employees_on_laptop} d-flex align-items-center`}>
+            <Employees users={data?.users} owner={data?.owner} />
+          </div>
+          {userRole === 'admin' || userId === data?.owner?._id ? (
+            <i
             className={`${styles.cursor} fa-solid fa-user-plus`}
             onClick={() => setIsShareModalOpen(true)}
           ></i>
+          ) : null}
+          
         </div>
 
       </div>
-      <div className={styles.back} >
-        <i className="fa-solid fa-arrow-left" style={{ color: "black", fontSize: "30px", textAlign: "center", cursor: "pointer" }} onClick={() => navigate("/boards")}></i>
+      <div className={`${styles.back}  `} >
+        <i className="fa-solid fa-arrow-left fs-2" style={{ color: "black", fontSize: "30px", textAlign: "center", cursor: "pointer" }} onClick={() => navigate("/boards")}></i>
+      </div>
+      <div className={` d-flex justify-content-between px-3 my-2`}>
+      <div className="ps-4 pt-1">
+       <i class={`${styles.toggle_btn} ${styles.toggle_btn_mobile_screen} fa-solid fa-bars me-3 fs-2 d-none text-white`}
+            onClick={toggleSidebar}
+          ></i>
+     </div>
+     <div className={`${styles.employees_on_mobile} d-flex align-items-center`}>
+       <Employees users={data?.users} owner={data?.owner} />
+     </div>
       </div>
 
 

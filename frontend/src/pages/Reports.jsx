@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AttendanceContext } from '../context/AttendenceContext'
-
+import { useOutletContext } from "react-router-dom";
+import styles from './styles.module.css'
 export default function Reports() {
+  const { toggleSidebar } = useOutletContext(); 
   const { getAttendance } = useContext(AttendanceContext);
 
     const [attendance, setAttendance] = useState([]);
@@ -27,6 +29,9 @@ export default function Reports() {
 
   return (
     <div className="container-fluid py-4 bg-light min-vh-100">
+    <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 `}
+            onClick={toggleSidebar}
+          ></i>
       <h2 className="mb-3 fw-bold text-dark">Attendance Records</h2>
 
       {/* 🔘 زرار ذكي */}

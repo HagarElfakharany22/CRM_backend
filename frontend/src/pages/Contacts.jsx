@@ -2,8 +2,11 @@ import React from 'react'
 import { useState } from 'react';
 import Modal from '../common/Modal'
 import Contactsform from '../forms/Contactsform'
+import { useOutletContext } from "react-router-dom";
+import styles from './styles.module.css'
 
 export default function Contacts({contacts, onAdd, onEdit, onDelete}) {
+   const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState(null);
@@ -23,7 +26,12 @@ export default function Contacts({contacts, onAdd, onEdit, onDelete}) {
     };
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-4">Contacts</h1>
+      {/* <h1 className="text-2xl font-semibold mb-4">Contacts</h1> */}
+       <div className='p-3'>
+             <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 text-white `}
+              onClick={toggleSidebar}
+            ></i>
+           </div>
        <div className="bg-white rounded-lg shadow">
         <div className="d-flex justify-between items-center p-4 ">
           <h2 className="font-semibold mx-3">All Contacts</h2>
