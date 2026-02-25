@@ -97,7 +97,7 @@ export default function Boards() {
   return (
     <div className={`${styles.bg_dark} p-0 m-0  `}>
       <div className="pt-3 ps-4">
-        <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 text-white mb-3`}
+        <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 text-white `}
         onClick={toggleSidebar}
       ></i>
       </div>
@@ -193,7 +193,7 @@ export default function Boards() {
       )}
       {/*------------------------------ end form ---------------------------------*/}
 
-      <div className="container py-5 bg-dark">
+      <div className="container py-2 bg-dark">
         <div className="row">
           {data?.boards.map((item) => (
             <Board item={item} key={item._id} />

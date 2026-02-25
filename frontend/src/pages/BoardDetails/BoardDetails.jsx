@@ -178,7 +178,7 @@ export default function BoardDetails() {
       <div className={`${styles.back}  `} >
         <i className="fa-solid fa-arrow-left fs-2" style={{ color: "black", fontSize: "30px", textAlign: "center", cursor: "pointer" }} onClick={() => navigate("/boards")}></i>
       </div>
-      <div className={` d-flex justify-content-between px-3 my-2`}>
+      <div className={` d-flex justify-content-between px-3 my-2 position-relative  `}>
       <div className="ps-4 pt-1">
        <i class={`${styles.toggle_btn} ${styles.toggle_btn_mobile_screen} fa-solid fa-bars me-3 fs-2 d-none text-white`}
             onClick={toggleSidebar}

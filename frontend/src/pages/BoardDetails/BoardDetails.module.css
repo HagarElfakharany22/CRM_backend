@@ -174,11 +174,6 @@ textarea.form_control {
  
 }
 @media (max-width: 374px) {
- .boardNav{
-    /* flex-direction: column !important; */
-    /* justify-content: start !important;
-    align-items: start !important; */
-  }
   .toggle_title_holder{
     /* width: 100%; */
     /* background-color: green; */
@@ -221,3 +216,11 @@ textarea.form_control {
  }
  
 }
+@media (min-width: 375px) {
+  .employees_on_mobile{
+    position: absolute;
+    right: 15px;
+    top: -40px;
+  }
+}
+ 
