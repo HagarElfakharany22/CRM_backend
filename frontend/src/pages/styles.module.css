@@ -7,3 +7,23 @@
   }
  
 }
+
+.bg_gredient {
+  background: linear-gradient(#fd7e14 10%, #4d215d);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  /* allow child (.board) scrollbars to show */
+}
+
+.w_90{
+  width: 90%;
+}
+.border_main{
+  border: #fd7e14 2px solid;
+}
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}

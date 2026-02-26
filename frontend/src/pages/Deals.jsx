@@ -32,7 +32,8 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
       ></i>
      </div>
 
-      <div className="bg-white rounded-lg shadow">
+      <div className='d-flex justify-content-center'>
+        <div className={`bg-white  rounded-4 p-2 shadow ${styles.border_main} `}>
         {/* Header */}
         <div className="d-flex justify-between items-center p-4 border-b">
           <h2 className="font-semibold mx-3">All Deals</h2>
@@ -53,7 +54,8 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
           </div>
         </div>
 
-        {/* Table */}
+       <div className={`${styles.tableWrapper} overflow-auto`}>
+         {/* Table */}
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500">
             <tr>
@@ -90,6 +92,8 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
             ))}
           </tbody>
         </table>
+       </div>
+      </div>
       </div>
 
       {/* Modal */}

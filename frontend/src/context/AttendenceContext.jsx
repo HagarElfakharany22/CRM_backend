@@ -8,18 +8,18 @@ export const AttendanceContext = createContext({
 });
 
 export const AttendanceProvider = ({ children }) => {
-    const { user } = useContext(AuthContext);
-    function getAuthData() {
+  const { user } = useContext(AuthContext);
+  function getAuthData() {
     const token = localStorage.getItem("token");
-   
+
     if (!token || !user) return null;
     const role = user.role || "user";
     const auth = role === "admin" ? "admin" : "Bearer";
     return { token, auth };
   }
- async function getAttendance() {
+  async function getAttendance() {
     const authData = getAuthData();
-    console.log("authData",authData);
+    console.log("authData", authData);
     if (!authData) return [];
 
     const response = await api.get('/api/v1/user/attendance', {

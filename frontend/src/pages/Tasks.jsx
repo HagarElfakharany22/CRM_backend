@@ -90,7 +90,7 @@ function TasksPage() {
   };
 
   return (
-    <div className="container-fluid py-4 bg-light min-vh-100">
+    <div className="container-fluid py-4 bg-light min-vh-100 ">
       <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3`}
               onClick={toggleSidebar}
             ></i>

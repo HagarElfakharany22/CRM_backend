@@ -14,7 +14,7 @@ import testSocket from "./services/testSocket.js";
 import getUserById from "./services/getUserById.service.js";
 import { checkIn } from "./services/checkIn.service.js";
 import { getMyAttendanceStatus } from "./services/getattendanceStatus.service.js";
-
+import getDashboardData from "./services/getDashboardData.service.js";
 const router=Router();
 router.post('/register' , signup)
 router.post('/login' , login)
@@ -29,4 +29,5 @@ router.get('/attendance',authentication() , getAttendace)
 router.put('/password',authentication() , changePassword)
 router.get('/test-socket', testSocket)
 router.get('/by-id/:id' , authentication() , getUserById)
+router.get('/dashboard' , authentication(), getDashboardData)
 export default router;

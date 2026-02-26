@@ -112,6 +112,14 @@ async function deleteMember(id , userId){
     
     return response.data;
 }
+async function getDashboardData () {
+    let response= await api.get(`/api/v1/user/dashboard` , {
+        headers:getAuthHeader()
+    })
+
+    
+    return response.data;
+}
 export default  function BoardContextProvider({children}){
     const [BoardsData,setBoardsData]=useState();
 
@@ -126,7 +134,8 @@ export default  function BoardContextProvider({children}){
         updateBoard,
         getUserRole,
         getEmployeesBoards,
-        deleteMember
+        deleteMember,
+        getDashboardData
     }}>
         {children}
         

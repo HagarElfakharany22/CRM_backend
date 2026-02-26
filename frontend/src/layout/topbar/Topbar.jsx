@@ -15,7 +15,7 @@ const Topbar = ({ user }) => {
         className="form-control me-3"
         style={{ maxWidth: "24rem" }} 
       /> */}
-      <h3>hello <span style={{ color: "#FF8911" }}>{user.name}</span></h3>
+      <h3>Hello <span style={{ color: "#FF8911" }}>{user.name}</span></h3>
       {/* Right Section */}
       <div className={` d-flex align-items-center gap-2`}>
         {/* <button className="btn btn-primary">

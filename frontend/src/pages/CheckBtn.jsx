@@ -70,7 +70,7 @@ export default function CheckBtn() {
   return (
     <button
       onClick={isCheckedIn ? handleCheckOut : handleCheckIn}
-      className={`btn mb-3 ${
+      className={`btn mb-3 px-5 py-3 fs-5 ${
         isCheckedIn ? "btn-danger" : "btn-success"
       }`}
     >

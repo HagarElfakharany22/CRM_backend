@@ -109,7 +109,7 @@ export default function ShareModal({ board, onClose, onSubmit }) {
                     {/*------------ delete icon---------- */}
                     {
                       user._id != board.owner._id && user.role != `admin` && user.role != `leader` ? (
-                        <i class="fa-solid fa-user-minus" onClick={() => setMemberToDelete(user)}></i>
+                        <i class={`fa-solid fa-user-minus ${styles.cursor}`} onClick={() => setMemberToDelete(user)}></i>
                       ) : null
                     }
                     {/*---------------------------- start delete member ----------------------- */}

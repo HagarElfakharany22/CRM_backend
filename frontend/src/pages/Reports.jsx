@@ -28,16 +28,16 @@ export default function Reports() {
   // }, []);
 
   return (
-    <div className="container-fluid py-4 bg-light min-vh-100">
+    <div className={`container-fluid py-4 bg-light min-vh-100 ${styles.bg_gredient}`}>
     <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 `}
             onClick={toggleSidebar}
           ></i>
-      <h2 className="mb-3 fw-bold text-dark">Attendance Records</h2>
+      <h2 className="mb-3 fw-bold text-light">Attendance Records</h2>
 
       {/* 🔘 زرار ذكي */}
       
 
-      <div className="card shadow-sm border-0 overflow-hidden">
+      <div className={`card shadow-sm border-0 overflow-hidden  ${styles.card}`}>
         <table className="table table-hover align-middle mb-0">
           <thead className="bg-white border-bottom">
             <tr>
