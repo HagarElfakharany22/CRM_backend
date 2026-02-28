@@ -27,3 +27,10 @@
   width: 100%;
   overflow-x: auto;
 }
+/* ------------------------- input size responsive ---------- */
+@media (max-width: 576px) {
+  .input_size_responsive{
+    width: 100% !important;
+  }
+ 
+}
