@@ -1,11 +1,17 @@
 import mongoose, { Schema, model } from "mongoose";
 
 const dealSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  title: { type: String, required: true },
 
-  contact: {
+  contacts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Contact',
+    },
+  ],
+  lead: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Contact"
+    ref: 'Lead',
   },
 
   value: {
