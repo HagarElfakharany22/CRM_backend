@@ -134,7 +134,7 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                       >
                         Delete
                       </button>
-                      {/*---------------------------- start delete list ----------------------- */}
+                      {/*---------------------------- start delete contact ----------------------- */}
                       {
                         contactToDelete && (
                           <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
@@ -146,7 +146,7 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                           </div>
                         )
                       }
-                      {/*---------------------------- end delete list ----------------------- */}
+                      {/*---------------------------- end delete contact ----------------------- */}
                     </div>
                   </td>
                 </tr>
@@ -173,7 +173,6 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                     className="btn btn-outline-secondary btn-sm w-50"
                     onClick={() => {
                       setEditing(contact);
-                      setFormData(contact);
                       setOpen(true);
                     }}
                   >
@@ -181,10 +180,23 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                   </button>
                   <button
                     className="btn btn-danger btn-sm w-50"
-                    onClick={() => onDelete(contact._id)}
+                    onClick={() => setContactToDelete(contact)}
                   >
                     Delete
                   </button>
+                   {/*---------------------------- start delete contact ----------------------- */}
+                      {
+                        contactToDelete && (
+                          <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
+                            <div className={`p-5 bg-light rounded-3`}>
+                              <h5 className="text-center mb-4">Are You Sure ?  </h5>
+                              <button className={`py-2 px-5 rounded-3 border-0 me-2 bg-danger text-white`} onClick={() => deleteContactMutation.mutate(contactToDelete._id)}>Delete</button>
+                              <button className={`py-2 px-5 rounded-3 border-1  me-2`} onClick={() => setContactToDelete(null)}>Cancel</button>
+                            </div>
+                          </div>
+                        )
+                      }
+                      {/*---------------------------- end delete contact ----------------------- */}
                 </div>
               </div>
             </div>
@@ -196,7 +208,7 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
       {/* Modal */}
       <Modal
         isOpen={open}
-        title={editing ? "Edit Lead" : "Add Lead"}
+        title={editing ? "Edit Contact" : "Add Contact"}
         onClose={() => {
           setOpen(false);
           setEditing(null);
@@ -208,6 +220,7 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
               name: "",
               company: "",
               email: "",
+              title:"",
               phone: "",
               status: "",
               source: "",
@@ -216,9 +229,9 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
           isEdit={!!editing}
           onSubmit={(values) => {
             if (editing) {
-              updateLeadMutation.mutate({ ...values, _id: editing._id });
+              updateContactMutation.mutate({ ...values, _id: editing._id });
             } else {
-              addLeadMutation.mutate(values);
+              addConactMutation.mutate(values);
             }
           }}
         />

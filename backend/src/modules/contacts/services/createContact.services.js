@@ -6,8 +6,7 @@ import { asyncHandler } from "../../../utilities/error/error.js";
 const createContact= asyncHandler(async(req , res , next)=>{
     const id= req.user._id;
     const {name , email , phone, company ,title, createdFromLead}= req.body;
-    console.log(createdFromLead);
-     
+
     const lead = await Lead.findOne({_id:createdFromLead})
     console.log(lead);
     if(!lead){
@@ -16,6 +15,8 @@ const createContact= asyncHandler(async(req , res , next)=>{
             message:"lead not found"
         })
     }
+    console.log(`lead : ` , lead);
+    
     
     const newContact= await Contact.create({name, email , phone , company , title , createdFromLead , owner:id})
     if(!newContact){

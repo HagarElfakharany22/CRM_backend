@@ -2,7 +2,8 @@
 
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
+import * as Yup from "yup"
 
 const statusOptions = ["new", "contacted", "qualified", "lost"];
 const sourceOptions = ["website", "facebook", "referral", "manual"];
