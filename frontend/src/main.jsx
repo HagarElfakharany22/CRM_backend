@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { AttendanceProvider } from './context/AttendenceContext.jsx'
 import LeadsProvider from './context/LeadsContext.jsx'
+import ContactsProvider from './context/ContactsContext.jsx'
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
           <ListContextProvider>
             <AttendanceProvider>
               <LeadsProvider>
+                <ContactsProvider>
             <BrowserRouter>
               <QueryClientProvider client={queryClient}>
                 <App />
@@ -35,6 +37,7 @@ createRoot(document.getElementById('root')).render(
                 />
               </QueryClientProvider>
             </BrowserRouter>
+            </ContactsProvider>
             </LeadsProvider>
             </AttendanceProvider>
           </ListContextProvider>

@@ -1,130 +1,67 @@
-// import React from 'react'
-// import { useState } from 'react';
-// import Modal from '../common/Modal'
-// import Contactsform from '../forms/Contactsform'
-// import { useOutletContext } from "react-router-dom";
-// import styles from './styles.module.css'
 
-// export default function Contacts({contacts, onAdd, onEdit, onDelete}) {
-//    const { toggleSidebar } = useOutletContext();
-//   const [search, setSearch] = useState('');
-//     const [open, setOpen] = useState(false);
-//     const [editing, setEditing] = useState(null);
-//     const [formData, setFormData] = useState({ name: '', company: '', email: '', phone: '', title: ''});
-  
-  
-//     const filtered = contacts.filter(l =>
-//       l.name.toLowerCase().includes(search.toLowerCase()) 
-//       || l.company.toLowerCase().includes(search.toLocaleLowerCase())||
-//       l.title.toLowerCase().includes(search.toLocaleLowerCase())
-//     );
-  
-//     const submit = () => {
-//       if (editing) onEdit({ ...formData, id: editing.id });
-//       else onAdd(formData);
-//       setOpen(false);
-//     };
-//   return (
-//     <>
-//       {/* <h1 className="text-2xl font-semibold mb-4">Contacts</h1> */}
-//        <div className='p-3'>
-//              <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 text-white `}
-//               onClick={toggleSidebar}
-//             ></i>
-//            </div>
-//        <div className="bg-white rounded-lg shadow">
-//         <div className="d-flex justify-between items-center p-4 ">
-//           <h2 className="font-semibold mx-3">All Contacts</h2>
-//           <div className="d-flex gap-3">
-//             <input
-//               placeholder="Search leads..."
-//               className="border px-3 py-2 rounded"
-//               onChange={e=> setSearch(e.target.value)}
-              
-//             />
-//             <button
-//               className="btn btn-primary text-white px-4 py-2 rounded"
-//               onClick={()=>{setEditing(null); setFormData({ name:'', company:'', email:'', phone:'', title:'' }); setOpen(true);}}
-//             >
-//               + Add Contact
-//             </button>
-//           </div>
-//         </div>
-//         <table className="w-full text-sm">
-//           <thead className="bg-gray-50 text-gray-500">
-//             <tr>
-//               {["Name","Title","Email","Phone","Company","Actions"].map(h => (
-//                 <th key={h} className="text-left px-4 py-3">{h}</th>
-//               ))}
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {filtered.map(contact => (
-//               <tr key={contact.id} className="border-t">
-//                 <td className="px-4 py-3">{contact.name}</td>
-//                 <td className="px-4 py-3">{contact.title}</td>
-//                 <td className="px-4 py-3">{contact.email}</td>
-//                 <td className="px-4 py-3 "  style={{ width: "15%" }}>{contact.phone}</td>
-//                 <td className="px-4 py-3">{contact.company}</td>
-                
-//                 <td className="px-4 py-3 d-flex gap-2">
-//                   <button
-//                     className="px-3 py-1 border rounded"
-//                     onClick={() => { setEditing(contact); setFormData(contact); setOpen(true); }}
-//                   >
-//                     Edit
-//                   </button>
-//                   <button
-//                     className="px-3 py-1 btn btn-danger text-white rounded"
-//                      onClick={() => onDelete(contact.id)}
-//                   >
-//                     Delete
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//        </div>
-//        <Modal isOpen={open} title={editing ? "Edit Contacts" : "Add Contacts"} onClose={() => setOpen(false)} onSubmit={submit}>
-//           <Contactsform formData={formData} setFormData={setFormData}/>
-//        </Modal>
-//     </>
-//   )
-// }
-
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Modal from '../common/Modal';
 import Contactsform from '../forms/Contactsform';
 import { useOutletContext } from "react-router-dom";
 import styles from './styles.module.css';
-
+import { ContactsContext } from '../context/ContactsContext.jsx';
+import { BoardContext } from '../context/BoardContext.jsx';
+import LeadForm from '../forms/Leadform.jsx';
 export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
+  const queryClient = useQueryClient();
+  const { getContacts, getContactsByUserId, deleteContacts, updateContacts, createContacts } = useContext(ContactsContext)
   const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
+  let [userRole, setUserRole] = useState(null);
+  const { getUserRole } = useContext(BoardContext)
   const [editing, setEditing] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    title: ''
+  const [contactToDelete, setContactToDelete] = useState(null);
+  const { data } = useQuery({
+    queryKey: ["contacts", search],
+    queryFn: () =>
+      userRole === "admin" ||
+        userRole === "leader" ||
+        userRole === "manager"
+        ? getContacts(search)
+        : getContactsByUserId(search),
+    enabled: !!userRole,
   });
+  const deleteContactMutation = useMutation({
+      mutationFn: (contactId) => deleteContacts(contactId),
+      onSuccess: async () => {
+        setContactToDelete(null)
+        await queryClient.invalidateQueries({ queryKey: ["contacts"] });
+        queryClient.refetchQueries({ queryKey: ["contacts"] });
+        onClose();
+      },
+    });
+    const addConactMutation = useMutation({
+    mutationFn: (newContact) => createContacts(newContact),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      setOpen(false);
+    },
+  });
+  
+  const updateContactMutation = useMutation({
+    mutationFn: (updatedContact) => updateContacts(updatedContact._id, updatedContact),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      setOpen(false);
+      setEditing(null);
+    },
+  });
+  useEffect(() => {
+    let role = getUserRole();
+    if (role) {
+      setUserRole(role)
+    }
+    console.log(data);
 
-  const filtered = contacts.filter(l =>
-    l.name.toLowerCase().includes(search.toLowerCase()) ||
-    l.company.toLowerCase().includes(search.toLowerCase()) ||
-    l.title.toLowerCase().includes(search.toLowerCase())
-  );
+  }, [userRole, data]);
 
-  const submit = () => {
-    if (editing) onEdit({ ...formData, id: editing.id });
-    else onAdd(formData);
-    setOpen(false);
-  };
 
   return (
     <>
@@ -151,14 +88,6 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
             <button
               className="btn btn-primary px-3  py-2"
               onClick={() => {
-                setEditing(null);
-                setFormData({
-                  name: '',
-                  company: '',
-                  email: '',
-                  phone: '',
-                  title: ''
-                });
                 setOpen(true);
               }}
             >
@@ -181,8 +110,8 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
             </thead>
 
             <tbody>
-              {filtered.map(contact => (
-                <tr key={contact.id}>
+              {data?.contacts?.map(contact => (
+                <tr key={contact._id}>
                   <td>{contact.name}</td>
                   <td>{contact.title}</td>
                   <td>{contact.email}</td>
@@ -194,7 +123,6 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                         className="btn btn-outline-secondary px-4"
                         onClick={() => {
                           setEditing(contact);
-                          setFormData(contact);
                           setOpen(true);
                         }}
                       >
@@ -202,10 +130,23 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                       </button>
                       <button
                         className="btn btn-danger px-4"
-                        onClick={() => onDelete(contact.id)}
+                        onClick={() => setContactToDelete(contact)}
                       >
                         Delete
                       </button>
+                      {/*---------------------------- start delete list ----------------------- */}
+                      {
+                        contactToDelete && (
+                          <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
+                            <div className={`p-5 bg-light rounded-3`}>
+                              <h5 className="text-center mb-4">Are You Sure ?  </h5>
+                              <button className={`py-2 px-5 rounded-3 border-0 me-2 bg-danger text-white`} onClick={() => deleteContactMutation.mutate(contactToDelete._id)}>Delete</button>
+                              <button className={`py-2 px-5 rounded-3 border-1  me-2`} onClick={() => setContactToDelete(null)}>Cancel</button>
+                            </div>
+                          </div>
+                        )
+                      }
+                      {/*---------------------------- end delete list ----------------------- */}
                     </div>
                   </td>
                 </tr>
@@ -218,8 +159,8 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
         {/* Mobile Card Layout */}
         {/* ===================== */}
         <div className="d-md-none">
-          {filtered.map(contact => (
-            <div key={contact.id} className="card mb-3 shadow-sm">
+          {data?.contacts?.map(contact => (
+            <div key={contact._id} className="card mb-3 shadow-sm">
               <div className="card-body">
                 <h5 className="card-title mb-1">{contact.name}</h5>
                 <p className="mb-1"><strong>Title:</strong> {contact.title}</p>
@@ -240,7 +181,7 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
                   </button>
                   <button
                     className="btn btn-danger btn-sm w-50"
-                    onClick={() => onDelete(contact.id)}
+                    onClick={() => onDelete(contact._id)}
                   >
                     Delete
                   </button>
@@ -255,13 +196,31 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
       {/* Modal */}
       <Modal
         isOpen={open}
-        title={editing ? "Edit Contact" : "Add Contact"}
-        onClose={() => setOpen(false)}
-        onSubmit={submit}
+        title={editing ? "Edit Lead" : "Add Lead"}
+        onClose={() => {
+          setOpen(false);
+          setEditing(null);
+        }}
       >
-        <Contactsform
-          formData={formData}
-          setFormData={setFormData}
+        <LeadForm
+          initialValues={
+            editing || {
+              name: "",
+              company: "",
+              email: "",
+              phone: "",
+              status: "",
+              source: "",
+            }
+          }
+          isEdit={!!editing}
+          onSubmit={(values) => {
+            if (editing) {
+              updateLeadMutation.mutate({ ...values, _id: editing._id });
+            } else {
+              addLeadMutation.mutate(values);
+            }
+          }}
         />
       </Modal>
     </>
