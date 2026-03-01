@@ -1,77 +1,247 @@
-import React from 'react';
 
-const LeadForm = ({ formData, setFormData }) => {
+// import React from "react";
+// import { useFormik } from "formik";
+// import * as Yup from "yup";
+
+// const LeadForm = ({ initialValues, onSubmit, isEdit }) => {
+//   const formik = useFormik({
+//     enableReinitialize: true, // important for dynamic edit data
+//     initialValues: initialValues,
+//     validationSchema: Yup.object({
+//       name: Yup.string().required("Name is required"),
+//       company: Yup.string().required("Company is required"),
+//       email: Yup.string().email("Invalid email").required("Email is required"),
+//       phone: Yup.string().required("Phone is required"),
+//       status: Yup.string().required("Status is required"),
+//       source: Yup.string().required("Source is required"),
+//     }),
+//     onSubmit: (values) => {
+//       onSubmit(values);
+//     },
+//   });
+
+//   return (
+//     <form onSubmit={formik.handleSubmit}>
+//       <div className="mb-3">
+//         <input
+//           type="text"
+//           name="name"
+//           placeholder="Name"
+//           className="form-control"
+//           onChange={formik.handleChange}
+//           onBlur={formik.handleBlur}
+//           value={formik.values.name}
+//         />
+//         {formik.touched.name && formik.errors.name && (
+//           <div className="text-danger small">{formik.errors.name}</div>
+//         )}
+//       </div>
+
+//       <div className="mb-3">
+//         <input
+//           type="text"
+//           name="company"
+//           placeholder="Company"
+//           className="form-control"
+//           onChange={formik.handleChange}
+//           onBlur={formik.handleBlur}
+//           value={formik.values.company}
+//         />
+//       </div>
+
+//       <div className="mb-3">
+//         <input
+//           type="email"
+//           name="email"
+//           placeholder="Email"
+//           className="form-control"
+//           onChange={formik.handleChange}
+//           onBlur={formik.handleBlur}
+//           value={formik.values.email}
+//         />
+//       </div>
+
+//       <div className="mb-3">
+//         <input
+//           type="text"
+//           name="phone"
+//           placeholder="Phone"
+//           className="form-control"
+//           onChange={formik.handleChange}
+//           onBlur={formik.handleBlur}
+//           value={formik.values.phone}
+//         />
+//       </div>
+
+//       <div className="mb-3">
+//         <input
+//           type="text"
+//           name="status"
+//           placeholder="Status"
+//           className="form-control"
+//           onChange={formik.handleChange}
+//           onBlur={formik.handleBlur}
+//           value={formik.values.status}
+//         />
+//       </div>
+
+//       <div className="mb-3">
+//         <input
+//           type="text"
+//           name="source"
+//           placeholder="Source"
+//           className="form-control"
+//           onChange={formik.handleChange}
+//           onBlur={formik.handleBlur}
+//           value={formik.values.source}
+//         />
+//       </div>
+
+//       <button type="submit" className="btn btn-primary w-100">
+//         {isEdit ? "Update Lead" : "Add Lead"}
+//       </button>
+//     </form>
+//   );
+// };
+
+// export default LeadForm;
+
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const statusOptions = ["new", "contacted", "qualified", "lost"];
+const sourceOptions = ["website", "facebook", "referral", "manual"];
+
+const LeadForm = ({ initialValues, onSubmit, isEdit }) => {
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      status: "new",
+      source: "manual",
+      ...initialValues, // ensures edit data overrides defaults
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Name is required"),
+      company: Yup.string().required("Company is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      phone: Yup.string().required("Phone is required"),
+      status: Yup.string()
+        .oneOf(statusOptions)
+        .required("Status is required"),
+      source: Yup.string()
+        .oneOf(sourceOptions)
+        .required("Source is required"),
+    }),
+    onSubmit: (values) => {
+      onSubmit(values);
+    },
+  });
+
   return (
-    <form className="row g-3">
+    <form onSubmit={formik.handleSubmit}>
       {/* Name */}
-      <div className="col-12">
-        <label className="form-label">Name</label>
+      <div className="mb-3">
         <input
           type="text"
+          name="name"
+          placeholder="Name"
           className="form-control"
-          placeholder="Enter name"
-          value={formData.name}
-          onChange={e => setFormData({ ...formData, name: e.target.value })}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.name}
         />
+        {formik.touched.name && formik.errors.name && (
+          <div className="text-danger small">{formik.errors.name}</div>
+        )}
       </div>
 
       {/* Company */}
-      <div className="col-12">
-        <label className="form-label">Company</label>
+      <div className="mb-3">
         <input
           type="text"
+          name="company"
+          placeholder="Company"
           className="form-control"
-          placeholder="Enter company"
-          value={formData.company}
-          onChange={e => setFormData({ ...formData, company: e.target.value })}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.company}
         />
       </div>
 
       {/* Email */}
-      <div className="col-12">
-        <label className="form-label">Email</label>
+      <div className="mb-3">
         <input
           type="email"
+          name="email"
+          placeholder="Email"
           className="form-control"
-          placeholder="Enter email"
-          value={formData.email}
-          onChange={e => setFormData({ ...formData, email: e.target.value })}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.email}
         />
       </div>
-      <div className="col-12">
-        <label className="form-label">phone</label>
+
+      {/* Phone */}
+      <div className="mb-3">
         <input
           type="text"
+          name="phone"
+          placeholder="Phone"
           className="form-control"
-          placeholder="Enter email"
-          value={formData.phone}
-          onChange={e => setFormData({ ...formData, phone: e.target.value })}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.phone}
         />
       </div>
-      <select
-        className="form-select"
-        value={formData.status}
-        onChange={e =>
-          setFormData({ ...formData, status: e.target.value })
-        }
-      >
-        <option value="">Select Status</option>
-        <option value="New">New</option>
-        <option value="Contacted">Contacted</option>
-        <option value="Qualified">Qualified</option>
-        <option value="Lost">Lost</option>
-      </select>
-       <select
-        className="form-select"
-        value={formData.source}
-        onChange={e =>
-          setFormData({ ...formData, source: e.target.value })
-        }
-      >
-        <option value="">Select Status</option>
-        <option value="facebook">Facebook</option>
-        <option value="website">Website</option>
-      </select>
+
+      {/* Status Select */}
+      <div className="mb-3">
+        <select
+          name="status"
+          className="form-select"
+          value={formik.values.status}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        >
+          {statusOptions.map((option) => (
+            <option key={option} value={option}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </option>
+          ))}
+        </select>
+        {formik.touched.status && formik.errors.status && (
+          <div className="text-danger small">{formik.errors.status}</div>
+        )}
+      </div>
+
+      {/* Source Select */}
+      <div className="mb-3">
+        <select
+          name="source"
+          className="form-select"
+          value={formik.values.source}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        >
+          {sourceOptions.map((option) => (
+            <option key={option} value={option}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </option>
+          ))}
+        </select>
+        {formik.touched.source && formik.errors.source && (
+          <div className="text-danger small">{formik.errors.source}</div>
+        )}
+      </div>
+
+      <button type="submit" className="btn btn-primary w-100">
+        {isEdit ? "Update Lead" : "Add Lead"}
+      </button>
     </form>
   );
 };

@@ -3,7 +3,7 @@ import styles from '../sidebar/side.module.css'
 
 export default function Sidebar({ user, isOpen, toggleSidebar }) {
   const menuItems =
-    user.role === "admin"
+    user.role === "admin"|| user.role ==="leader"
       ? [
           { name: "Dashboard", path: "/dashboard", end: true },
           { name: "Leads", path: "/leads" },

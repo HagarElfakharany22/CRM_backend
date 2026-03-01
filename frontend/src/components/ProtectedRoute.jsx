@@ -4,7 +4,8 @@ import { Link, Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children, roles }) {
   const { user, loading } = useContext(AuthContext);
-
+console.log("Allowed roles:", roles);
+console.log("User role:", user?.role);
  
   if (loading) return null; 
 

@@ -18,7 +18,6 @@ const dealSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-
   stage: {
     type: String,
     enum: ["prospecting", "proposal", "negotiation", "won", "lost"],

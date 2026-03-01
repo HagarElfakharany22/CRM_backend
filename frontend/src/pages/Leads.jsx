@@ -1,155 +1,91 @@
 
-// import React, { useEffect, useState, useContext } from "react";
-// import LeadForm from '../forms/Leadform';
-// import Modal from '../common/Modal';
-// import { BoardContext } from '../context/BoardContext';
-// import { useOutletContext } from "react-router-dom";
-// import styles from './styles.module.css'
-// const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
-//   const { toggleSidebar } = useOutletContext();
-//   const [search, setSearch] = useState('');
-//   const [open, setOpen] = useState(false);
-//   const [editing, setEditing] = useState(null);
-//   const [formData, setFormData] = useState({ name: '', company: '', email: '', phone: '', status: '', source: '' });
-//   const {  getUserRole} = useContext(BoardContext);
-
-
-//   const filtered = leads.filter(l =>
-//     l.name.toLowerCase().includes(search.toLowerCase()) 
-//     || l.company.toLowerCase().includes(search.toLocaleLowerCase())
-//   );
-
-//   const submit = () => {
-//     if (editing) onEdit({ ...formData, id: editing.id });
-//     else onAdd(formData);
-//     setOpen(false);
-//   };
-//   useEffect(() => {
-//    let role= getUserRole(); 
-//    console.log(role);
- 
-//   }, []);
-//   return (
-//     <>
-//     <div className="d-flex justify-content-between p-3">
-//           <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 text-white mb-3`}
-//             onClick={toggleSidebar}
-//           ></i>
-//           {/* <h2 className="mb-4 text-white">Leads</h2> */}
-//           </div>
-//     {/* <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 text-white`}
-//                   onClick={toggleSidebar}
-//                 ></i>
-//       <h1 className="text-2xl font-semibold mb-4 text-white">Leads</h1> */}
-
-//       <div className="bg-white rounded-lg shadow">
-//         {/* Header */}
-//         <div className="d-flex justify-between items-center p-4 border-b">
-//           <h2 className="font-semibold mx-3">All Leads</h2>
-
-//           <div className="d-flex gap-3">
-//             <input
-//               placeholder="Search leads..."
-//               className="border px-3 py-2 rounded"
-//               value={search}
-//               onChange={e => setSearch(e.target.value)}
-//             />
-//             <button
-//               className="btn btn-primary text-white px-4 py-2 rounded"
-//               onClick={() => { setEditing(null); setFormData({ name:'', company:'', email:'', phone:'', status:'', source:'' }); setOpen(true); }}
-//             >
-//               + Add Lead
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Table */}
-//         <table className="w-full text-sm">
-//           <thead className="bg-gray-50 text-gray-500">
-//             <tr>
-//               {["Name","Company","Email","Phone","Status","Source","Actions"].map(h => (
-//                 <th key={h} className="text-left px-4 py-3">{h}</th>
-//               ))}
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {filtered.map(lead => (
-//               <tr key={lead.id} className="border-t">
-//                 <td className="px-4 py-3">{lead.name}</td>
-//                 <td className="px-4 py-3">{lead.company}</td>
-//                 <td className="px-4 py-3">{lead.email}</td>
-//                 <td className="px-4 py-3 "  style={{ width: "15%" }}>{lead.phone}</td>
-//                 <td className="px-4 py-3">{lead.status}</td>
-//                 <td className="px-4 py-3">{lead.source}</td>
-//                 <td className="px-4 py-3 d-flex gap-2">
-//                   <button
-//                     className="px-3 py-1 border rounded"
-//                     onClick={() => { setEditing(lead); setFormData(lead); setOpen(true); }}
-//                   >
-//                     Edit
-//                   </button>
-//                   <button
-//                     className="px-3 py-1 btn btn-danger text-white rounded"
-//                     onClick={() => onDelete(lead.id)}
-//                   >
-//                     Delete
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-
-//       {/* Modal */}
-//       <Modal isOpen={open} title={editing ? "Edit Lead" : "Add Lead"} onClose={() => setOpen(false)} onSubmit={submit}>
-//         <LeadForm formData={formData} setFormData={setFormData} />
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default Leads;
 
 import React, { useEffect, useState, useContext } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LeadForm from '../forms/Leadform';
 import Modal from '../common/Modal';
-import { BoardContext } from '../context/BoardContext';
+import { LeadsContext } from "../context/LeadsContext.jsx";
+import { BoardContext } from "../context/BoardContext.jsx";
 import { useOutletContext } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import styles from './styles.module.css';
 
 const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
+  const queryClient = useQueryClient();
   const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
+  let [userRole, setUserRole] = useState(null);
   const [editing, setEditing] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    status: '',
-    source: ''
+
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   company: '',
+  //   email: '',
+  //   phone: '',
+  //   status: '',
+  //   source: ''
+  // });
+  const [leadToDelete, setLeadToDelete] = useState(null);
+  const { getUserRole } = useContext(BoardContext)
+  const { getAllLeads, getLeadsByUserId, user, deleteLead , updateLead , createLead } = useContext(LeadsContext);
+  const { data } = useQuery({
+    queryKey: ["leads"],
+    queryFn: () =>
+      userRole === "admin" ||
+        userRole === "leader" ||
+        userRole === "manager"
+        ? getAllLeads()
+        : getLeadsByUserId(),
+    enabled: !!userRole,
   });
-
-  const { getUserRole } = useContext(BoardContext);
-
-  const filtered = leads.filter(l =>
-    l.name.toLowerCase().includes(search.toLowerCase()) ||
-    l.company.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const submit = () => {
-    if (editing) onEdit({ ...formData, id: editing.id });
-    else onAdd(formData);
+  const deleteLeadMutation = useMutation({
+    mutationFn: (LeadId) => deleteLead(LeadId),
+    onSuccess: async () => {
+      setLeadToDelete(null)
+      await queryClient.invalidateQueries({ queryKey: ["leads"] });
+      queryClient.refetchQueries({ queryKey: ["leads"] });
+      onClose();
+    },
+  });
+  const addLeadMutation = useMutation({
+  mutationFn: (newLead) => createLead(newLead),
+  onSuccess: async () => {
+    await queryClient.invalidateQueries({ queryKey: ["leads"] });
     setOpen(false);
-  };
+  },
+});
+
+const updateLeadMutation = useMutation({
+  mutationFn: (updatedLead) => updateLead(updatedLead._id, updatedLead),
+  onSuccess: async () => {
+    await queryClient.invalidateQueries({ queryKey: ["leads"] });
+    setOpen(false);
+    setEditing(null);
+  },
+});
+
+
+  // const filtered = leads.filter(l =>
+  //   l.name.toLowerCase().includes(search.toLowerCase()) ||
+  //   l.company.toLowerCase().includes(search.toLowerCase())
+  // );
+
+  // const submit = () => {
+  //   if (editing) onEdit({ ...formData, id: editing.id });
+  //   else onAdd(formData);
+  //   setOpen(false);
+  // };
 
   useEffect(() => {
     let role = getUserRole();
-    console.log(role);
-  }, []);
+    if (role) {
+      setUserRole(role)
+    }
+    console.log(data);
+
+  }, [userRole, data]);
 
   return (
     <>
@@ -178,15 +114,7 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
               <button
                 className="btn btn-primary px-3  py-2"
                 onClick={() => {
-                  setEditing(null);
-                  setFormData({
-                    name: '',
-                    company: '',
-                    email: '',
-                    phone: '',
-                    status: '',
-                    source: ''
-                  });
+           
                   setOpen(true);
                 }}
               >
@@ -200,14 +128,15 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
             <table className="table align-middle">
               <thead className="table-light">
                 <tr>
-                  {["Name","Company","Email","Phone","Status","Source","Actions"].map(h => (
+                  {["Name", "Company", "Email", "Phone", "Status", "Source", "Actions"].map(h => (
                     <th key={h}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(lead => (
-                  <tr key={lead.id}>
+                {data?.leads?.map(lead => (
+                  <tr key={lead._id}>
+
                     <td>{lead.name}</td>
                     <td>{lead.company}</td>
                     <td>{lead.email}</td>
@@ -220,7 +149,6 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
                           className="btn btn-outline-secondary px-4"
                           onClick={() => {
                             setEditing(lead);
-                            setFormData(lead);
                             setOpen(true);
                           }}
                         >
@@ -228,22 +156,41 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
                         </button>
                         <button
                           className="btn btn-danger px-4"
-                          onClick={() => onDelete(lead.id)}
+                          onClick={() => {
+                            setLeadToDelete(lead);
+
+
+                          }}
                         >
                           Delete
                         </button>
+                        {/*---------------------------- start delete list ----------------------- */}
+                        {
+                          leadToDelete && (
+                            <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
+                              <div className={`p-5 bg-light rounded-3`}>
+                                <h5 className="text-center mb-4">Are You Sure ?  </h5>
+                                <button className={`py-2 px-5 rounded-3 border-0 me-2 bg-danger text-white`} onClick={() => deleteLeadMutation.mutate(leadToDelete._id)}>Delete</button>
+                                <button className={`py-2 px-5 rounded-3 border-1  me-2`} onClick={() => setLeadToDelete(null)}>Cancel</button>
+                              </div>
+                            </div>
+                          )
+                        }
+                        {/*---------------------------- end delete list ----------------------- */}
                       </div>
                     </td>
                   </tr>
+
                 ))}
+
               </tbody>
             </table>
           </div>
 
           {/* ================= Mobile Card Layout ================= */}
           <div className="d-md-none">
-            {filtered.map(lead => (
-              <div key={lead.id} className="card mb-3 shadow-sm">
+            {data?.leads?.map(lead => (
+              <div key={lead._id} className="card mb-3 shadow-sm">
                 <div className="card-body">
                   <h5 className="card-title">{lead.name}</h5>
                   <p className="mb-1"><strong>Company:</strong> {lead.company}</p>
@@ -257,7 +204,6 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
                       className="btn btn-outline-secondary btn-sm w-50"
                       onClick={() => {
                         setEditing(lead);
-                        setFormData(lead);
                         setOpen(true);
                       }}
                     >
@@ -265,21 +211,65 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
                     </button>
                     <button
                       className="btn btn-danger btn-sm w-50"
-                      onClick={() => onDelete(lead.id)}
+                      onClick={() => setLeadToDelete(lead)}
                     >
                       Delete
                     </button>
                   </div>
                 </div>
+                {/*---------------------------- start delete list ----------------------- */}
+                {
+                  leadToDelete && (
+                    <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
+                      <div className={`p-5 bg-light rounded-3`}>
+                        <h5 className="text-center mb-4">Are You Sure ?  </h5>
+                        <button className={`py-2 px-5 rounded-3 border-0 me-2 bg-danger text-white`} onClick={() => deleteLeadMutation.mutate(leadToDelete._id)}>Delete</button>
+                        <button className={`py-2 px-5 rounded-3 border-1  me-2`} onClick={() => setLeadToDelete(null)}>Cancel</button>
+                      </div>
+                    </div>
+                  )
+                }
+                {/*---------------------------- end delete list ----------------------- */}
               </div>
+
             ))}
           </div>
 
         </div>
       </div>
 
+
       {/* Modal */}
       <Modal
+        isOpen={open}
+        title={editing ? "Edit Lead" : "Add Lead"}
+        onClose={() => {
+          setOpen(false);
+          setEditing(null);
+        }}
+      >
+        <LeadForm
+          initialValues={
+            editing || {
+              name: "",
+              company: "",
+              email: "",
+              phone: "",
+              status: "",
+              source: "",
+            }
+          }
+          isEdit={!!editing}
+          onSubmit={(values) => {
+            if (editing) {
+              updateLeadMutation.mutate({ ...values, _id: editing._id });
+            } else {
+              addLeadMutation.mutate(values);
+            }
+          }}
+        />
+      </Modal>
+      {/* <Modal
         isOpen={open}
         title={editing ? "Edit Lead" : "Add Lead"}
         onClose={() => setOpen(false)}
@@ -289,7 +279,7 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
           formData={formData}
           setFormData={setFormData}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };

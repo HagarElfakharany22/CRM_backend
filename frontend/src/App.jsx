@@ -88,7 +88,7 @@ export default function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute roles={["admin"]}>
+            <ProtectedRoute roles={["admin", "leader"]}>
               <Dashboard />
             </ProtectedRoute>
           }
@@ -98,7 +98,7 @@ export default function App() {
         <Route
           path="/employees"
           element={
-            <ProtectedRoute roles={["admin"]}>
+            <ProtectedRoute roles={["admin", "leader"]}>
               <employees />
             </ProtectedRoute>
           }
@@ -107,7 +107,7 @@ export default function App() {
         <Route
           path="/leads"
           element={
-            <ProtectedRoute roles={["admin", "user"]}>
+            <ProtectedRoute roles={["admin", "user" , "employee" , "leader"]}>
               <Leads
                 leads={leads}
                 onAdd={addLead}
@@ -148,7 +148,7 @@ export default function App() {
         <Route
           path="/boards"
           element={
-            <ProtectedRoute roles={["admin", "employee"]}>
+            <ProtectedRoute roles={["admin", "employee" , "leader"]}>
               <Boards />
             </ProtectedRoute>
           }
@@ -158,7 +158,7 @@ export default function App() {
         <Route
           path="/boards/:id"
           element={
-            <ProtectedRoute roles={["admin", "employee"]}>
+            <ProtectedRoute roles={["admin", "employee" , "leader"]}>
               <BoardDetails />
             </ProtectedRoute>
           }
@@ -168,7 +168,7 @@ export default function App() {
         <Route
           path="/tasks"
           element={
-            <ProtectedRoute roles={["admin", "employee"]}>
+            <ProtectedRoute roles={["admin", "employee", "leader"]}>
               <Tasks />
             </ProtectedRoute>
           }
@@ -177,6 +177,7 @@ export default function App() {
         {/* Reports */}
         <Route path="/reports" element={<Reports />} />
         <Route path="/attendance" element={<Attendance/>} />
+        <Route path="/unauthorized" element={<h2 className="text-white">Unauthorized Access</h2>} />
       </Route>
     </Routes>
   );
