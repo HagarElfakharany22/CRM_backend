@@ -34,13 +34,13 @@ export default function Modal({ isOpen, title, children, onClose, onSubmit }) {
             >
               Cancel
             </button>
-            <button
+            {/* <button
               type="button"
               className="btn btn-primary"
               onClick={onSubmit}
             >
               Save
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

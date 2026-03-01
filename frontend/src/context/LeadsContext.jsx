@@ -36,10 +36,11 @@ const LeadsProvider = ({ children }) => {
     return { token, auth };
   }
 
-  async function getAllLeads(){
+  async function getAllLeads(search){
     
  let response=await api.get(`/api/v1/lead/all` , {
-    headers:getAuthHeader()
+    headers:getAuthHeader(),
+     params: { search },
   });
   console.log('get all Leads');
   

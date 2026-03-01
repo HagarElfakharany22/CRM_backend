@@ -5,6 +5,8 @@ import { asyncHandler } from "../../../utilities/error/error.js";
 const getAllLeads= asyncHandler(async(req , res , next)=>{
     const userId= req.user._id;
     const user= await User.findById(userId);
+    const { search } = req.query;
+    let filter = {};
     console.log(user);
     if(!(user.role=='admin' ||user.role=='manager' || user.role=='leader') ){
         return res.status(401).json({
@@ -12,7 +14,18 @@ const getAllLeads= asyncHandler(async(req , res , next)=>{
             message:"you're not authorized "
         })
     }
-    const leads= await Lead.find();
+    if (search) {
+    filter = {
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { status: { $regex: search, $options: "i" } },
+        { source: { $regex: search, $options: "i" } },
+      ],
+    };
+  }
+    const leads= await Lead.find(filter);
     if(leads.length==0){
         return res.status(404).json({
             status:"fail",

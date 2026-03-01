@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LeadForm from '../forms/Leadform';
@@ -7,8 +5,6 @@ import Modal from '../common/Modal';
 import { LeadsContext } from "../context/LeadsContext.jsx";
 import { BoardContext } from "../context/BoardContext.jsx";
 import { useOutletContext } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import styles from './styles.module.css';
 
 const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
@@ -19,27 +15,29 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
   let [userRole, setUserRole] = useState(null);
   const [editing, setEditing] = useState(null);
 
-  // const [formData, setFormData] = useState({
-  //   name: '',
-  //   company: '',
-  //   email: '',
-  //   phone: '',
-  //   status: '',
-  //   source: ''
-  // });
   const [leadToDelete, setLeadToDelete] = useState(null);
   const { getUserRole } = useContext(BoardContext)
   const { getAllLeads, getLeadsByUserId, user, deleteLead , updateLead , createLead } = useContext(LeadsContext);
+  // const { data } = useQuery({
+  //   queryKey: ["leads"],
+  //   queryFn: () =>
+  //     userRole === "admin" ||
+  //       userRole === "leader" ||
+  //       userRole === "manager"
+  //       ? getAllLeads()
+  //       : getLeadsByUserId(),
+  //   enabled: !!userRole,
+  // });
   const { data } = useQuery({
-    queryKey: ["leads"],
-    queryFn: () =>
-      userRole === "admin" ||
-        userRole === "leader" ||
-        userRole === "manager"
-        ? getAllLeads()
-        : getLeadsByUserId(),
-    enabled: !!userRole,
-  });
+  queryKey: ["leads", search],
+  queryFn: () =>
+    userRole === "admin" ||
+    userRole === "leader" ||
+    userRole === "manager"
+      ? getAllLeads(search)
+      : getLeadsByUserId(search),
+  enabled: !!userRole,
+});
   const deleteLeadMutation = useMutation({
     mutationFn: (LeadId) => deleteLead(LeadId),
     onSuccess: async () => {
@@ -65,18 +63,6 @@ const updateLeadMutation = useMutation({
     setEditing(null);
   },
 });
-
-
-  // const filtered = leads.filter(l =>
-  //   l.name.toLowerCase().includes(search.toLowerCase()) ||
-  //   l.company.toLowerCase().includes(search.toLowerCase())
-  // );
-
-  // const submit = () => {
-  //   if (editing) onEdit({ ...formData, id: editing.id });
-  //   else onAdd(formData);
-  //   setOpen(false);
-  // };
 
   useEffect(() => {
     let role = getUserRole();
@@ -269,17 +255,6 @@ const updateLeadMutation = useMutation({
           }}
         />
       </Modal>
-      {/* <Modal
-        isOpen={open}
-        title={editing ? "Edit Lead" : "Add Lead"}
-        onClose={() => setOpen(false)}
-        onSubmit={submit}
-      >
-        <LeadForm
-          formData={formData}
-          setFormData={setFormData}
-        />
-      </Modal> */}
     </>
   );
 };
