@@ -50,10 +50,11 @@ const LeadsProvider = ({ children }) => {
   return response.data;
 }
 
-  async function getLeadsByUserId(){
+  async function getLeadsByUserId(search){
     
  let response=await api.get(`/api/v1/lead/by-user-id` , {
-    headers:getAuthHeader()
+    headers:getAuthHeader(),
+     params: { search },
   });
   console.log('get Leads By User Id');
   
