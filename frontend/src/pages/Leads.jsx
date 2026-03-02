@@ -17,27 +17,18 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
 
   const [leadToDelete, setLeadToDelete] = useState(null);
   const { getUserRole } = useContext(BoardContext)
-  const { getAllLeads, getLeadsByUserId, user, deleteLead , updateLead , createLead } = useContext(LeadsContext);
-  // const { data } = useQuery({
-  //   queryKey: ["leads"],
-  //   queryFn: () =>
-  //     userRole === "admin" ||
-  //       userRole === "leader" ||
-  //       userRole === "manager"
-  //       ? getAllLeads()
-  //       : getLeadsByUserId(),
-  //   enabled: !!userRole,
-  // });
+  const { getAllLeads, getLeadsByUserId, user, deleteLead, updateLead, createLead } = useContext(LeadsContext);
+
   const { data } = useQuery({
-  queryKey: ["leads", search],
-  queryFn: () =>
-    userRole === "admin" ||
-    userRole === "leader" ||
-    userRole === "manager"
-      ? getAllLeads(search)
-      : getLeadsByUserId(search),
-  enabled: !!userRole,
-});
+    queryKey: ["leads", search],
+    queryFn: () =>
+      userRole === "admin" ||
+        userRole === "leader" ||
+        userRole === "manager"
+        ? getAllLeads(search)
+        : getLeadsByUserId(search),
+    enabled: !!userRole,
+  });
   const deleteLeadMutation = useMutation({
     mutationFn: (LeadId) => deleteLead(LeadId),
     onSuccess: async () => {
@@ -48,21 +39,21 @@ const Leads = ({ leads, onAdd, onEdit, onDelete }) => {
     },
   });
   const addLeadMutation = useMutation({
-  mutationFn: (newLead) => createLead(newLead),
-  onSuccess: async () => {
-    await queryClient.invalidateQueries({ queryKey: ["leads"] });
-    setOpen(false);
-  },
-});
+    mutationFn: (newLead) => createLead(newLead),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["leads"] });
+      setOpen(false);
+    },
+  });
 
-const updateLeadMutation = useMutation({
-  mutationFn: (updatedLead) => updateLead(updatedLead._id, updatedLead),
-  onSuccess: async () => {
-    await queryClient.invalidateQueries({ queryKey: ["leads"] });
-    setOpen(false);
-    setEditing(null);
-  },
-});
+  const updateLeadMutation = useMutation({
+    mutationFn: (updatedLead) => updateLead(updatedLead._id, updatedLead),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["leads"] });
+      setOpen(false);
+      setEditing(null);
+    },
+  });
 
   useEffect(() => {
     let role = getUserRole();
@@ -70,6 +61,7 @@ const updateLeadMutation = useMutation({
       setUserRole(role)
     }
     console.log(data);
+    // localStorage.setItem("leads", JSON.stringify(data?.leads));
 
   }, [userRole, data]);
 
@@ -100,7 +92,7 @@ const updateLeadMutation = useMutation({
               <button
                 className="btn btn-primary px-3  py-2"
                 onClick={() => {
-           
+
                   setOpen(true);
                 }}
               >
@@ -203,7 +195,7 @@ const updateLeadMutation = useMutation({
                     </button>
                   </div>
                 </div>
-                {/*---------------------------- start delete list ----------------------- */}
+                {/*---------------------------- start delete lead ----------------------- */}
                 {
                   leadToDelete && (
                     <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
@@ -215,7 +207,7 @@ const updateLeadMutation = useMutation({
                     </div>
                   )
                 }
-                {/*---------------------------- end delete list ----------------------- */}
+                {/*---------------------------- end delete lead ----------------------- */}
               </div>
 
             ))}

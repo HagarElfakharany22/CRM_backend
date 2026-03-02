@@ -1,9 +1,50 @@
 import React from "react";
+import { useState, useEffect, useContext } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { LeadsContext } from "../context/LeadsContext";
 import { useFormik } from "formik";
 // import * as Yup from "yup";
 import * as Yup from "yup";
+import Leads from "../pages/Leads";
+import { BoardContext } from "../context/BoardContext";
 
+const createdFromLead = ["website", "facebook", "referral", "manual"];
 export default function ContactsForm({ initialValues, onSubmit, isEdit }) {
+  const queryClient = useQueryClient();
+  const { getLeadsByUserId, getAllLeads } = useContext(LeadsContext)
+  const { getUserRole } = useContext(BoardContext)
+  let [userRole, setUserRole] = useState(null);
+  // const [leads, setLeads] = useState([]);
+    const { data } = useQuery({
+      queryKey: ["leadsData"],
+      queryFn: () =>
+        userRole === "admin" ||
+          userRole === "leader" ||
+          userRole === "manager"
+          ? getAllLeads()
+          : getLeadsByUserId(),
+      enabled: !!userRole,
+    });
+  // const getLeadsData = async () => {
+  //   let response=userRole === "admin" ||
+  //       userRole === "leader" ||
+  //       userRole === "manager"
+  //       ? getAllLeads()
+  //       : getLeadsByUserId()
+  //   setLeads(response?.leads || []);
+  //   console.log(response?.leads);
+  //   console.log(leads);
+  // }
+  useEffect(() => {
+    let role = getUserRole();
+    if (role) {
+      setUserRole(role)
+    }
+    console.log(data);
+    
+    // getLeadsData()
+
+  }, [data]);
   const formik = useFormik({
     enableReinitialize: true, // important for edit mode
     initialValues: initialValues,
@@ -23,7 +64,7 @@ export default function ContactsForm({ initialValues, onSubmit, isEdit }) {
 
   return (
     <form className="row g-3" onSubmit={formik.handleSubmit}>
-      
+
       {/* Name */}
       <div className="col-12">
         <label className="form-label">Name</label>
@@ -108,6 +149,48 @@ export default function ContactsForm({ initialValues, onSubmit, isEdit }) {
           <div className="text-danger small">{formik.errors.title}</div>
         )}
       </div>
+      {/* createdFromLead */}
+      <div className="mb-3">
+        <select
+          name="createdFromLead"
+          className="form-select"
+          value={formik.values.createdFromLead}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        >
+          <option value="">Select Lead</option>
+
+          {data?.leads?.map((lead) => (
+            <option key={lead._id} value={lead._id}>
+              {lead.name}
+            </option>
+          ))}
+        </select>
+
+        {formik.touched.createdFromLead && formik.errors.createdFromLead && (
+          <div className="text-danger small">
+            {formik.errors.createdFromLead}
+          </div>
+        )}
+      </div>
+      {/* <div className="mb-3">
+        <select
+          name="createdFromLead"
+          className="form-select"
+          value={formik.values.createdFromLead}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        >
+          {sourceOptions.map((option) => (
+            <option key={option} value={option}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </option>
+          ))}
+        </select>
+        {formik.touched.source && formik.errors.source && (
+          <div className="text-danger small">{formik.errors.source}</div>
+        )}
+      </div> */}
 
       <div className="col-12">
         <button type="submit" className="btn btn-primary w-100">

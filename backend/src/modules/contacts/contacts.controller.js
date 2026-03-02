@@ -5,6 +5,7 @@ import getAllContacts from "./services/getAllContacts.service.js";
 import getContactsByUserId from "./services/getContactsByUserId.service.js";
 import updateContact from "./services/updateContact.service.js";
 import deleteContact from "./services/deleteContact.service.js";
+import getContactsByLeadId from "./services/getContactsByLeadId.service.js";
 const router= Router()
 
 router.post('/create' , authentication() , createContact)
@@ -12,5 +13,6 @@ router.get('/all' , authentication() , getAllContacts)
 router.get('/by-user-id' , authentication() , getContactsByUserId)
 router.put('/update/:id' , authentication() , updateContact)
 router.delete('/delete/:id' , authentication() , deleteContact)
+router.get('/by-lead-id/:id' , authentication() , getContactsByLeadId)
 
 export default router

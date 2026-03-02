@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AttendanceProvider } from './context/AttendenceContext.jsx'
 import LeadsProvider from './context/LeadsContext.jsx'
 import ContactsProvider from './context/ContactsContext.jsx'
+import DealsProvider from './context/DealsContext.jsx'
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -23,22 +24,24 @@ createRoot(document.getElementById('root')).render(
             <AttendanceProvider>
               <LeadsProvider>
                 <ContactsProvider>
-            <BrowserRouter>
-              <QueryClientProvider client={queryClient}>
-                <App />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  closeOnClick
-                  pauseOnHover
-                  draggable
-                  theme="light"
-                />
-              </QueryClientProvider>
-            </BrowserRouter>
-            </ContactsProvider>
-            </LeadsProvider>
+                  <DealsProvider>
+                    <BrowserRouter>
+                      <QueryClientProvider client={queryClient}>
+                        <App />
+                        <ToastContainer
+                          position="top-right"
+                          autoClose={3000}
+                          hideProgressBar={false}
+                          closeOnClick
+                          pauseOnHover
+                          draggable
+                          theme="light"
+                        />
+                      </QueryClientProvider>
+                    </BrowserRouter>
+                  </DealsProvider>
+                </ContactsProvider>
+              </LeadsProvider>
             </AttendanceProvider>
           </ListContextProvider>
         </TaskProvider>

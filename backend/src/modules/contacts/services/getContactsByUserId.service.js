@@ -23,8 +23,8 @@ const query = {
         { name: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
         { phone: { $regex: search, $options: "i" } },
-        { status: { $regex: search, $options: "i" } },
-        { source: { $regex: search, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
+        { company: { $regex: search, $options: "i" } },
       ],
     }),
   };

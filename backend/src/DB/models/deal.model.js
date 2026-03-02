@@ -6,12 +6,12 @@ const dealSchema = new mongoose.Schema({
   contacts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Contact',
+      ref: 'contacts',
     },
   ],
   lead: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Lead',
+    ref: 'leads',
   },
 
   value: {

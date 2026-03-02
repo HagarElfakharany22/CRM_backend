@@ -2,15 +2,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Modal from '../common/Modal';
-import Contactsform from '../forms/Contactsform';
+import Contactsform from '../forms/Contactsform.jsx';
 import { useOutletContext } from "react-router-dom";
 import styles from './styles.module.css';
 import { ContactsContext } from '../context/ContactsContext.jsx';
 import { BoardContext } from '../context/BoardContext.jsx';
+import { LeadsContext } from '../context/LeadsContext.jsx';
 import LeadForm from '../forms/Leadform.jsx';
 export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
   const queryClient = useQueryClient();
   const { getContacts, getContactsByUserId, deleteContacts, updateContacts, createContacts } = useContext(ContactsContext)
+  // const {getLeadsByUserId} = useContext(LeadsContext)
+  // const [leads , setLeads] = useState([]);
   const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
@@ -53,13 +56,21 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
       setEditing(null);
     },
   });
+  // const getLeadsData=async()=>{
+  //   const response=await getLeadsByUserId()
+  //   setLeads(response?.leads)
+    
+  // }
   useEffect(() => {
     let role = getUserRole();
     if (role) {
       setUserRole(role)
     }
     console.log(data);
-
+    // getLeadsData()
+    // console.log(leads);
+    
+    
   }, [userRole, data]);
 
 
@@ -214,7 +225,7 @@ export default function Contacts({ contacts, onAdd, onEdit, onDelete }) {
           setEditing(null);
         }}
       >
-        <LeadForm
+        <Contactsform
           initialValues={
             editing || {
               name: "",

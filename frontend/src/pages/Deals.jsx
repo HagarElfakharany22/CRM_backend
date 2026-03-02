@@ -1,140 +1,67 @@
-// import React, { useState } from 'react'
-// import Modal from '../common/Modal';
-// import Dealsforms from '../forms/Dealsforms';
-// import { useOutletContext } from "react-router-dom";
-// import styles from './styles.module.css'
-// export default function Deals({ deals, onAdd, onEdit, onDelete }) {
-//   const { toggleSidebar } = useOutletContext();
-//   const [search, setSearch] = useState('');
-//   const [open, setOpen] = useState(false);
-//   const [editing, setEditing] = useState(null);
-//   const [formData, setFormData] = useState({ name: '', company: '', stage: '', probability: '', status: '' });
-
-
-//   const filtered = deals.filter(l =>
-//     l.name.toLowerCase().includes(search.toLowerCase())
-//     || l.company.toLowerCase().includes(search.toLocaleLowerCase()) ||
-//     l.stage.toLowerCase().includes(search.toLocaleLowerCase())
-
-//   );
-
-//   const submit = () => {
-//     if (editing) onEdit({ ...formData, id: editing.id });
-//     else onAdd(formData);
-//     setOpen(false);
-//   };
-//   return (
-//     <>
-//       {/* <h1 className="text-2xl font-semibold mb-4">Deals</h1> */}
-//      <div className='p-3'>
-//        <i class={`${styles.toggle_btn} fa-solid fa-bars me-3 fs-2 mb-3 text-white `}
-//         onClick={toggleSidebar}
-//       ></i>
-//      </div>
-
-//       <div className='d-flex justify-content-center'>
-//         <div className={`bg-white  rounded-4 p-2 shadow ${styles.border_main} `}>
-//         {/* Header */}
-//         <div className="d-flex justify-between items-center p-4 border-b">
-//           <h2 className="font-semibold mx-3">All Deals</h2>
-
-//           <div className="d-flex gap-3">
-//             <input
-//               placeholder="Search leads..."
-//               className="border px-3 py-2 rounded"
-//               value={search}
-//               onChange={e => setSearch(e.target.value)}
-//             />
-//             <button
-//               className="btn btn-primary text-white px-4 py-2 rounded"
-//               onClick={() => { setEditing(null); setFormData({ name: '', company: '', stage: '', probability: '', status: '' }); setOpen(true); }}
-//             >
-//               + Add Deal
-//             </button>
-//           </div>
-//         </div>
-
-//        <div className={`${styles.tableWrapper} overflow-auto`}>
-//          {/* Table */}
-//         <table className="w-full text-sm">
-//           <thead className="bg-gray-50 text-gray-500">
-//             <tr>
-//               {["Name", "Company", "Stage", "Probability", "Status", "Actions"].map(h => (
-//                 <th key={h} className="text-left px-4 py-3">{h}</th>
-//               ))}
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {filtered.map(deal => (
-//               <tr key={deal.id} className="border-t">
-//                 <td className="px-4 py-3">{deal.name}</td>
-//                 <td className="px-4 py-3">{deal.company}</td>
-//                 <td className="px-4 py-3">{deal.stage}</td>
-//                 <td className="px-4 py-3 "  >{deal.probability}%</td>
-//                 <td className="px-4 py-3" style={{ width: "15%" }}>{deal.status}</td>
-
-//                 <td className="px-4 py-3 d-flex gap-2">
-//                   <button
-//                     className="px-3 py-1 border rounded"
-//                     onClick={() => { setEditing(deal); setFormData(deal); setOpen(true); }}
-//                   >
-//                     Edit
-//                   </button>
-//                   <button
-//                     className="px-3 py-1 btn btn-danger text-white rounded"
-//                     onClick={() => onDelete(deal.id)}
-//                   >
-//                     Delete
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//        </div>
-//       </div>
-//       </div>
-
-//       {/* Modal */}
-//       <Modal isOpen={open} title={editing ? "Edit deal" : "Add deal"} onClose={() => setOpen(false)} onSubmit={submit}>
-//         <Dealsforms formData={formData} setFormData={setFormData} />
-//       </Modal>
-//     </>
-//   );
-// }
-
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Modal from '../common/Modal';
 import Dealsforms from '../forms/Dealsforms';
 import { useOutletContext } from "react-router-dom";
+import { BoardContext } from "../context/BoardContext.jsx";
+import { DealsContext } from '../context/DealsContext.jsx';
 import styles from './styles.module.css';
 
 export default function Deals({ deals, onAdd, onEdit, onDelete }) {
+  const queryClient = useQueryClient();
   const { toggleSidebar } = useOutletContext();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
+  let [userRole, setUserRole] = useState(null);
   const [editing, setEditing] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    stage: '',
-    probability: '',
-    status: ''
+  const [dealToDelete, setDealToDelete] = useState(null);
+  const { getUserRole } = useContext(BoardContext)
+  const { getAllDeals, getDealsByUserId, user, deleteDeals, updateDeals, createDeals } = useContext(DealsContext);
+
+  const { data } = useQuery({
+    queryKey: ["deals", search],
+    queryFn: () =>
+      userRole === "admin" ||
+        userRole === "leader" ||
+        userRole === "manager"
+        ? getAllDeals(search)
+        : getDealsByUserId(search),
+    enabled: !!userRole,
+  });
+  const deleteDealMutation = useMutation({
+    mutationFn: (DealId) => deleteDeals(DealId),
+    onSuccess: async () => {
+      setDealToDelete(null)
+      await queryClient.invalidateQueries({ queryKey: ["deals"] });
+      queryClient.refetchQueries({ queryKey: ["deals"] });
+      onClose();
+    },
+  });
+  const addDealMutation = useMutation({
+    mutationFn: (newDeal) => createDeals(newDeal),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["deals"] });
+      setOpen(false);
+    },
   });
 
-  const filtered = deals.filter(l =>
-    l.name.toLowerCase().includes(search.toLowerCase()) ||
-    l.company.toLowerCase().includes(search.toLowerCase()) ||
-    l.stage.toLowerCase().includes(search.toLowerCase())
-  );
+  const updateDealMutation = useMutation({
+    mutationFn: (updatedDeal) => updateDeals(updatedDeal._id, updatedDeal),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["deals"] });
+      setOpen(false);
+      setEditing(null);
+    },
+  });
 
-  const submit = () => {
-    if (editing) onEdit({ ...formData, id: editing.id });
-    else onAdd(formData);
-    setOpen(false);
-  };
+  useEffect(() => {
+    let role = getUserRole();
+    if (role) {
+      setUserRole(role)
+    }
+    console.log(data);
 
+  }, [userRole, data]);
   return (
     <>
       {/* Sidebar Toggle */}
@@ -162,14 +89,6 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
               <button
                 className="btn btn-primary px-3  py-2"
                 onClick={() => {
-                  setEditing(null);
-                  setFormData({
-                    name: '',
-                    company: '',
-                    stage: '',
-                    probability: '',
-                    status: ''
-                  });
                   setOpen(true);
                 }}
               >
@@ -183,26 +102,25 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
             <table className="table align-middle">
               <thead className="table-light">
                 <tr>
-                  {["Name", "Company", "Stage", "Probability", "Status", "Actions"].map(h => (
+                  {["Title", "Value", "Stage", "Probability", "Deadline", "Actions"].map(h => (
                     <th key={h}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(deal => (
-                  <tr key={deal.id}>
-                    <td>{deal.name}</td>
-                    <td>{deal.company}</td>
+                {data?.deals?.map(deal => (
+                  <tr key={deal._id}>
+                    <td>{deal.title}</td>
+                    <td>{deal.value}</td>
                     <td>{deal.stage}</td>
                     <td>{deal.probability}%</td>
-                    <td>{deal.status}</td>
+                    <td>{deal.expectedCloseDate}</td>
                     <td>
                       <div className="d-flex gap-2">
                         <button
                           className="btn btn-outline-secondary px-4"
                           onClick={() => {
                             setEditing(deal);
-                            setFormData(deal);
                             setOpen(true);
                           }}
                         >
@@ -210,10 +128,23 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
                         </button>
                         <button
                           className="btn btn-danger px-4"
-                          onClick={() => onDelete(deal.id)}
+                          onClick={() => setDealToDelete(deal)}
                         >
                           Delete
                         </button>
+                        {/*---------------------------- start delete list ----------------------- */}
+                        {
+                          dealToDelete && (
+                            <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
+                              <div className={`p-5 bg-light rounded-3`}>
+                                <h5 className="text-center mb-4">Are You Sure ?  </h5>
+                                <button className={`py-2 px-5 rounded-3 border-0 me-2 bg-danger text-white`} onClick={() => deleteDealMutation.mutate(dealToDelete._id)}>Delete</button>
+                                <button className={`py-2 px-5 rounded-3 border-1  me-2`} onClick={() => setDealToDelete(null)}>Cancel</button>
+                              </div>
+                            </div>
+                          )
+                        }
+                        {/*---------------------------- end delete list ----------------------- */}
                       </div>
                     </td>
                   </tr>
@@ -224,21 +155,20 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
 
           {/* ================= Mobile Card Layout ================= */}
           <div className="d-md-none">
-            {filtered.map(deal => (
-              <div key={deal.id} className="card mb-3 shadow-sm">
+            {data?.deals?.map(deal => (
+              <div key={deal._id} className="card mb-3 shadow-sm">
                 <div className="card-body">
-                  <h5 className="card-title mb-2">{deal.name}</h5>
-                  <p className="mb-1"><strong>Company:</strong> {deal.company}</p>
+                  <h5 className="card-title mb-2">{deal.title}</h5>
+                  <p className="mb-1"><strong>Value:</strong> {deal.value}</p>
                   <p className="mb-1"><strong>Stage:</strong> {deal.stage}</p>
                   <p className="mb-1"><strong>Probability:</strong> {deal.probability}%</p>
-                  <p className="mb-2"><strong>Status:</strong> {deal.status}</p>
+                  <p className="mb-2"><strong>Dateline:</strong> {deal.expectedCloseDate}</p>
 
                   <div className="d-flex gap-2">
                     <button
                       className="btn btn-outline-secondary btn-sm w-50"
                       onClick={() => {
                         setEditing(deal);
-                        setFormData(deal);
                         setOpen(true);
                       }}
                     >
@@ -246,10 +176,23 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
                     </button>
                     <button
                       className="btn btn-danger btn-sm w-50"
-                      onClick={() => onDelete(deal.id)}
+                      onClick={() => setDealToDelete(deal)}
                     >
                       Delete
                     </button>
+                    {/*---------------------------- start delete deal ----------------------- */}
+                    {
+                      dealToDelete && (
+                        <div className={`${styles.deleteCheckHolder} z-2 position-fixed start-0 end-0 top-0 bottom-0 d-flex justify-content-center align-items-center`} >
+                          <div className={`p-5 bg-light rounded-3`}>
+                            <h5 className="text-center mb-4">Are You Sure ?  </h5>
+                            <button className={`py-2 px-5 rounded-3 border-0 me-2 bg-danger text-white`} onClick={() => deleteDealMutation.mutate(dealToDelete._id)}>Delete</button>
+                            <button className={`py-2 px-5 rounded-3 border-1  me-2`} onClick={() => setDealToDelete(null)}>Cancel</button>
+                          </div>
+                        </div>
+                      )
+                    }
+                    {/*---------------------------- end delete deal ----------------------- */}
                   </div>
                 </div>
               </div>
@@ -262,6 +205,36 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
       {/* Modal */}
       <Modal
         isOpen={open}
+        title={editing ? "Edit Lead" : "Add Lead"}
+        onClose={() => {
+          setOpen(false);
+          setEditing(null);
+        }}
+      >
+        <Dealsforms
+          initialValues={
+            editing || {
+              title: "",
+              value: "",
+              stage: "",
+              probability: "",
+              expectedCloseDate: "",
+              contacts: [],
+              lead: ""
+            }
+          }
+          isEdit={!!editing}
+          onSubmit={(values) => {
+            if (editing) {
+              updateDealMutation.mutate({ ...values, _id: editing._id });
+            } else {
+              addDealMutation.mutate(values);
+            }
+          }}
+        />
+      </Modal>
+      {/* <Modal
+        isOpen={open}
         title={editing ? "Edit Deal" : "Add Deal"}
         onClose={() => setOpen(false)}
         onSubmit={submit}
@@ -270,7 +243,7 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
           formData={formData}
           setFormData={setFormData}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 }

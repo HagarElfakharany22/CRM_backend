@@ -6,10 +6,10 @@ import { AuthContext } from "./AuthContext";
 import api from "./baseURL.jsx";
 
 
-export const ContactsContext = createContext();
+export const DealsContext = createContext();
 
 
-const ContactsProvider = ({ children }) => {
+const DealsProvider = ({ children }) => {
     const { user } = useContext(AuthContext);
 
     function getAuthHeader() {
@@ -36,13 +36,13 @@ const ContactsProvider = ({ children }) => {
         return { token, auth };
     }
 
-    async function getContacts(search) {
+    async function getAllDeals(search) {
 
-        let response = await api.get(`/api/v1/contact/all`, {
+        let response = await api.get(`/api/v1/deal/all`, {
             headers: getAuthHeader(),
             params: { search },
         });
-        console.log('get all Contacts');
+        console.log('get all Deals');
 
         console.log(response.data);
 
@@ -50,71 +50,58 @@ const ContactsProvider = ({ children }) => {
         return response.data;
     }
 
-    async function getContactsByUserId(search) {
+    async function getDealsByUserId(search) {
 
-        let response = await api.get(`/api/v1/contact/by-user-id`, {
+        let response = await api.get(`/api/v1/deal/by-user-id`, {
             headers: getAuthHeader(),
             params: { search },
         });
-        console.log('get Contacts By User Id');
+        console.log('get Deals By User Id');
 
         console.log(response.data);
 
 
         return response.data;
     }
-    async function getContactsByLeadId(leadId) {
-
-        let response = await api.get(`/api/v1/contact/by-lead-id/${leadId}`, {
-            headers: getAuthHeader()
-        });
-        console.log('get Contacts By lead Id');
-
-        console.log(response.data);
-
-
-        return response.data;
-    }
-    async function deleteContacts(id) {
-        let response = await api.delete(`/api/v1/contact/delete/${id}`, {
+    async function deleteDeals(id) {
+        let response = await api.delete(`/api/v1/deal/delete/${id}`, {
             headers: getAuthHeader()
         });
         console.log(response?.data);
 
         return response?.data
     }
-    async function updateContacts(id, data) {
+    async function updateDeals(id, data) {
         console.log(data);
 
-        let response = await api.put(`/api/v1/contact/update/${id}`, data, {
+        let response = await api.put(`/api/v1/deal/update/${id}`, data, {
             headers: getAuthHeader()
         });
         console.log(response?.data);
 
         return response?.data
     }
-    async function createContacts(data) {
-        let response = await api.post('/api/v1/contact/create', data, {
+    async function createDeals(data) {
+        let response = await api.post('/api/v1/deal/create', data, {
             headers: getAuthHeader()
         })
         console.log(response);
         return response.data;
     }
     return (
-        <ContactsContext.Provider
+        <DealsContext.Provider
             value={{
-                getContacts,
-                getContactsByUserId,
+                getAllDeals,
+                getDealsByUserId,
                 user,
-                deleteContacts,
-                updateContacts,
-                createContacts,
-                getContactsByLeadId
+                deleteDeals,
+                updateDeals,
+                createDeals
             }}
         >
             {children}
-        </ContactsContext.Provider>
+        </DealsContext.Provider>
     );
 };
 
-export default ContactsProvider;
+export default DealsProvider;
