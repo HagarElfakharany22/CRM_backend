@@ -114,7 +114,7 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
                     <td>{deal.value}</td>
                     <td>{deal.stage}</td>
                     <td>{deal.probability}%</td>
-                    <td>{deal.expectedCloseDate}</td>
+                    <td>{new Date(deal.expectedCloseDate).toLocaleString()}</td>
                     <td>
                       <div className="d-flex gap-2">
                         <button
@@ -162,7 +162,7 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
                   <p className="mb-1"><strong>Value:</strong> {deal.value}</p>
                   <p className="mb-1"><strong>Stage:</strong> {deal.stage}</p>
                   <p className="mb-1"><strong>Probability:</strong> {deal.probability}%</p>
-                  <p className="mb-2"><strong>Dateline:</strong> {deal.expectedCloseDate}</p>
+                  <p className="mb-2"><strong>Dateline:</strong> {new Date(deal.expectedCloseDate).toLocaleString()}</p>
 
                   <div className="d-flex gap-2">
                     <button
@@ -212,16 +212,56 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
         }}
       >
         <Dealsforms
+  initialValues={
+    editing
+      ? {
+          ...editing,
+          expectedCloseDate: editing.expectedCloseDate
+            ? editing.expectedCloseDate.split("T")[0]
+            : "",
+          lead: editing.lead?._id || "",
+          contacts: editing.contacts?.map(c => c._id) || []
+        }
+      : {
+          title: "",
+          value: "",
+          stage: "",
+          probability: "",
+          expectedCloseDate: "",
+          contacts: [],
+          lead: ""
+        }
+  }
+  isEdit={!!editing}
+  onSubmit={(values) => {
+    if (editing) {
+      updateDealMutation.mutate({ ...values, _id: editing._id });
+    } else {
+      addDealMutation.mutate(values);
+    }
+  }}
+/>
+
+        {/* <Dealsforms
           initialValues={
-            editing || {
-              title: "",
-              value: "",
-              stage: "",
-              probability: "",
-              expectedCloseDate: "",
-              contacts: [],
-              lead: ""
-            }
+            editing
+              ? {
+                ...editing,
+                expectedCloseDate: editing.expectedCloseDate
+                  ? editing.expectedCloseDate.split("T")[0]
+                  : "",
+                lead: editing.lead?._id || "",
+                contacts: editing.contacts?.map(c => c._id) || []
+              }
+              : {
+                title: "",
+                value: "",
+                stage: "",
+                probability: "",
+                expectedCloseDate: "",
+                contacts: [],
+                lead: ""
+              }
           }
           isEdit={!!editing}
           onSubmit={(values) => {
@@ -231,19 +271,9 @@ export default function Deals({ deals, onAdd, onEdit, onDelete }) {
               addDealMutation.mutate(values);
             }
           }}
-        />
+        /> */}
       </Modal>
-      {/* <Modal
-        isOpen={open}
-        title={editing ? "Edit Deal" : "Add Deal"}
-        onClose={() => setOpen(false)}
-        onSubmit={submit}
-      >
-        <Dealsforms
-          formData={formData}
-          setFormData={setFormData}
-        />
-      </Modal> */}
+
     </>
   );
 }

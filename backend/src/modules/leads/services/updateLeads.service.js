@@ -16,13 +16,7 @@ const updatLead= asyncHandler(async(req , res , next)=>{
     
     
     console.log(( lead.createdBy==user._id));
-    
-    // if(!((user.role=='admin' ||user.role=='manager' || user.role=='leader')||( lead.assignedTo==user._id || lead.createdBy==user._id)) ){
-    //     return res.status(401).json({
-    //         status:'fail',
-    //         message:"you're not authorized "
-    //     })
-    // }
+
     const {name ,email ,  phone ,company ,  status , source , assignedTo}= req.body;
     const updatedLead = await Lead.findByIdAndUpdate(leadId , {name ,email ,  phone ,company ,  status , source , assignedTo} , {new:true});
     console.log(updatedLead);
