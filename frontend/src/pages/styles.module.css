@@ -9,7 +9,7 @@
 }
 
 .bg_gredient {
-  background: linear-gradient(#fd7e14 10%, #4d215d);
+  background: linear-gradient(#4d215d 10%,  #fd7e14);
   height: 100%;
   display: flex;
   flex-direction: column;
