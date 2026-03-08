@@ -179,26 +179,37 @@ export default function Dealsforms({ initialValues, onSubmit, isEdit }) {
 
       {/* contacts */}
       <div className="mb-3">
-  <select
-    multiple
-    name="contacts"
-    className="form-select"
-    value={formik.values.contacts}
-    onChange={(e) => {
-      const selected = Array.from(
-        e.target.selectedOptions,
-        (option) => option.value
-      );
-      formik.setFieldValue("contacts", selected);
-    }}
-    onBlur={formik.handleBlur}
-  >
-    {contactsData?.contacts?.map((contact) => (
-      <option key={contact._id} value={contact._id}>
+  <div className="form-check">
+  {contactsData?.contacts?.map((contact) => (
+    <div key={contact._id} className="form-check">
+      <input
+        type="checkbox"
+        className="form-check-input"
+        id={contact._id}
+        name="contacts"
+        value={contact._id}
+        checked={formik.values.contacts.includes(contact._id)}
+        onChange={(e) => {
+          if (e.target.checked) {
+            formik.setFieldValue("contacts", [
+              ...formik.values.contacts,
+              contact._id,
+            ]);
+          } else {
+            formik.setFieldValue(
+              "contacts",
+              formik.values.contacts.filter((id) => id !== contact._id)
+            );
+          }
+        }}
+      />
+
+      <label className="form-check-label" htmlFor={contact._id}>
         {contact.name}
-      </option>
-    ))}
-  </select>
+      </label>
+    </div>
+  ))}
+</div>
 
   {formik.touched.contacts && formik.errors.contacts && (
     <div className="text-danger small">
