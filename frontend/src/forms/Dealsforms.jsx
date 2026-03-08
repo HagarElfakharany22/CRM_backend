@@ -206,30 +206,6 @@ export default function Dealsforms({ initialValues, onSubmit, isEdit }) {
     </div>
   )}
 </div>
-            {/* <div className="mb-3">
-        <select
-        multiple
-          name="contacts"
-          className="form-select"
-          value={formik.values.contacts}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        >
-          <option value="">Select Contacts</option>
-
-          {contactsData?.contacts?.map((contact) => (
-            <option key={contact._id} value={contact._id}>
-              {contact.name}
-            </option>
-          ))}
-        </select>
-
-        {formik.touched.contact && formik.errors.contact && (
-          <div className="text-danger small">
-            {formik.errors.contact}
-          </div>
-        )}
-      </div> */}
 
       <div className="col-12">
         <button type="submit" className="btn btn-primary w-100">
