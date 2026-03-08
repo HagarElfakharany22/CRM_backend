@@ -34,7 +34,7 @@ const API_URL = import.meta.env.VITE_API_URL;
         )}
         {
           task.status &&(
-            <span className="badge bg-white-subtle text-primary border border-danger p-1 px-2">{task.status}</span>
+            <span className="badge bg-white-subtle text-primary  p-1 px-2 text-capitalize">{task.status}</span>
           )
         }
 
