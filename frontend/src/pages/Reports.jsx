@@ -37,7 +37,7 @@ export default function Reports() {
       {/* 🔘 زرار ذكي */}
       
 
-      <div className={`card shadow-sm border-0 overflow-hidden  ${styles.card}`}>
+      <div className={`card shadow-sm border-0 overflow-auto  ${styles.card}`}>
         <table className="table table-hover align-middle mb-0">
           <thead className="bg-white border-bottom">
             <tr>
