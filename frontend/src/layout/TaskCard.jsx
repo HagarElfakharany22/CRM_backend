@@ -32,11 +32,16 @@ const API_URL = import.meta.env.VITE_API_URL;
             {new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
           </span>
         )}
+        {
+          task.status &&(
+            <span className="badge bg-white-subtle text-primary  p-1 px-2 text-capitalize">{task.status}</span>
+          )
+        }
 
         {/* Indicators */}
         {task.description && <FontAwesomeIcon icon={faAlignLeft} title="Has description" />}
         {task.linkReference && <FontAwesomeIcon icon={faPaperclip} title="Has attachment" />}
-
+             
         {/* Priority Badge */}
         {task.priority === 'High' && <span className="badge bg-danger-subtle text-danger border border-danger p-1 px-2">High</span>}
       </div>

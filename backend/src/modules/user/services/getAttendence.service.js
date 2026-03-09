@@ -2,6 +2,7 @@ import Attendance from "../../../DB/models/attendance.model.js";
 import { asyncHandler } from "../../../utilities/error/error.js";
 const getAttendace= asyncHandler(async(req , res , next)=>{
     const attendance=  await Attendance.find()
+    .sort({ createdAt: -1 })
   .populate({
     path: "user",
     select: "name email role",
