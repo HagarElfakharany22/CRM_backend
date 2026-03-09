@@ -1,35 +1,57 @@
 import Attendance from "../../DB/models/attendance.model.js";
 import mongoose from "mongoose";
-const getMonthlyReport=async(req , res , next)=>{
- try {
-    console.log("i am in func");
-    
+const getMonthlyReport = async (req, res, next) => {
+  try {
+
     const now = new Date();
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
     const report = await Attendance.aggregate([
       {
         $match: {
-          loginAt: { $gte: firstDayOfMonth, $lte: lastDayOfMonth },
-          $expr: { $ne: [{ $dayOfWeek: "$loginAt" }, 6] } // استبعد يوم الجمعة
+          checkInAt: { $gte: firstDay, $lte: lastDay }
         }
       },
+
       {
         $project: {
           user: 1,
-          loginAt: 1,
-          logoutAt: 1,
-          durationHours: { $divide: [{ $subtract: ["$logoutAt", "$loginAt"] }, 1000*60*60] }
+
+          day: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$checkInAt"
+            }
+          },
+
+          durationHours: {
+            $divide: [
+              { $subtract: ["$checkOutAt", "$checkInAt"] },
+              1000 * 60 * 60
+            ]
+          }
         }
       },
+
       {
         $group: {
-          _id: "$user",
-          totalHours: { $sum: "$durationHours" },
-          totalDays: { $sum: 1 }
+          _id: {
+            user: "$user",
+            day: "$day"
+          },
+          totalHoursPerDay: { $sum: "$durationHours" }
         }
       },
+
+      {
+        $group: {
+          _id: "$_id.user",
+          totalDays: { $sum: 1 },
+          totalHours: { $sum: "$totalHoursPerDay" }
+        }
+      },
+
       {
         $lookup: {
           from: "users",
@@ -38,24 +60,29 @@ const getMonthlyReport=async(req , res , next)=>{
           as: "userData"
         }
       },
+
       { $unwind: "$userData" },
+
       {
         $project: {
           name: "$userData.name",
           email: "$userData.email",
-          totalHours: 1,
-          totalDays: 1
+          totalDays: 1,
+          totalHours: { $round: ["$totalHours", 2] }
         }
       },
+
       { $sort: { totalHours: -1 } }
+
     ]);
 
-    return res.json(report);
-  } catch (err) {
-    console.error("Error in aggregation:", err);
-    return [];
+    res.json(report);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "error" });
   }
-}
+};
 export default getMonthlyReport;
  
 

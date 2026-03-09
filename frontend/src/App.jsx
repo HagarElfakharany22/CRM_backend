@@ -17,6 +17,7 @@ import Register from "./pages/Register";
 import Employees from "./layout/Employees";
 import { io } from "socket.io-client";
 import Attendance from "./pages/Attendance.jsx";
+import MonthlyReport from "./pages/MonthlyReport.jsx";
 const API_URL = import.meta.env.VITE_API_URL;
 
 // const socket = io("http://localhost:8000");
@@ -170,6 +171,14 @@ export default function App() {
           element={
             <ProtectedRoute roles={["admin", "employee", "leader"]}>
               <Tasks />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/report"
+          element={
+            <ProtectedRoute roles={["admin", "employee", "leader"]}>
+             <MonthlyReport/>
             </ProtectedRoute>
           }
         />
