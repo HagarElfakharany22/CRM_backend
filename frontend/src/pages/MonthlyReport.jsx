@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import styles from './styles.module.css'
 import api from "../context/baseURL";
-
+import { useOutletContext } from "react-router-dom";
 export default function MonthlyReport() {
-
+   const { toggleSidebar } = useOutletContext();
   const [report, setReport] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +29,9 @@ export default function MonthlyReport() {
 
   return (
     <div className="container mt-4">
+      <i class={`${styles.toggle_btn} ${styles.toggle_btn_laptop_screen} mb-3 fa-solid fa-bars me-3 fs-2 text-light `}
+                        onClick={toggleSidebar}
+                      ></i>
       <h3 className="mb-4">Monthly Attendance Report</h3>
 
       <div className="table-responsive">
