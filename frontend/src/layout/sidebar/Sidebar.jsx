@@ -12,7 +12,7 @@ export default function Sidebar({ user, isOpen, toggleSidebar }) {
           { name: "Boards", path: "/boards" },
           { name: "Tasks", path: "/tasks" },
           { name: "Reports", path: "/reports" },
-          { name: "MonthReport", path: "/report" },
+          { name: "MonthlyReport", path: "/report" },
         ]
       : user.role === "employee"
       ? [
