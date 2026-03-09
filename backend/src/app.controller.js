@@ -31,7 +31,8 @@ const bootstrap=(app , express )=>{
     'https://crm-cross-road.vercel.app',
     'https://crm-backend-22cw.vercel.app',
     'https://crm-backend-theta-liard.vercel.app',
-    "http://localhost:5173"  
+    "http://localhost:5173"  ,
+    "https://crm-backend-4ag3hog0s-hagar-elfakharanys-projects.vercel.app/"
       ];
     //here i will use cors
     app.use(cors({
