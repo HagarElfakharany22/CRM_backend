@@ -179,13 +179,41 @@ const TaskProvider = ({ children }) => {
     }
 
   }
+  // update listId after movement 
+
+
+const updateTaskList = async (taskId, listId,changedListId) => {
+
+  try {
+
+    const response = await api.patch(
+      `/api/v1/task/moveTask/${taskId}`,
+      { listId ,changedListId},
+      {
+        headers: getAuthHeader()
+      }
+    );
+
+    console.log(response?.data?.updatedTask);
+
+    return response?.data?.updatedTask;
+
+  } catch (err) {
+
+    console.error("Error updating task:", err);
+    throw err;
+
+  }
+
+};
   return (
     <TaskContext.Provider
       value={{
         tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask,
         AssignTask,
         getAllAssignedTasks,
-        getAssignedTasksByEmpId
+        getAssignedTasksByEmpId,
+        updateTaskList
       }}
     >
       {children}

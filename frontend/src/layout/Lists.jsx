@@ -14,7 +14,7 @@ export default function Lists({list , onTaskClick}){
   const [editTitle, setEditTitle] = useState(list.title);
 
   const queryClient = useQueryClient();
-  const { AddTask , getAllAssignedTasks } = useContext(TaskContext);
+  const { AddTask , getAllAssignedTasks, updateTaskList  } = useContext(TaskContext);
   const { deleteList , updateList} = useContext(ListContext);
 
   const addTaskMutation = useMutation({
@@ -65,6 +65,23 @@ export default function Lists({list , onTaskClick}){
 
 
   }, [list])
+  // move task 
+const updateTaskMutation = useMutation({
+   mutationFn: ({ taskId, listId, changedListId }) =>
+    updateTaskList(taskId, listId, changedListId),
+
+  onSuccess: () => {
+    queryClient.invalidateQueries(["lists", list.boardId]);
+  },
+});
+const moveTask = (taskId, newListId, oldListId) => {
+  console.log("mooove");
+  updateTaskMutation.mutate({
+    taskId,
+    listId: newListId,
+    changedListId: oldListId
+  });
+};
 
   return (
     <div className={`${styles.list} position-relative`}>
@@ -135,7 +152,24 @@ export default function Lists({list , onTaskClick}){
       {/* ------------------------- end edit lists ---------------------- */}
       {/* --------- end list options menu ---------- */}
 
-      <div className={`${styles.tasks}`}>
+<div
+  className={`${styles.tasks}`}
+  onDragOver={(e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move"; // ← add this
+  }}
+  onDrop={(e) => {
+    e.preventDefault();
+  const taskId = e.dataTransfer.getData("taskId");
+  const currentListId = e.dataTransfer.getData("currentListId"); // ناخد الليست الأصلية
+  console.log("drop taskId",taskId);
+  console.log("drop currentListId",currentListId)
+ if (currentListId !== list._id) { // ← toString() for safe compare
+    moveTask(taskId, list._id, currentListId);
+  }
+  }}
+
+>
         {list.tasks.map((task) => (
           task.status !== 'done' &&<TaskCard key={task._id} task={task} onClick={onTaskClick} />
         ))}
