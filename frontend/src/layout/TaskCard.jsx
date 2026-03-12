@@ -2,7 +2,7 @@ import styles from './style.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faPaperclip, faImage, faAlignLeft } from '@fortawesome/free-solid-svg-icons';
 
-export default function TaskCard({ task, onClick }) {
+export default function TaskCard({ task, index,onClick }) {
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
   const API_URL = import.meta.env.VITE_API_URL;
   const imageSrc = task.image?.startsWith("http")
@@ -18,6 +18,7 @@ export default function TaskCard({ task, onClick }) {
 
         e.dataTransfer.setData("taskId", task._id);
         e.dataTransfer.setData("currentListId", task.listId);
+        e.dataTransfer.setData("sourceIndex", index);
         console.log("taskId", task._id)
         console.log("currentListId", task.listId)
       }}

@@ -206,6 +206,20 @@ const updateTaskList = async (taskId, listId,changedListId) => {
   }
 
 };
+
+  const reorderTasks = async (sourceListId, destinationListId, sourceTasks, destinationTasks, taskId) => {
+    try {
+      const response = await api.put(
+        `/api/v1/list/reorder`,
+        { sourceListId, destinationListId, sourceTasks, destinationTasks, taskId },
+        { headers: getAuthHeader() }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error reordering tasks:", err);
+      throw err;
+    }
+  };
   return (
     <TaskContext.Provider
       value={{
@@ -213,7 +227,8 @@ const updateTaskList = async (taskId, listId,changedListId) => {
         AssignTask,
         getAllAssignedTasks,
         getAssignedTasksByEmpId,
-        updateTaskList
+        updateTaskList,
+        reorderTasks
       }}
     >
       {children}
