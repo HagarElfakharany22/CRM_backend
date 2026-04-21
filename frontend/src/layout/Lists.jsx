@@ -69,7 +69,7 @@ export default function Lists({list , onTaskClick}){
   return (
     <div className={`${styles.list} position-relative`}>
       <div className={`${styles.list_header}`}>
-        <span>{list.title}</span>
+        <span className={`${styles.card_title}`}>{list.title}</span>
         <span className={`${styles.cursor}`} onClick={()=>setMenuOptions(!menuOptions)}>•••</span>
       </div>
       {/* --------- start list options menu ---------- */}
