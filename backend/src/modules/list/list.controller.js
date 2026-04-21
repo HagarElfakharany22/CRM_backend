@@ -6,6 +6,7 @@ import deleteList from "./services/deleteList.service.js";
 import getAllLists from "./services/getAllLists.service.js";
 import getListById from "./services/getListById.service.js";
 import getListByBoardId from "./services/getListByBoardId.service.js";
+import reorderListTasks from "./services/reorderListTasks.service.js";
 const router=Router();
 
 
@@ -15,4 +16,5 @@ router.delete('/delete/:id' , authentication() , deleteList)
 router.get('/all' , authentication() , getAllLists)
 router.get('/get/:id' , authentication() , getListById)
 router.get('/by-board-id/:id' , authentication() , getListByBoardId)
+router.put('/reorder' , authentication() , reorderListTasks)
 export default router;

@@ -179,13 +179,56 @@ const TaskProvider = ({ children }) => {
     }
 
   }
+  // update listId after movement 
+
+
+const updateTaskList = async (taskId, listId,changedListId) => {
+
+  try {
+
+    const response = await api.patch(
+      `/api/v1/task/moveTask/${taskId}`,
+      { listId ,changedListId},
+      {
+        headers: getAuthHeader()
+      }
+    );
+
+    console.log(response?.data?.updatedTask);
+
+    return response?.data?.updatedTask;
+
+  } catch (err) {
+
+    console.error("Error updating task:", err);
+    throw err;
+
+  }
+
+};
+
+  const reorderTasks = async (sourceListId, destinationListId, sourceTasks, destinationTasks, taskId) => {
+    try {
+      const response = await api.put(
+        `/api/v1/list/reorder`,
+        { sourceListId, destinationListId, sourceTasks, destinationTasks, taskId },
+        { headers: getAuthHeader() }
+      );
+      return response.data;
+    } catch (err) {
+      console.error("Error reordering tasks:", err);
+      throw err;
+    }
+  };
   return (
     <TaskContext.Provider
       value={{
         tasks, setTasks, getTasks, EditTasks, DeleteTasks, AddTask,
         AssignTask,
         getAllAssignedTasks,
-        getAssignedTasksByEmpId
+        getAssignedTasksByEmpId,
+        updateTaskList,
+        reorderTasks
       }}
     >
       {children}

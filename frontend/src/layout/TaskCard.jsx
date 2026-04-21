@@ -2,15 +2,27 @@ import styles from './style.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faPaperclip, faImage, faAlignLeft } from '@fortawesome/free-solid-svg-icons';
 
-export default function TaskCard({ task, onClick }) {
+export default function TaskCard({ task, index,onClick }) {
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
-const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
   const imageSrc = task.image?.startsWith("http")
-  ? task.image
-  : `${API_URL}/uploads/${task.image}`;
+    ? task.image
+    : `${API_URL}/uploads/${task.image}`;
 
   return (
-    <div className={`${styles.task} card shadow-sm mb-2 p-2 border-0`} onClick={() => onClick(task)} style={{ cursor: 'pointer' }}>
+    <div className={`${styles.task} card shadow-sm mb-2 p-2 border-0`} onClick={(e) => {
+      e.stopPropagation();
+      onClick(task);
+    }} style={{ cursor: 'pointer' }} draggable
+      onDragStart={(e) => {
+
+        e.dataTransfer.setData("taskId", task._id);
+        e.dataTransfer.setData("currentListId", task.listId);
+        e.dataTransfer.setData("sourceIndex", index);
+        console.log("taskId", task._id)
+        console.log("currentListId", task.listId)
+      }}
+    >
 
       {/* Cover Image Preview if exists */}
       {task.image && (
@@ -33,7 +45,7 @@ const API_URL = import.meta.env.VITE_API_URL;
           </span>
         )}
         {
-          task.status &&(
+          task.status && (
             <span className="badge bg-white-subtle text-primary  p-1 px-2 text-capitalize">{task.status}</span>
           )
         }
@@ -41,7 +53,7 @@ const API_URL = import.meta.env.VITE_API_URL;
         {/* Indicators */}
         {task.description && <FontAwesomeIcon icon={faAlignLeft} title="Has description" />}
         {task.linkReference && <FontAwesomeIcon icon={faPaperclip} title="Has attachment" />}
-             
+
         {/* Priority Badge */}
         {task.priority === 'High' && <span className="badge bg-danger-subtle text-danger border border-danger p-1 px-2">High</span>}
       </div>

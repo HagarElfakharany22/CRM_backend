@@ -14,7 +14,7 @@ export default function Lists({list , onTaskClick}){
   const [editTitle, setEditTitle] = useState(list.title);
 
   const queryClient = useQueryClient();
-  const { AddTask , getAllAssignedTasks } = useContext(TaskContext);
+  const { AddTask , getAllAssignedTasks, updateTaskList, reorderTasks  } = useContext(TaskContext);
   const { deleteList , updateList} = useContext(ListContext);
 
   const addTaskMutation = useMutation({
@@ -65,7 +65,97 @@ export default function Lists({list , onTaskClick}){
 
 
   }, [list])
+  // move task 
+const updateTaskMutation = useMutation({
+   mutationFn: ({ taskId, listId, changedListId }) =>
+    updateTaskList(taskId, listId, changedListId),
 
+  onSuccess: () => {
+    queryClient.invalidateQueries(["lists", list.boardId]);
+  },
+});
+const moveTask = (taskId, newListId, oldListId) => {
+  console.log("mooove");
+  updateTaskMutation.mutate({
+    taskId,
+    listId: newListId,
+    changedListId: oldListId
+  });
+};
+
+  const reorderTaskMutation = useMutation({
+    mutationFn: ({ sourceListId, destinationListId, sourceTasks, destinationTasks, taskId }) =>
+      reorderTasks(sourceListId, destinationListId, sourceTasks, destinationTasks, taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["lists", list.boardId] });
+    },
+  });
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const taskId = e.dataTransfer.getData("taskId");
+    const sourceListId = e.dataTransfer.getData("currentListId");
+    const sourceIndex = Number(e.dataTransfer.getData("sourceIndex"));
+
+    if (!taskId || !sourceListId) return;
+
+    // Moving within the SAME list
+    if (sourceListId === list._id) {
+      if (sourceIndex === dropIndex) return;
+
+      const updatedTasks = [...list.tasks];
+      const [draggedTask] = updatedTasks.splice(sourceIndex, 1);
+      updatedTasks.splice(dropIndex, 0, draggedTask);
+
+      const newTaskIds = updatedTasks.map((t) => typeof t === 'object' ? t._id : t);
+
+      reorderTaskMutation.mutate({
+        sourceListId: list._id,
+        destinationListId: list._id,
+        sourceTasks: newTaskIds,
+        destinationTasks: newTaskIds,
+        taskId
+      });
+      return;
+    }
+
+    // Moving to a DIFFERENT list
+    // We don't have the source list's task array directly here,
+    // so we handle it by fetching the lists from the react-query cache.
+    const allLists = queryClient.getQueryData(["lists", list.boardId]);
+    if (!allLists) return;
+
+    const sourceList = allLists.find(l => l._id === sourceListId);
+    if (!sourceList) return;
+
+    const sourceTasks = [...sourceList.tasks];
+    const destinationTasks = [...list.tasks];
+
+    const [draggedTask] = sourceTasks.splice(sourceIndex, 1);
+    destinationTasks.splice(dropIndex, 0, draggedTask);
+
+    const newSourceTaskIds = sourceTasks.map(t => typeof t === 'object' ? t._id : t);
+    const newDestinationTaskIds = destinationTasks.map(t => typeof t === 'object' ? t._id : t);
+
+    // Optimistic UI update (optional but good for immediate feedback)
+    queryClient.setQueryData(["lists", list.boardId], (old) => {
+      return old.map(l => {
+        if (l._id === sourceListId) return { ...l, tasks: sourceTasks };
+        if (l._id === list._id) return { ...l, tasks: destinationTasks };
+        return l;
+      });
+    });
+
+    reorderTaskMutation.mutate({
+      sourceListId,
+      destinationListId: list._id,
+      sourceTasks: newSourceTaskIds,
+      destinationTasks: newDestinationTaskIds,
+      taskId
+    });
+  };
   return (
     <div className={`${styles.list} position-relative`}>
       <div className={`${styles.list_header}`}>
@@ -135,10 +225,39 @@ export default function Lists({list , onTaskClick}){
       {/* ------------------------- end edit lists ---------------------- */}
       {/* --------- end list options menu ---------- */}
 
-      <div className={`${styles.tasks}`}>
-        {list.tasks.map((task) => (
-          task.status !== 'done' &&<TaskCard key={task._id} task={task} onClick={onTaskClick} />
-        ))}
+<div
+  className={`${styles.tasks} flex-grow-1`}
+  style={{ minHeight: "50px" }}
+  onDragOver={(e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  }}
+  onDrop={(e) => {
+    // Drop exactly on the empty space of the list (at the end)
+    console.log("event",e);
+     console.log("list length",list.tasks.length);
+    handleDrop(e, list.tasks.length);
+  }}
+>
+        {list.tasks.map((task, index) => (
+  task.status !== 'done' && (
+    <div
+      key={task._id}
+      
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => {
+      e.stopPropagation();
+      handleDrop(e, index);
+    }}
+      
+    >
+      <TaskCard
+        task={task}
+        index={index}
+        onClick={onTaskClick}
+      />
+    </div>
+  )))}
       </div>
       {isAddingTask ? (
         <div className="mt-2">
